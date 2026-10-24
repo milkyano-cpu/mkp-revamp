@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="en-AU">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#1d1d1d" />
+    <title>MKP Bikes | Inspected Pre-Owned &amp; New Road Bikes, Melbourne</title>
+    <meta name="description" content="Hand-selected, fully inspected pre-owned and new road, gravel and TT bikes. Authorised Tavelo dealer. Test ride in Cheltenham, delivered Australia-wide." />
+    <link rel="icon" href="assets/site/mkp-logo.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600&family=Poppins:wght@700&display=swap" />
+    <link rel="stylesheet" href="css/styles.css" />
+    <script src="js/data.js" defer></script>
+    <script src="js/app.js" defer></script>
+    <script src="js/home.js" defer></script>
+  </head>
+  <body data-page="home">
+    <main>
+      <!-- HERO -->
+      <section class="hero" data-hero aria-labelledby="hero-title">
+        <div class="hero__film" data-film aria-hidden="true">
+          <div class="scene scene--pan is-active"><img src="assets/site/background.jpg" alt="" fetchpriority="high" /></div>
+          <div class="scene scene--push"><img src="assets/site/tavelo-og.jpg" alt="" style="object-position:62% center" /></div>
+          <div class="scene scene--drift"><img src="assets/site/mkp-showroom.jpg" alt="" /></div>
+          <div class="hero__streaks"></div>
+        </div>
+        <div class="wrap hero__content">
+          <div class="hero__copy">
+            <span class="hero__eyebrow">Pre-owned &amp; new road bikes · Cheltenham, Melbourne</span>
+            <h1 class="hero__title" id="hero-title"><span>Marketplace bikes</span> <span>are a gamble.</span> <span>Ours aren’t.</span></h1>
+            <p class="hero__lede">Every road bike is hand-selected and fully inspected by us. You show up to race day, not a repair shop.</p>
+            <div class="row">
+              <a class="btn btn--light" href="shop.html?type=pre-owned">Shop pre-owned</a>
+              <a class="btn btn--line" href="shop.html?type=new">Shop new bikes</a>
+            </div>
+          </div>
+          <div class="hero__progress" data-film-progress><i></i><i></i><i></i></div>
+          <div class="hero__usps">
+            <div class="usp" data-icon="shield"><div><b>Inspected &amp; serviced</b><span>Every bike, before it’s listed</span></div></div>
+            <div class="usp" data-icon="truck"><div><b>Australia-wide delivery</b><span>Free packing, insured FedEx</span></div></div>
+            <div class="usp" data-icon="pin"><div><b>Test ride in Cheltenham</b><span>Open 7 days, walk-ins welcome</span></div></div>
+          </div>
+          <button class="hero__pause" type="button" data-film-toggle aria-label="Pause background animation" aria-pressed="false"></button>
+        </div>
+      </section>
+
+      <!-- SHOWCASE -->
+      <section class="showcase" aria-labelledby="showcase-title">
+        <div class="wrap">
+          <div class="showcase__top">
+            <div>
+              <span class="eyebrow">Fresh in the showroom</span>
+              <h2 class="h2" id="showcase-title" style="margin-top:8px">Pick your weapon.</h2>
+            </div>
+            <div class="seg" role="tablist" aria-label="Featured bikes" data-showcase-tabs></div>
+          </div>
+          <div class="slides" data-showcase></div>
+          <div class="slides__nav">
+            <button class="round-arrow" type="button" data-slide-prev aria-label="Previous bike"></button>
+            <button class="round-arrow" type="button" data-slide-next aria-label="Next bike"></button>
+            <span class="slides__count" data-slide-count></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAVELO FEATURE -->
+      <section class="feature" aria-labelledby="tavelo-title">
+        <div class="feature__media"><img src="assets/site/tavelo-about.jpg" alt="Tavelo carbon frameset on a workstand" loading="lazy" data-parallax /></div>
+        <div class="wrap">
+          <div class="feature__copy">
+            <span class="eyebrow accent-kicker">Authorised Australian dealer</span>
+            <h2 class="display" id="tavelo-title" style="margin-top:12px">Race-proven carbon.</h2>
+            <p class="lede">Tavelo bikes and framesets, built in our workshop and backed by a lifetime frame warranty. We handle every claim locally, so you never deal with an overseas seller.</p>
+            <div class="row"><a class="btn btn--light" href="tavelo.html">Discover Tavelo</a><a class="btn btn--line" href="shop.html?brand=Tavelo">Shop Tavelo</a></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TRUST ROW -->
+      <section class="section--tight">
+        <div class="wrap">
+          <div class="trust">
+            <div class="trust__card reveal" data-icon="wrench"><b>Inspected &amp; serviced</b><p>Frame, drivetrain, wheels and bearings checked before sale.</p></div>
+            <div class="trust__card reveal" data-icon="award"><b>Lifetime warranty</b><p>On every Tavelo frame, with local claim support.</p></div>
+            <div class="trust__card reveal" data-icon="truck"><b>Free packing</b><p>Insured FedEx Road Express, or use your own courier.</p></div>
+            <div class="trust__card reveal" data-icon="chat"><b>A human, 24/7</b><p>Message us day or night. No bots, no waiting around.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- STATEMENT -->
+      <section class="statement" aria-label="Our promise">
+        <div class="wrap"><p data-words data-mark-words="inspected honestly">Every bike hand-picked, inspected and serviced. Priced honestly, with no hidden issues.</p></div>
+      </section>
+
+      <!-- SHOP GRID -->
+      <section class="section" style="padding-top:0" aria-labelledby="range-title">
+        <div class="wrap">
+          <div class="section-head">
+            <div>
+              <h2 class="h2" id="range-title">Shop the range</h2>
+              <p class="lede">Road, triathlon and gravel bikes from the brands that win races. New stock lands every week.</p>
+            </div>
+            <div class="seg" role="tablist" aria-label="Filter range" data-range-tabs>
+              <button type="button" role="tab" aria-selected="true" data-range="latest">Latest</button>
+              <button type="button" role="tab" aria-selected="false" data-range="Road">Road</button>
+              <button type="button" role="tab" aria-selected="false" data-range="TT">TT</button>
+              <button type="button" role="tab" aria-selected="false" data-range="new">New</button>
+            </div>
+          </div>
+          <div class="grid" data-range-grid></div>
+          <div class="center" style="margin-top:40px"><a class="btn btn--dark" href="shop.html" data-range-all>View all bikes</a></div>
+        </div>
+      </section>
+
+      <!-- FITTING FEATURE -->
+      <section class="section on-dark fitband" data-inview aria-labelledby="fit-title">
+        <div class="fitband__bg" aria-hidden="true">
+          <img class="fitband__ambient" src="assets/site/bike-fitting-portrait.jpg" alt="" loading="lazy" />
+          <div class="fitband__glow"></div>
+          <!-- fitting-studio motif: a goniometer reading a knee angle, plus a faint measuring grid -->
+          <svg class="fitband__lines" viewBox="0 0 1440 900" preserveAspectRatio="xMaxYMin slice">
+            <defs><pattern id="fit-grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="currentColor" stroke-width="1"/></pattern></defs>
+            <rect class="fitband__grid" width="1440" height="900" fill="url(#fit-grid)"/>
+            <g class="fitband__gonio" transform="translate(1330 96) rotate(180)">
+              <circle r="260" class="ring"/><circle r="420" class="ring ring--ticks"/><circle r="580" class="ring"/>
+              <path class="ray" d="M0 0 L660 0"/>
+              <g class="ray-swing"><path class="ray ray--live" d="M0 0 L660 0"/><circle cx="420" cy="0" r="5" class="joint"/></g>
+              <path class="arc" pathLength="1" d="M330 0 A330 330 0 0 0 102 -314"/>
+              <circle r="7" class="joint"/>
+            </g>
+            <text class="reading" x="1010" y="78">145°</text>
+          </svg>
+          <div class="fitband__grain"></div>
+        </div>
+        <div class="wrap two">
+          <div class="stack-lg">
+            <div>
+              <span class="eyebrow">Professional bike fitting · Fitted by Ash Saxena</span>
+              <h2 class="display" id="fit-title" style="margin-top:14px">Ride without the pain.</h2>
+              <p class="lede" style="margin-top:18px;max-width:44ch">A 90-minute fit that starts off the bike, assessing mobility and flexibility first, then dials saddle, reach and cleats to your body. Full refund if you don’t feel the difference.</p>
+            </div>
+            <div class="stat-row" style="grid-template-columns:repeat(3,1fr)">
+              <div class="stat"><strong data-count="234" data-suffix="+">234+</strong><span>Riders fitted</span></div>
+              <div class="stat"><strong data-count="8" data-suffix=" yrs">8 yrs</strong><span>Racing track &amp; road</span></div>
+              <div class="stat"><strong data-count="90">90</strong><span>Minutes per session</span></div>
+            </div>
+            <div class="row"><a class="btn btn--light" href="fitting.html">Book a fit, $180</a><span class="muted" style="font-size:14px">$150 when you buy your bike from MKP</span></div>
+          </div>
+          <div class="rounded-media reveal" style="aspect-ratio:4/5"><img src="assets/site/bike-fitting-portrait.jpg" alt="Ash Saxena, MKP bike fitter, in the Cheltenham studio" loading="lazy" /></div>
+        </div>
+      </section>
+
+      <!-- TEST RIDE SPLIT -->
+      <section class="section" aria-labelledby="ride-title">
+        <div class="wrap">
+          <div class="split reveal">
+            <div class="split__copy">
+              <div>
+                <span class="accent-kicker" style="display:block;margin-bottom:14px">Cheltenham showroom</span>
+                <h2 class="h1" id="ride-title">One ride, then you’ll know.</h2>
+                <p class="lede">Come in, have a look around and <strong>take a test ride</strong>. No rush, no pressure, just honest advice from people who race.</p>
+              </div>
+              <div class="hours">
+                <div><span>Weekdays</span><span>11am – 7pm</span></div>
+                <div><span>Weekends</span><span>10am – 5pm</span></div>
+                <div><span>Showroom</span><span>5/17 Kylie Place, Cheltenham</span></div>
+              </div>
+              <div class="row"><a class="btn btn--light" data-wa="Hi MKP, I'd like to book a test ride." target="_blank" rel="noopener">Book a test ride</a><a class="btn btn--line" data-maps target="_blank" rel="noopener">Get directions</a></div>
+            </div>
+            <div class="split__media"><img src="assets/site/mkp-showroom.jpg" alt="Inside the MKP Bikes showroom in Cheltenham" loading="lazy" /></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SIZE FINDER -->
+      <section aria-labelledby="size-cta">
+        <div class="wrap">
+          <div class="sandcard reveal">
+            <h2 class="h1" id="size-cta">Which size is<br />right for you?</h2>
+            <p class="lede" style="margin:16px auto 0;max-width:40ch">Pop in your height and we’ll match you to every bike in stock that fits.</p>
+            <div class="row"><button class="btn btn--dark" type="button" data-open-size>Find your size</button></div>
+            <small>or read the <a href="https://www.mkpbikes.com.au/guides/road-bike-sizing" target="_blank" rel="noopener">road bike sizing guide</a></small>
+          </div>
+        </div>
+      </section>
+
+      <!-- COMMUNITY -->
+      <section class="section" aria-labelledby="riders-title">
+        <div class="wrap center">
+          <h2 class="h1" id="riders-title">Real riders.<br />Real bikes.</h2>
+          <p class="lede" style="margin:16px auto 0;max-width:42ch">Every one of these riders walked out of our Cheltenham showroom on a bike they love.</p>
+        </div>
+        <div class="marquee" data-marquee></div>
+      </section>
+
+      <!-- JOURNAL -->
+      <section class="section" style="padding-top:0" aria-labelledby="journal-title">
+        <div class="wrap">
+          <div class="section-head"><h2 class="h1" id="journal-title">From the workshop</h2><a class="link-arrow" href="https://www.mkpbikes.com.au/guides" target="_blank" rel="noopener">All guides</a></div>
+          <div class="grid grid--3 posts">
+            <a class="post reveal" href="https://www.mkpbikes.com.au/article/inside-tavelo-what-i-learned-visiting-a-chinese-carbon-factory-in-xiamen" target="_blank" rel="noopener">
+              <div class="post__media"><img src="assets/site/tavelo-og.jpg" alt="" /></div>
+              <h3>Inside Tavelo: what I learned visiting a carbon factory in Xiamen</h3><time>8 min read</time></a>
+            <a class="post reveal" href="https://www.mkpbikes.com.au/article/lower-back-pain-from-cycling-causes-fixes-and-when-a-bike-fit-is-the-answer" target="_blank" rel="noopener">
+              <div class="post__media"><img src="assets/site/bike-fitting-portrait.jpg" alt="" loading="lazy" style="object-position:center 35%" /></div>
+              <h3>Lower back pain from cycling: causes, fixes and when a fit is the answer</h3><time>6 min read</time></a>
+            <a class="post reveal" href="https://www.mkpbikes.com.au/guides/used-bike-checklist" target="_blank" rel="noopener">
+              <div class="post__media"><img src="assets/bikes/specialized-tarmac-sl8-1.jpg" alt="" loading="lazy" /></div>
+              <h3>The used bike checklist: what to inspect before you hand over cash</h3><time>Buying guide</time></a>
+          </div>
+        </div>
+      </section>
+
+      <!-- EXPLORE -->
+      <section class="explore explore--hub" data-inview aria-labelledby="explore-title">
+        <div class="hub__bg" aria-hidden="true">
+          <img src="assets/site/mkp-showroom.jpg" alt="" loading="lazy" />
+          <div class="hub__glow hub__glow--a"></div>
+          <div class="hub__glow hub__glow--b"></div>
+          <div class="hub__type"><div class="hub__type-track"><span>Test ride · Bike fitting · Sell · Trade-in · Tavelo ·&nbsp;</span><span>Test ride · Bike fitting · Sell · Trade-in · Tavelo ·&nbsp;</span></div></div>
+          <div class="hub__grain"></div>
+        </div>
+        <div class="wrap explore__inner">
+          <span class="eyebrow hub__eyebrow">More from MKP</span>
+          <h2 class="h1 center" id="explore-title">Keep exploring</h2>
+          <div class="tiles">
+            <a class="tile reveal" data-wa="Hi MKP, I'd like to book a test ride." target="_blank" rel="noopener">
+              <span class="tile__icon" data-icon="ride"></span>
+              <span class="tile__text"><b>Test ride</b><small>Cheltenham, open 7 days</small></span><i></i></a>
+            <a class="tile reveal" href="fitting.html">
+              <span class="tile__icon" data-icon="fit"></span>
+              <span class="tile__text"><b>Bike fitting</b><small>90 minutes with Ash, $180</small></span><i></i></a>
+            <a class="tile reveal" href="sell.html">
+              <span class="tile__icon" data-icon="swap"></span>
+              <span class="tile__text"><b>Sell or trade-in</b><small>Fair offers, paid by transfer</small></span><i></i></a>
+            <a class="tile reveal" href="tavelo.html">
+              <span class="tile__icon" data-icon="shield"></span>
+              <span class="tile__text"><b>Tavelo warranty</b><small>Lifetime frame cover</small></span><i></i></a>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
