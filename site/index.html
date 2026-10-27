@@ -9,9 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="preconnect" href="https://sketchfab.com">
-<link rel="preconnect" href="https://static.sketchfab.com">
-<link rel="preconnect" href="https://media.sketchfab.com" crossorigin>
 <link rel="preload" as="image" href="img/hero-bike-1400.webp" imagesrcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" imagesizes="(max-width: 700px) 90vw, 66vw">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/pages.css">
@@ -22,8 +19,10 @@
 
 <main id="top">
 
-<!-- 1. HERO: scroll story around a 3D bike (starboy). Model: "Bianchi Oltre RC_ Classic" by Dav1d- on Sketchfab,
-     shown through Sketchfab's official embed + Viewer API (the model is view-only, not downloadable) -->
+<!-- 1. HERO: scroll story around a turning bike. The turn is a 60-frame image sequence (img/seq) rendered from
+     "Bianchi Oltre RC_ Classic" by Dav1d- on Sketchfab, drawn on a canvas as the page scrolls.
+     The live Sketchfab 3D viewer was removed in Oct 2026 for performance (about 4 MB of WebGL and scripts);
+     js/bike-viewer.js is kept for reference but no longer loaded. -->
 <section class="story" id="story">
   <div class="story-stage">
 
@@ -34,20 +33,20 @@
       <h2 class="w" data-i="3">ready to ride.</h2>
     </div>
 
-    <!-- Instant poster: a still of the 3D model in its opening pose, shown until the live viewer is ready.
-         If the visitor scrolls before then, a 60-frame turn sequence (img/seq, captured from the same viewer) plays instead. -->
+    <!-- Poster: the opening pose, shown at first paint. As soon as the visitor scrolls, the canvas takes over and
+         shows the frame for the current scroll position (frames load coarse to fine). -->
     <img class="bike-poster" id="bikePoster" src="img/hero-bike-1400.webp" srcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" sizes="(max-width: 700px) 90vw, 66vw" alt="" fetchpriority="high" decoding="async">
     <canvas class="bike-seq" id="bikeSeq" aria-hidden="true"></canvas>
-    <div class="bike-frame"><iframe id="bikeViewer" title="Bianchi Oltre RC 3D model" allow="autoplay; fullscreen; xr-spatial-tracking" tabindex="-1"></iframe></div>
     <script>
       (function () {
         var st = document.currentScript.parentElement;
         var poster = document.getElementById('bikePoster'), cv = document.getElementById('bikeSeq'), ctx = cv.getContext('2d');
         var N = 60, small = innerWidth < 700, set = small ? 'm' : 'd', fw = small ? 600 : 1000;
+        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
         cv.width = fw; cv.height = Math.round(fw * 1186 / 1428);
-        // same framing maths as bike-viewer.js: B = bike width at the opening camera
+        // framing maths from the original viewer: B = bike width at the opening camera
         function place() {
-          var W = st.clientWidth, H = st.clientHeight + 640;          /* the viewer overhangs 320px top and bottom */
+          var W = st.clientWidth, H = st.clientHeight + 640;
           var B = 0.6453 * Math.min(W, 1.7 * H);
           poster.style.width = (1.0082 * B) + 'px';
           poster.style.left = (W / 2 - 0.461 * B) + 'px';
@@ -63,44 +62,53 @@
         var queue = [0, N - 1, 30, 15, 45]
           .concat(all.filter(function (i) { return i % 6 === 0; }), all.filter(function (i) { return i % 2 === 0; }), all)
           .filter(function (v, i, a) { return a.indexOf(v) === i; });
-        var active = 0;
+        var active = 0, started = false;
         function next() {
-          while (active < 6 && queue.length) {
+          started = true;
+          while (active < 4 && queue.length) {
             (function (i) {
               active++;
               var im = new Image();
               im.decoding = 'async';
               im.src = 'img/seq/' + set + (i < 10 ? '0' : '') + i + '.webp';
-              im.decode().then(function () { frames[i] = im; ok[i] = true; draw(); }, function () {}).then(function () { active--; next(); });
+              im.decode().then(function () { frames[i] = im; ok[i] = true; kick(); }, function () {}).then(function () { active--; next(); });
             })(queue.shift());
           }
         }
-        // start right away, after the poster has had first go at the network
+        // start after the page has loaded, or straight away on the first scroll
         if (document.readyState === 'complete') next(); else addEventListener('load', next);
-        setTimeout(next, 600);
+        addEventListener('scroll', function () { if (!started) next(); }, { passive: true, once: true });
 
-        var cur = -1, using = false;
+        // Draw only when something changes: the frame position eases toward the scroll position
+        // (like the old 3D camera did), and the loop stops as soon as it settles.
+        var pos = 0, cur = -1, using = false, running = false;
         function nearest(i) {
           for (var d = 0; d < N; d++) { if (ok[i - d]) return i - d; if (ok[i + d]) return i + d; }
           return -1;
         }
-        function draw() {
-          if (st.classList.contains('viewer-ready')) return;
-          var p = (window.MKP && window.MKP.p) || 0;
-          if (!using && p < 0.004) return;                   // still at the top: the poster is exact
-          var j = nearest(Math.round(p * (N - 1)));
-          if (j < 0) return;
-          if (j !== cur) { ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(frames[j], 0, 0, cv.width, cv.height); cur = j; }
-          if (!using) { using = true; poster.style.transition = 'none'; poster.style.opacity = 0; cv.classList.add('on'); }
+        function tick() {
+          // same progress maths as home.js storyTick, read here so the frame never lags a scroll step behind
+          var story = st.parentElement, r = story.getBoundingClientRect();
+          var p = Math.min(1, Math.max(0, -r.top / Math.max(1, story.offsetHeight - innerHeight))), target = p * (N - 1);
+          pos = reduce ? target : pos + (target - pos) * 0.22;
+          if (Math.abs(target - pos) < 0.02) pos = target;
+          if (using || p >= 0.004) {
+            var j = nearest(Math.round(pos));
+            if (j >= 0) {
+              if (j !== cur) { ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(frames[j], 0, 0, cv.width, cv.height); cur = j; }
+              if (!using) { using = true; poster.style.transition = 'none'; poster.style.opacity = 0; cv.classList.add('on'); }
+            }
+          }
+          if (pos !== target) requestAnimationFrame(tick); else running = false;
         }
-        (function loop() { if (!st.classList.contains('viewer-ready')) { draw(); requestAnimationFrame(loop); } })();
+        function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
+        addEventListener('scroll', kick, { passive: true });
+        addEventListener('resize', kick);
       })();
     </script>
-    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
-    <script src="js/bike-viewer.js"></script>
 
     <div class="story-end">
-      <h1>Marketplace bikes are a gamble.<br>Ours aren’t.</h1>
+      <h1>Marketplace bikes are a gamble. <br>Ours aren’t.</h1>
       <div class="btns">
         <a class="btn dark" href="bikes.html">Shop road bikes</a>
         <a class="btn ghost" href="#" data-wa="Hi MKP Bikes, I'd like to book a test ride.">Book a test ride</a>

@@ -103,7 +103,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .nav-ico.bump .fav-count{animation:heartPop .55s cubic-bezier(.17,.89,.32,1.49)}
 .fav-big{gap:10px}
 /* favourites drawer */
-.favs{position:fixed;inset:0;z-index:85;background:rgba(8,8,10,.5);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);opacity:0;transition:opacity .35s var(--ease)}
+.favs{position:fixed;inset:0;z-index:85;background:rgba(8,8,10,.66);opacity:0;transition:opacity .35s var(--ease)}
 .favs.open{opacity:1}
 .favs[hidden]{display:none}
 .favs-panel{position:absolute;top:0;right:0;bottom:0;width:min(440px,100%);display:flex;flex-direction:column;background:#0b0b0c;color:#fff;box-shadow:-30px 0 80px rgba(0,0,0,.45);transform:translateX(100%);transition:transform .45s var(--ease)}
@@ -135,7 +135,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .favs-cta{width:100%;height:54px;color:#fff;background:linear-gradient(110deg,#1f6bff,#2fb4ff);box-shadow:0 12px 30px -12px rgba(47,140,255,.9);font-size:16px}
 .favs-trust{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:10px;color:rgba(255,255,255,.45)}
 /* bike quick view: the product page design in a floating panel, page visible around it */
-.qv{position:fixed;inset:0;z-index:86;padding:clamp(14px,4vh,44px) clamp(14px,4vw,56px);background:rgba(8,8,10,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .35s var(--ease)}
+.qv{position:fixed;inset:0;z-index:86;padding:clamp(14px,4vh,44px) clamp(14px,4vw,56px);background:rgba(8,8,10,.66);opacity:0;transition:opacity .35s var(--ease)}
 .qv.open{opacity:1}
 .qv[hidden]{display:none}
 .qv-card{position:relative;height:100%;max-width:1240px;margin:0 auto;border-radius:28px;overflow:hidden;background:radial-gradient(rgba(13,13,15,.07) 1px,transparent 1.2px) 0 0/22px 22px,var(--bg);box-shadow:0 40px 100px -30px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.08);transform:translateY(28px) scale(.985);transition:transform .5s var(--ease)}
@@ -172,7 +172,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .nav-burger i{display:block;width:16px;height:1.6px;border-radius:2px;background:currentColor;transition:transform .35s var(--ease)}
 .menu-open .nav-burger i:first-child{transform:translateY(3.3px) rotate(45deg)}
 .menu-open .nav-burger i:last-child{transform:translateY(-3.3px) rotate(-45deg)}
-.menu{position:fixed;inset:0;z-index:45;background:rgba(10,10,11,.96);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:110px var(--gut) 32px;animation:menuIn .45s var(--ease)}
+.menu{position:fixed;inset:0;z-index:45;background:rgba(10,10,11,.97);color:#fff;display:flex;flex-direction:column;justify-content:space-between;padding:110px var(--gut) 32px;animation:menuIn .45s var(--ease)}
 .menu[hidden]{display:none}
 @keyframes menuIn{from{opacity:0;transform:translateY(-12px)}}
 .menu-links{display:flex;flex-direction:column}
@@ -186,7 +186,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 
 /* ---------- guide popup ---------- */
-.pop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(8,8,10,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .4s var(--ease)}
+.pop{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:20px;background:rgba(8,8,10,.7);opacity:0;transition:opacity .4s var(--ease)}
 .pop.open{opacity:1}
 .pop[hidden]{display:none}
 .pop-card{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;width:min(760px,100%);border-radius:28px;overflow:hidden;background:#0b0b0c;color:#fff;box-shadow:0 50px 100px -30px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.08);transform:translateY(24px) scale(.97);transition:transform .6s var(--ease)}
@@ -402,7 +402,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .rev-more{font-size:13.5px;font-weight:600;color:var(--blue)}
 .rev-card:has(.rev-more){cursor:pointer}
 .rev-cta{display:flex;justify-content:center;margin-top:36px}
-.rev-dialog{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:20px;background:rgba(8,8,10,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);opacity:0;transition:opacity .3s var(--ease)}
+.rev-dialog{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:20px;background:rgba(8,8,10,.66);opacity:0;transition:opacity .3s var(--ease)}
 .rev-dialog.open{opacity:1}
 .rev-dialog[hidden]{display:none}
 .rev-dialog-card{position:relative;width:min(560px,100%);max-height:85vh;overflow-y:auto;padding:34px 32px 30px;border-radius:26px;background:var(--bg);box-shadow:0 40px 90px -30px rgba(0,0,0,.6);transform:translateY(16px) scale(.98);transition:transform .45s var(--ease)}
@@ -562,4 +562,16 @@ html.pop-lock .tony,html.menu-open .tony{display:none}
   .tony{right:14px;bottom:14px}.tony.above-widget{bottom:86px}
   .tony-fab{width:52px;height:52px}
   .tony-panel{position:fixed;inset:auto 10px 10px 10px;width:auto;height:min(78vh,620px);bottom:76px}
+}
+
+/* Performance (Oct 2026): live blur behind sticky bars is expensive on phones while the page scrolls.
+   Touch devices get a near-opaque fill instead; desktops keep the frosted look. Full-screen overlays
+   (.pop, .favs, .qv, .rev-dialog, .menu) use a plain dark fill everywhere: a full-viewport backdrop blur
+   re-renders the whole page behind it every frame and was the main cause of the lag. */
+@media (hover:none),(max-width:700px){
+  .nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(251,251,250,.95)}
+  .nav.on-dark{background:rgba(20,20,22,.94)}
+  .split-foot{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(13,13,15,.8)}
+  .grade-card{backdrop-filter:none;-webkit-backdrop-filter:none}
+  .story-words .w.past{filter:none}
 }
