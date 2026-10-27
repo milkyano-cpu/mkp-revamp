@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MKP Bikes | Pre-owned & new road bikes, Melbourne</title>
+<meta name="description" content="Hand-selected, fully inspected road, gravel and TT bikes in Cheltenham, Melbourne. #1 Australian Tavelo dealer. Australia-wide delivery.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://sketchfab.com">
+<link rel="preconnect" href="https://static.sketchfab.com">
+<link rel="preconnect" href="https://media.sketchfab.com" crossorigin>
+<link rel="preload" as="image" href="img/hero-bike-1400.webp" imagesrcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" imagesizes="(max-width: 700px) 90vw, 66vw">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="home">
+
+<div id="site-nav"></div>
+
+<main id="top">
+
+<!-- 1. HERO: scroll story around a 3D bike (starboy). Model: "Bianchi Oltre RC_ Classic" by Dav1d- on Sketchfab,
+     shown through Sketchfab's official embed + Viewer API (the model is view-only, not downloadable) -->
+<section class="story" id="story">
+  <div class="story-stage">
+
+    <div class="story-words" aria-hidden="true">
+      <h2 class="w" data-i="0">every bike.</h2>
+      <h2 class="w" data-i="1">inspected.</h2>
+      <h2 class="w" data-i="2">graded.</h2>
+      <h2 class="w" data-i="3">ready to ride.</h2>
+    </div>
+
+    <!-- Instant poster: a still of the 3D model in its opening pose, shown until the live viewer is ready.
+         If the visitor scrolls before then, a 60-frame turn sequence (img/seq, captured from the same viewer) plays instead. -->
+    <img class="bike-poster" id="bikePoster" src="img/hero-bike-1400.webp" srcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" sizes="(max-width: 700px) 90vw, 66vw" alt="" fetchpriority="high" decoding="async">
+    <canvas class="bike-seq" id="bikeSeq" aria-hidden="true"></canvas>
+    <div class="bike-frame"><iframe id="bikeViewer" title="Bianchi Oltre RC 3D model" allow="autoplay; fullscreen; xr-spatial-tracking" tabindex="-1"></iframe></div>
+    <script>
+      (function () {
+        var st = document.currentScript.parentElement;
+        var poster = document.getElementById('bikePoster'), cv = document.getElementById('bikeSeq'), ctx = cv.getContext('2d');
+        var N = 60, small = innerWidth < 700, set = small ? 'm' : 'd', fw = small ? 600 : 1000;
+        cv.width = fw; cv.height = Math.round(fw * 1186 / 1428);
+        // same framing maths as bike-viewer.js: B = bike width at the opening camera
+        function place() {
+          var W = st.clientWidth, H = st.clientHeight + 640;          /* the viewer overhangs 320px top and bottom */
+          var B = 0.6453 * Math.min(W, 1.7 * H);
+          poster.style.width = (1.0082 * B) + 'px';
+          poster.style.left = (W / 2 - 0.461 * B) + 'px';
+          poster.style.top = (H / 2 - 0.325 * B - 320) + 'px';
+          cv.style.width = (1.3831 * B) + 'px';
+          cv.style.left = (W / 2 - 0.6915 * B) + 'px';
+          cv.style.top = (H / 2 - 0.5521 * B - 320) + 'px';
+        }
+        place(); addEventListener('resize', place);
+
+        // load frames coarse to fine so any scroll position has a close frame quickly
+        var frames = [], ok = [], all = Array.from({ length: N }, function (_, i) { return i; });
+        var queue = [0, N - 1, 30, 15, 45]
+          .concat(all.filter(function (i) { return i % 6 === 0; }), all.filter(function (i) { return i % 2 === 0; }), all)
+          .filter(function (v, i, a) { return a.indexOf(v) === i; });
+        var active = 0;
+        function next() {
+          while (active < 6 && queue.length) {
+            (function (i) {
+              active++;
+              var im = new Image();
+              im.decoding = 'async';
+              im.src = 'img/seq/' + set + (i < 10 ? '0' : '') + i + '.webp';
+              im.decode().then(function () { frames[i] = im; ok[i] = true; draw(); }, function () {}).then(function () { active--; next(); });
+            })(queue.shift());
+          }
+        }
+        // start right away, after the poster has had first go at the network
+        if (document.readyState === 'complete') next(); else addEventListener('load', next);
+        setTimeout(next, 600);
+
+        var cur = -1, using = false;
+        function nearest(i) {
+          for (var d = 0; d < N; d++) { if (ok[i - d]) return i - d; if (ok[i + d]) return i + d; }
+          return -1;
+        }
+        function draw() {
+          if (st.classList.contains('viewer-ready')) return;
+          var p = (window.MKP && window.MKP.p) || 0;
+          if (!using && p < 0.004) return;                   // still at the top: the poster is exact
+          var j = nearest(Math.round(p * (N - 1)));
+          if (j < 0) return;
+          if (j !== cur) { ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(frames[j], 0, 0, cv.width, cv.height); cur = j; }
+          if (!using) { using = true; poster.style.transition = 'none'; poster.style.opacity = 0; cv.classList.add('on'); }
+        }
+        (function loop() { if (!st.classList.contains('viewer-ready')) { draw(); requestAnimationFrame(loop); } })();
+      })();
+    </script>
+    <script src="https://static.sketchfab.com/api/sketchfab-viewer-1.12.1.js"></script>
+    <script src="js/bike-viewer.js"></script>
+
+    <div class="story-end">
+      <h1>Marketplace bikes are a gamble.<br>Ours aren’t.</h1>
+      <div class="btns">
+        <a class="btn dark" href="bikes.html">Shop road bikes</a>
+        <a class="btn ghost" href="#" data-wa="Hi MKP Bikes, I'd like to book a test ride.">Book a test ride</a>
+      </div>
+    </div>
+
+    <div class="story-hint mono"><span class="dot"></span>Scroll</div>
+    <div class="story-bar"><i id="storyBar"></i></div>
+  </div>
+</section>
+
+<!-- 1b. TAVELO BAND (from the live site's "Now available" strip, restyled) -->
+<section class="tav-band">
+  <div class="wrap">
+    <a class="tav-card reveal" href="tavelo.html">
+      <span class="tav-logo"><img src="img/tavelo-logo.png" alt="Tavelo"></span>
+      <span class="tav-copy">
+        <span class="mono eyebrow light">Now available</span>
+        <span class="tav-title">Tavelo bikes, frames and components</span>
+        <span class="tav-sub">#1 Australian Tavelo dealer. Lifetime warranty included.</span>
+      </span>
+      <span class="btn outline tav-btn">Tavelo Bikes Australia <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+    </a>
+  </div>
+</section>
+
+<!-- 2. SPLIT: two worlds (Analogue) -->
+<section class="split" id="split">
+  <a class="half dark" href="bikes.html?type=pre">
+    <div class="half-copy">
+      <span class="mono label madone">Pre-owned</span>
+      <h2>Premium Bikes</h2>
+      <span class="explore">Explore now</span>
+    </div>
+    <img class="bg" src="img/studio/madone-black.jpg" alt="Trek Madone SL7, pre-owned">
+  </a>
+  <a class="half light" href="bikes.html?type=new">
+    <div class="half-copy">
+      <span class="mono label">Brand new</span>
+      <h2>Tavelo</h2>
+      <span class="explore">Explore now</span>
+    </div>
+    <img class="bg" src="img/studio/arow-stone.jpg" alt="Tavelo Arow, brand new">
+  </a>
+  <p class="split-foot mono">#1 Australian Tavelo dealer</p>
+</section>
+
+<!-- 3. LINEUP: model cards with price + two actions (Polestar) -->
+<section class="lineup" id="lineup">
+  <div class="wrap">
+    <div class="head center reveal">
+      <span class="mono eyebrow">In stock now</span>
+      <h2>Pick your next bike.</h2>
+      <div class="seg" role="tablist" aria-label="Filter bikes">
+        <button class="on" data-f="all" role="tab" aria-selected="true">All</button>
+        <button data-f="pre" role="tab" aria-selected="false">Pre-owned</button>
+        <button data-f="new" role="tab" aria-selected="false">New</button>
+      </div>
+    </div>
+
+    <div class="models">
+      <article class="model reveal" data-t="pre">
+        <div class="m-top"><span class="tag orange">Pre-owned</span><span class="mono size">52cm</span></div>
+        <a class="m-img" href="product.html?bike=specialized-aethos-expert"><img src="img/list/aethos.jpg" alt="Specialized Aethos Expert" loading="lazy"></a>
+        <h3>Specialized Aethos Expert</h3>
+        <p class="m-line">Ultralight FACT carbon. Shimano Ultegra Di2.</p>
+        <dl class="specs"><div><dt>Condition</dt><dd>Amazing</dd></div><div><dt>Groupset</dt><dd>Ultegra Di2</dd></div><div><dt>Price</dt><dd>$4,600</dd></div></dl>
+        <div class="m-btns"><a class="btn dark sm" href="product.html?bike=specialized-aethos-expert">View bike</a><a class="btn ghost sm" href="#" data-wa="Hey MKP, I'd like to book a test ride for this bike: https://www.mkpbikes.com.au/bikes/pre-owned/specialized-aethos-expert">Test ride</a></div>
+      </article>
+
+      <article class="model reveal" data-t="pre">
+        <div class="m-top"><span class="tag orange">Pre-owned</span><span class="mono size">Medium</span></div>
+        <a class="m-img" href="product.html?bike=trek-madone-sl7"><img src="img/list/madone.jpg" alt="Trek Madone SL7" loading="lazy"></a>
+        <h3>Trek Madone SL7</h3>
+        <p class="m-line">Aero flagship. Zipp 303 S carbon wheels.</p>
+        <dl class="specs"><div><dt>Condition</dt><dd>Amazing</dd></div><div><dt>Groupset</dt><dd>Ultegra Di2</dd></div><div><dt>Price</dt><dd>$4,000</dd></div></dl>
+        <div class="m-btns"><a class="btn dark sm" href="product.html?bike=trek-madone-sl7">View bike</a><a class="btn ghost sm" href="#" data-wa="Hey MKP, I'd like to book a test ride for this bike: https://www.mkpbikes.com.au/bikes/pre-owned/trek-madone-sl7">Test ride</a></div>
+      </article>
+
+      <article class="model reveal" data-t="pre">
+        <div class="m-top"><span class="tag orange">Pre-owned</span><span class="mono size">Road</span></div>
+        <a class="m-img" href="product.html?bike=orbea-orca-m20i-ltd-team"><img src="img/list/orca.jpg" alt="Orbea Orca M20i LTD Team" loading="lazy"></a>
+        <h3>Orbea Orca M20i LTD Team</h3>
+        <p class="m-line">Climbing frame in team colours.</p>
+        <dl class="specs"><div><dt>Condition</dt><dd>Amazing</dd></div><div><dt>Type</dt><dd>Road</dd></div><div><dt>Price</dt><dd>$5,280</dd></div></dl>
+        <div class="m-btns"><a class="btn dark sm" href="product.html?bike=orbea-orca-m20i-ltd-team">View bike</a><a class="btn ghost sm" href="#" data-wa="Hey MKP, I'd like to book a test ride for this bike: https://www.mkpbikes.com.au/bikes/pre-owned/orbea-orca-m20i-ltd-team">Test ride</a></div>
+      </article>
+
+      <article class="model reveal" data-t="new">
+        <div class="m-top"><span class="tag blue">Brand new</span><span class="mono size">Medium</span></div>
+        <a class="m-img" href="product.html?bike=tavelo-arow-2"><img src="img/list/arow2.jpg" alt="Tavelo Arow" loading="lazy"></a>
+        <h3>Tavelo Arow</h3>
+        <p class="m-line">Wind tunnel aero. Lifetime warranty.</p>
+        <dl class="specs"><div><dt>Groupset</dt><dd>105 Di2</dd></div><div><dt>Weight</dt><dd>7.7 kg</dd></div><div><dt>Price</dt><dd>$4,980</dd></div></dl>
+        <div class="m-btns"><a class="btn dark sm" href="product.html?bike=tavelo-arow-2">View bike</a><a class="btn ghost sm" href="#" data-wa="Hey MKP, I'd like to book a test ride for this bike: https://www.mkpbikes.com.au/bikes/new-bikes/tavelo-arow-2">Test ride</a></div>
+      </article>
+    </div>
+
+    <p class="center more reveal"><a class="link" href="bikes.html">See all bikes in stock</a></p>
+  </div>
+</section>
+
+<!-- 4. INSPECTION: dark dot-grid band (Nothing) -->
+<section class="inspect" id="inspect" data-dark>
+  <div class="wrap inspect-in">
+    <div class="reveal">
+      <span class="mono eyebrow light">The MKP grade</span>
+      <h2>Every Part,<br>Graded Low to High.</h2>
+      <p class="sub">Frame, wheels, groupset and cockpit are checked and scored out of 100% on every bike we list. No hidden issues. No “sold as is”.</p>
+      <a class="btn light" href="product.html?bike=specialized-aethos-expert#grades">See a full report</a>
+    </div>
+    <div class="grade-card reveal">
+      <div class="gc-head mono"><span>Specialized Aethos Expert</span><span>Grade report</span></div>
+      <ul class="grades">
+        <li><span>Frame set</span><i style="--v:0.96"></i><b>96%</b></li>
+        <li><span>Wheel set</span><i style="--v:0.94"></i><b>94%</b></li>
+        <li><span>Group set</span><i style="--v:0.92"></i><b>92%</b></li>
+        <li><span>Cockpit</span><i style="--v:0.95"></i><b>95%</b></li>
+      </ul>
+      <div class="grade-scale mono" aria-hidden="true"><span></span><span class="gs"><span>Low</span><span>High</span></span><b>100%</b></div>
+    </div>
+  </div>
+</section>
+
+<!-- 5. ACTION TRIO (Polestar: test drive / shop online / find a retailer) -->
+<section class="trio">
+  <div class="wrap trio-in">
+    <a class="t reveal" href="#" data-wa="Hi MKP Bikes, I'd like to book a test ride at the Cheltenham showroom."><span class="mono">01</span><h3>Book a test ride</h3><p>Come to the Cheltenham showroom. No rush, no pressure.</p><em>Book now</em></a>
+    <a class="t reveal" href="bikes.html"><span class="mono">02</span><h3>Shop online</h3><p>Insured delivery Australia-wide. Packing is always free, plus a complimentary video recording of your bike's condition.</p><em>Browse bikes</em></a>
+    <a class="t reveal" href="#" data-wa=""><span class="mono">03</span><h3>Message us 24/7</h3><p>Ping us on WhatsApp day or night. Real people reply.</p><em>WhatsApp</em></a>
+  </div>
+</section>
+
+<!-- 6. FITTING -->
+<section class="fitting" id="fitting">
+  <div class="wrap fit-in">
+    <div class="fit-img reveal"><img src="img/bike-fitting-landscape.jpg" alt="Bike fitting session at MKP Bikes"></div>
+    <div class="fit-copy reveal">
+      <span class="mono eyebrow">Bike fitting with Ash Saxena</span>
+      <h2>Ride without the knee, back and neck pain.</h2>
+      <p class="sub">A 90-minute session that starts off the bike, so every adjustment is built around your body, not a template.</p>
+      <ol class="steps mono">
+        <li>Conversation</li><li>Body assessment</li><li>On-bike assessment</li><li>Adjustments</li><li>Fit report</li>
+      </ol>
+      <div class="price-row"><div><b>From $180</b><span>Full refund if you feel no improvement.</span></div><a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book a fitting</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7. TAVELO BANNER (Polestar award strip) -->
+<section class="banner">
+  <div class="wrap"><div class="banner-in reveal">
+    <img src="img/tavelo-og.jpg" alt="Tavelo carbon bikes">
+    <div class="banner-copy">
+      <span class="mono eyebrow light">#1 Australian Tavelo dealer</span>
+      <h2>Race-proven carbon, with a lifetime warranty.</h2>
+      <p>UCI-certified Tavelo frames, backed by local support in Melbourne.</p>
+      <div class="btns"><a class="btn light" href="tavelo.html">Shop Tavelo</a><a class="btn outline" href="#" data-wa="Hi MKP Bikes, I'd like to chat about Tavelo bikes.">Talk to us</a></div>
+    </div>
+  </div></div>
+</section>
+
+<!-- 8. REVIEWS: real Google reviews (js/reviews-data.js) -->
+<section class="reviews" id="reviews">
+  <div class="wrap">
+    <div class="rev-head reveal">
+      <div><span class="mono eyebrow">Google reviews</span><h2>Riders Who Stopped Gambling.</h2></div>
+      <a class="rev-score" href="#" data-maps aria-label="5.0 stars from 219 Google reviews">
+        <b>5.0</b>
+        <span class="rev-score-side"><span class="stars" aria-hidden="true">★★★★★</span><span class="rev-score-sub"><svg class="g-logo" width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>219 Google reviews</span></span>
+      </a>
+    </div>
+  </div>
+  <div class="rev-rows" id="revRows" aria-label="Customer reviews"></div>
+  <div class="wrap rev-cta reveal"><a class="btn ghost" href="#" data-maps>Read all 219 reviews on Google</a></div>
+  <div class="rev-dialog" id="revDialog" hidden><div class="rev-dialog-card" role="dialog" aria-modal="true" aria-label="Review"><button class="rev-dialog-x" type="button" aria-label="Close">✕</button><div class="rev-dialog-body"></div></div></div>
+</section>
+
+<!-- 9. VISIT -->
+<section class="visit" id="visit">
+  <div class="wrap visit-in reveal">
+    <div class="visit-copy">
+      <span class="mono eyebrow">Visit the showroom</span>
+      <h2>Come in.<br>Take it for a spin.</h2>
+      <p class="sub">Test ride any bike in stock, talk sizing and fit, no rush and no pressure.</p>
+      <div class="btns">
+        <a class="btn dark" href="#" data-wa="">Contact us on WhatsApp</a>
+        <a class="btn ghost" href="#" data-maps>Get directions</a>
+      </div>
+    </div>
+    <dl class="visit-info">
+      <div><dt class="mono">Address</dt><dd>5/17 Kylie Place<br>Cheltenham VIC 3192</dd></div>
+      <div><dt class="mono">Hours</dt><dd>Weekdays 11am to 7pm<br>Weekends 10am to 5pm</dd></div>
+      <div><dt class="mono">Contact</dt><dd><a href="#" data-wa="">+61 426 195 709</a></dd></div>
+    </dl>
+  </div>
+</section>
+</main>
+
+<div id="site-foot"></div>
+
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script src="js/reviews-data.js"></script>
+<script src="js/home.js"></script>
+</body>
+</html>

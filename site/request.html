@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Request a Bike | MKP Bikes Melbourne</title>
+<meta name="description" content="Can't find the exact bike you're after? Tell MKP Bikes what you want and we'll get back to you as soon as possible.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="request" data-no-popup="1">
+<div id="site-nav"></div>
+
+<main>
+  <section class="phero">
+    <div class="wrap two" style="align-items:start">
+      <div>
+        <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Request a bike</span></nav>
+        <h1>Request a bike.</h1>
+        <p class="sub">Can't find the exact bike you're after? Fill in the details below and we'll get back to you as soon as possible.</p>
+        <ul class="checks">
+          <li>Any road bike, new or pre-owned</li>
+          <li>Tell us your size and budget</li>
+          <li>We'll reach out to you shortly</li>
+        </ul>
+        <div class="btns" style="margin-top:30px">
+          <a class="btn ghost" href="bikes.html">Browse current stock</a>
+          <a class="btn ghost" href="size.html">Find your size</a>
+        </div>
+      </div>
+
+      <form class="form-card reveal" id="reqForm" novalidate>
+        <div id="reqFields">
+          <h3>What are you looking for?</h3>
+          <p>Fields marked * are required.</p>
+          <div class="fields">
+            <label class="field"><span>Name *</span><input name="name" autocomplete="name" placeholder="Your full name" required minlength="2"></label>
+            <label class="field"><span>Phone *</span><input name="phone" type="tel" autocomplete="tel" placeholder="+61 4XX XXX XXX" required minlength="8"></label>
+            <label class="field full"><span>Bike model *</span><input name="bikeModel" placeholder="e.g. Trek Emonda, Specialized Tarmac, any road bike..." required minlength="2"></label>
+            <label class="field"><span>Frame size *</span>
+              <select name="size" required><option value="">Select size</option><option>XS</option><option>S</option><option>SM</option><option>M</option><option>ML</option><option>L</option><option>XL</option><option>XXL</option></select>
+            </label>
+            <label class="field"><span>Budget (AUD) *</span>
+              <select name="budget" required>
+                <option value="">Select budget range</option>
+                <option value="Under $1,000">Under $1,000</option>
+                <option value="$1,000 &#8211; $2,000">$1,000 to $2,000</option>
+                <option value="$2,000 &#8211; $3,500">$2,000 to $3,500</option>
+                <option value="$3,500+">$3,500+</option>
+              </select>
+            </label>
+            <label class="field full"><span>Notes (optional)</span><textarea name="notes" placeholder="Any specific requirements, preferred colours, components, etc."></textarea></label>
+          </div>
+          <button class="btn dark" type="submit">Submit request</button>
+          <p class="form-note" id="reqErr" hidden></p>
+          <p class="form-note">Or message us directly: <a class="link" href="#" data-wa="Hi MKP Bikes, I'm looking for a bike you don't have listed.">WhatsApp</a></p>
+        </div>
+        <div class="req-ok" id="reqOk" hidden>
+          <span class="ok-dot" aria-hidden="true">✓</span>
+          <h3>Request received!</h3>
+          <p>We'll reach out to you shortly to help find your perfect bike.</p>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><span class="mono eyebrow">While you wait</span><h2>Have a look around.</h2></div></div>
+      <div class="fgrid">
+        <a class="fcard reveal" href="bikes.html?type=pre"><span class="mono">Shop</span><h3>Pre-owned bikes</h3><p>Hand-selected, inspected and serviced road, gravel and triathlon bikes.</p></a>
+        <a class="fcard reveal" href="tavelo.html"><span class="mono">New</span><h3>Tavelo</h3><p>#1 Australian Tavelo dealer. Bikes, frames and components.</p></a>
+        <a class="fcard reveal" href="sell.html"><span class="mono">Trade in</span><h3>Sell your bike</h3><p>Get a fair offer, or put the value towards your next bike.</p></a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+  // Same fields and checks as the live mkpbikes.com.au/request-a-bike form, which posts to /api/request-bike.
+  // Browsers only allow that post from mkpbikes.com.au itself; anywhere else (this concept) the request
+  // opens WhatsApp with the details filled in, like the sell form.
+  (() => {
+    const S = window.MKPsite;
+    const form = document.getElementById('reqForm');
+    const err = document.getElementById('reqErr');
+    const onLive = /(^|\.)mkpbikes\.com\.au$/.test(location.hostname);
+    form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('bad'));
+    form.addEventListener('change', e => e.target.closest('.field')?.classList.remove('bad'));
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      let ok = true;
+      form.querySelectorAll('[required]').forEach(f => {
+        const min = +f.getAttribute('minlength') || 1;
+        const bad = f.value.trim().length < min;
+        f.closest('.field').classList.toggle('bad', bad);
+        if (bad && ok) { f.focus(); ok = false; }
+      });
+      if (!ok) return;
+      const d = Object.fromEntries(new FormData(form));
+      const done = () => { document.getElementById('reqFields').hidden = true; document.getElementById('reqOk').hidden = false; };
+      if (onLive) {
+        const btn = form.querySelector('[type=submit]');
+        btn.disabled = true; btn.textContent = 'Submitting...';
+        try {
+          const r = await fetch('/api/request-bike', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(d) });
+          if (!r.ok) throw new Error();
+          done();
+        } catch (x) {
+          err.textContent = 'Something went wrong. Please try again or contact us directly.';
+          err.hidden = false;
+        }
+        btn.disabled = false; btn.textContent = 'Submit request';
+        return;
+      }
+      const msg = [
+        'Hi MKP Bikes, I\'d like to request a bike.',
+        `Bike model: ${d.bikeModel}`, `Frame size: ${d.size}`,
+        `Budget: ${d.budget.replace(/\s*\u2013\s*/, ' to ')}`,
+        d.notes ? `Notes: ${d.notes}` : '',
+        `Name: ${d.name}`, `Phone: ${d.phone}`,
+      ].filter(Boolean).join('\n');
+      window.open(S.wa(msg), '_blank', 'noopener');
+      done();
+    });
+  })();
+</script>
+</body>
+</html>

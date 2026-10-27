@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bike | MKP Bikes</title>
+<meta name="description" content="Inspected and graded road bikes from MKP Bikes, Cheltenham, Melbourne.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="shop">
+<div id="site-nav"></div>
+
+<main id="pdp"></main>
+
+<section class="sec" id="relatedSec" hidden>
+  <div class="wrap">
+    <div class="sec-head"><div><span class="mono eyebrow">You may also like</span><h2>More bikes like this.</h2></div><a class="link" id="relatedAll" href="bikes.html">See all</a></div>
+    <div class="models" id="related"></div>
+  </div>
+</section>
+
+<section class="trio">
+  <div class="wrap trio-in">
+    <a class="t reveal" href="#" data-wa="Hi MKP Bikes, I'd like to book a test ride at the Cheltenham showroom."><span class="mono">01</span><h3>Visit and test ride</h3><p>Come in, have a look around and take it for a spin. No rush, no pressure.</p><em>Book a test ride</em></a>
+    <a class="t reveal" href="#" data-wa="Hi MKP Bikes, can you quote delivery to my postcode?"><span class="mono">02</span><h3>Australia-wide delivery</h3><p>Packing is always free, plus a complimentary video recording of your bike's condition. Use our insured FedEx Road Express service or organise your own.</p><em>Ask about delivery</em></a>
+    <a class="t reveal" href="#" data-wa=""><span class="mono">03</span><h3>We're here 24/7</h3><p>See something you like? Message us day or night so you never miss out.</p><em>WhatsApp</em></a>
+  </div>
+</section>
+<div style="height:clamp(72px,9vw,120px)"></div>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+(() => {
+  const S = window.MKPsite;
+  const slug = new URLSearchParams(location.search).get('bike') || 'specialized-aethos-expert';
+  const main = document.getElementById('pdp');
+  const esc = S.esc;
+  const notFound = () => { main.innerHTML = `<section class="notfound"><div class="wrap"><span class="mono eyebrow">Not found</span><h1 style="font-size:clamp(40px,6vw,72px)">This Bike Has Found a New Home.</h1><p class="sub" style="margin:18px auto 30px">It may have sold. Plenty more inspected bikes are ready to ride.</p><a class="btn dark" href="bikes.html">Shop all bikes</a></div></section>`; };
+  let gal = null, cur = null;
+
+  function show(b) {
+    cur = b;
+    document.title = `${b.name} | MKP Bikes`;
+    // same renderer as the quick-view popup (site.js), so both always look identical
+    gal = S.renderProduct(main, b, false);
+    related();
+    if (location.hash) setTimeout(() => document.querySelector(location.hash)?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+  }
+  // related: the bikes picked in the admin (relatedProducts) first, then same type and category at the closest price
+  function related() {
+    const b = cur; if (!b) return;
+    const picked = (b.related || []).map(S.bySlug).filter(Boolean);
+    const near = S.bikes.filter(x => x.slug !== b.slug && x.kind === b.kind && x.productType === b.productType && !picked.includes(x))
+      .sort((x, y) => (x.category === b.category ? 0 : 1) - (y.category === b.category ? 0 : 1) || Math.abs(x.price - b.price) - Math.abs(y.price - b.price));
+    const rel = [...picked, ...near].slice(0, 4);
+    document.getElementById('relatedSec').hidden = !rel.length;
+    if (!rel.length) return;
+    document.getElementById('related').innerHTML = rel.map(S.card).join('');
+    document.getElementById('relatedAll').href = `bikes.html?type=${b.kind}`;
+    S.wireWa(document.getElementById('related')); S.reveal(document.getElementById('related'));
+  }
+  addEventListener('keydown', e => { if (!gal || document.querySelector('.qv.open')) return; if (e.key === 'ArrowLeft') gal.prev(); if (e.key === 'ArrowRight') gal.next(); });
+
+  const b = S.bySlug(slug);
+  if (b) show(b);
+  else if (window.MKP_API) {
+    // not in the snapshot (e.g. listed in the admin today): ask the backend
+    main.innerHTML = '<section class="notfound"><div class="wrap"><p class="sub">Loading bike…</p></div></section>';
+    MKP_API.bike(slug).then(x => x && x.inStock ? show(x) : notFound());
+  } else notFound();
+  // live list arrived: refresh related, and drop the page if this bike sold since the snapshot
+  document.addEventListener('mkp:bikes', () => { if (cur && !S.bySlug(cur.slug)) notFound(); else related(); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Find Your Perfect Bike Size | MKP Bikes</title>
+<meta name="description" content="Road bike size finder: find your perfect road bike size based on your measurements and riding style.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="size" data-no-popup="1">
+<div id="site-nav"></div>
+
+<main>
+  <section class="phero">
+    <div class="wrap two" style="align-items:start">
+      <div>
+        <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Find your size</span></nav>
+        <h1>Road bike size finder.</h1>
+        <p class="sub">Find your perfect road bike size based on your measurements and riding style.</p>
+        <div class="howto reveal">
+          <h3>How to measure yourself accurately</h3>
+          <div class="howto-cols">
+            <div>
+              <span class="mono eyebrow">Measuring height</span>
+              <ol>
+                <li>Stand barefoot with your back against a wall</li>
+                <li>Keep your feet flat on the ground</li>
+                <li>Look straight ahead (not up or down)</li>
+                <li>Place a book or flat object on top of your head</li>
+                <li>Mark the position and measure from the floor</li>
+              </ol>
+            </div>
+            <div>
+              <span class="mono eyebrow">Measuring inseam</span>
+              <ol>
+                <li>Stand barefoot with your back against a wall</li>
+                <li>Place a book between your legs, firmly against your crotch</li>
+                <li>Keep the book level and mark where it touches the wall</li>
+                <li>Measure from the floor to this mark</li>
+                <li>This is your inseam length</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <form class="form-card wiz reveal" id="wiz" novalidate>
+        <div class="wiz-top">
+          <span class="mono" id="wizStep">Step 1 of 3</span>
+          <span class="mono" id="wizName">Rider measurements</span>
+        </div>
+        <div class="wiz-bar"><i id="wizBar"></i></div>
+
+        <!-- step 1 -->
+        <fieldset class="wiz-pane" data-step="1">
+          <div class="wiz-head">
+            <h3>Rider measurements</h3>
+            <div class="seg units" role="radiogroup" aria-label="Units">
+              <button type="button" class="on" data-unit="cm" role="radio" aria-checked="true">cm</button>
+              <button type="button" data-unit="in" role="radio" aria-checked="false">inches</button>
+            </div>
+          </div>
+          <p class="wiz-note">Required: these measurements are essential for determining your bike size.</p>
+          <div class="fields">
+            <label class="field"><span>Height *</span><span class="unit-in"><input type="number" name="height" inputmode="decimal" min="0" step="any" placeholder="Your height in cm" required><em class="u">cm</em></span></label>
+            <label class="field"><span>Inseam (inner leg length) *</span><span class="unit-in"><input type="number" name="inseam" inputmode="decimal" min="0" step="any" placeholder="Your inseam in cm" required><em class="u">cm</em></span></label>
+          </div>
+          <p class="wiz-note" style="margin-top:20px">Optional: these additional measurements can help refine your bike fit.</p>
+          <div class="fields">
+            <label class="field"><span>Arm length (shoulder to wrist)</span><span class="unit-in"><input type="number" name="armLength" inputmode="decimal" min="0" step="any" placeholder="Your arm length in cm"><em class="u">cm</em></span></label>
+            <label class="field"><span>Torso length</span><span class="unit-in"><input type="number" name="torsoLength" inputmode="decimal" min="0" step="any" placeholder="Your torso length in cm"><em class="u">cm</em></span></label>
+          </div>
+        </fieldset>
+
+        <!-- step 2 -->
+        <fieldset class="wiz-pane" data-step="2" hidden>
+          <h3>Riding style and goals</h3>
+          <p class="wiz-note">Type of riding: select the primary type of riding you plan to do.</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="ridingType" value="recreational" checked><b>Recreational</b><span>Casual rides, weekend adventures, fitness</span></label>
+            <label class="opt"><input type="radio" name="ridingType" value="racing"><b>Racing</b><span>Competitive events, group rides, high performance</span></label>
+            <label class="opt"><input type="radio" name="ridingType" value="commuting"><b>Commuting</b><span>Daily transportation, urban riding</span></label>
+          </div>
+          <p class="wiz-note">Desired riding position: select your preferred body position while riding.</p>
+          <div class="opts">
+            <label class="opt"><input type="radio" name="position" value="aggressive"><b>Aggressive</b><span>Lower, more aerodynamic position for speed</span></label>
+            <label class="opt"><input type="radio" name="position" value="moderate" checked><b>Moderate</b><span>Balanced between speed and comfort</span></label>
+            <label class="opt"><input type="radio" name="position" value="comfortable"><b>Comfortable</b><span>More upright position for better comfort</span></label>
+          </div>
+          <p class="wiz-note">Performance goals: select any specific goals you have for your riding (optional).</p>
+          <div class="goals">
+            <label><input type="checkbox" name="goals" value="speed"><span>Speed and performance</span></label>
+            <label><input type="checkbox" name="goals" value="comfort"><span>Comfort on long rides</span></label>
+            <label><input type="checkbox" name="goals" value="climbing"><span>Climbing efficiency</span></label>
+            <label><input type="checkbox" name="goals" value="endurance"><span>Endurance</span></label>
+            <label><input type="checkbox" name="goals" value="versatility"><span>Versatility for different terrains</span></label>
+            <label><input type="checkbox" name="goals" value="handling"><span>Better handling and control</span></label>
+          </div>
+        </fieldset>
+
+        <!-- step 3 -->
+        <fieldset class="wiz-pane" data-step="3" hidden>
+          <div class="size-result">
+            <span class="mono eyebrow">Your recommended size</span>
+            <b id="sizeOut">M</b>
+            <p id="sizeDesc"></p>
+          </div>
+          <h3 style="margin-top:26px">Get your result</h3>
+          <p class="wiz-note">We'll email your size and measurements so you have them when you shop.</p>
+          <label class="field"><span>Email</span><input type="email" name="email" placeholder="Enter your email" autocomplete="email"></label>
+          <button class="btn dark" type="button" id="sendResult">Send result</button>
+          <p class="form-note" id="sendMsg" hidden></p>
+          <div class="btns" style="margin-top:14px">
+            <a class="btn ghost sm" href="bikes.html">Shop bikes</a>
+            <a class="btn ghost sm" href="#" id="askSize" data-wa="">Ask about this size</a>
+            <a class="btn ghost sm" href="fitting.html">Book a bike fit</a>
+          </div>
+        </fieldset>
+
+        <div class="wiz-nav">
+          <button class="btn ghost" type="button" id="wizBack" disabled>Back</button>
+          <button class="btn dark" type="button" id="wizNext" disabled>Next</button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><span class="mono eyebrow">Why correct sizing matters</span><h2>The right size changes everything.</h2></div></div>
+      <p class="sub reveal" style="margin:-16px 0 32px">Riding a bike that's the correct size for your body is crucial for:</p>
+      <div class="fgrid five">
+        <div class="fcard reveal"><span class="mono">01</span><h3>Optimal comfort on long rides</h3></div>
+        <div class="fcard reveal"><span class="mono">02</span><h3>Better control and handling</h3></div>
+        <div class="fcard reveal"><span class="mono">03</span><h3>Improved power transfer and efficiency</h3></div>
+        <div class="fcard reveal"><span class="mono">04</span><h3>Reduced risk of injury and pain</h3></div>
+        <div class="fcard reveal"><span class="mono">05</span><h3>Overall more enjoyable riding experience</h3></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap">
+      <a class="tav-card reveal" href="fitting.html">
+        <span class="tav-logo"><img src="img/mkp-logo.jpg" alt=""></span>
+        <span class="tav-copy">
+          <span class="mono eyebrow light">Go further than a size chart</span>
+          <span class="tav-title">Get a professional bike fit</span>
+          <span class="tav-sub">90 minutes with Ash Saxena in Cheltenham. Full refund if you feel no improvement.</span>
+        </span>
+        <span class="btn outline tav-btn">Bike fitting <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+  // Same sizing formula as the live mkpbikes.com.au/find-your-size tool.
+  (() => {
+    const S = window.MKPsite;
+    const form = document.getElementById('wiz');
+    const panes = [...form.querySelectorAll('.wiz-pane')];
+    const back = document.getElementById('wizBack'), next = document.getElementById('wizNext');
+    const names = ['Rider measurements', 'Riding style and goals', 'Recommended size'];
+    const DESC = {
+      XS: 'Ideal for shorter riders. You should feel comfortable with good standover clearance and a responsive handling experience.',
+      S: 'Perfect for shorter to average height riders. You should feel balanced with good control and comfortable reach to the handlebars.',
+      M: 'Suitable for average height riders. You should feel centered on the bike with a good balance between comfort and efficiency.',
+      L: 'Designed for taller riders. You should feel properly stretched out with efficient power transfer and stable handling.',
+      XL: 'Ideal for very tall riders. You should feel comfortable with adequate room for proper leg extension and upper body positioning.',
+      XXL: 'Perfect for exceptionally tall riders. You should feel properly fitted with optimal biomechanics for comfort on long rides.',
+    };
+    let step = 1, units = 'cm', size = '';
+    const num = n => parseFloat(form.elements[n].value) || 0;
+    const valid = () => num('height') > 0 && num('inseam') > 0;
+
+    function frameSize() {
+      const k = units === 'in' ? 2.54 : 1;
+      const h = num('height') * k, i = num('inseam') * k;
+      let r = 0.665 * i;
+      const ratio = i / h;
+      if (ratio > 0.48) r += 0.5;
+      if (ratio < 0.45) r -= 0.5;
+      if (num('armLength') && num('torsoLength')) {
+        const u = (num('armLength') * k + num('torsoLength') * k) / h;
+        if (u > 0.62) r += 1;
+        if (u < 0.58) r -= 1;
+      }
+      const pos = form.elements.position.value;
+      if (pos === 'aggressive') r += 0.5;
+      if (pos === 'comfortable') r -= 0.5;
+      return r < 49 ? 'XS' : r < 52 ? 'S' : r < 55 ? 'M' : r < 58 ? 'L' : r < 61 ? 'XL' : 'XXL';
+    }
+
+    function show(n) {
+      step = n;
+      panes.forEach(p => { p.hidden = +p.dataset.step !== n; });
+      document.getElementById('wizStep').textContent = `Step ${n} of 3`;
+      document.getElementById('wizName').textContent = names[n - 1];
+      document.getElementById('wizBar').style.transform = `scaleX(${n / 3})`;
+      back.disabled = n === 1;
+      next.hidden = n === 3;
+      next.disabled = n === 1 && !valid();
+      if (n === 3) {
+        size = frameSize();
+        document.getElementById('sizeOut').textContent = size;
+        document.getElementById('sizeDesc').textContent = DESC[size];
+        document.getElementById('askSize').href = S.wa(`Hi MKP Bikes, the size finder says I'm a size ${size} (height ${num('height')}${units}, inseam ${num('inseam')}${units}). Which bikes do you have in my size?`);
+      }
+      if (n > 1 || document.activeElement === back) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    next.addEventListener('click', () => show(step + 1));
+    back.addEventListener('click', () => show(step - 1));
+    form.addEventListener('input', () => { if (step === 1) next.disabled = !valid(); });
+
+    // cm / inches toggle converts what's already typed, like the live tool
+    form.querySelectorAll('.units button').forEach(b => b.addEventListener('click', () => {
+      const u = b.dataset.unit;
+      if (u === units) return;
+      const f = u === 'cm' ? 2.54 : 0.393701;
+      ['height', 'inseam', 'armLength', 'torsoLength'].forEach(n => {
+        const el = form.elements[n];
+        if (el.value) el.value = Number((parseFloat(el.value) * f).toFixed(1));
+        el.placeholder = el.placeholder.replace(/(cm|in)$/, u);
+      });
+      form.querySelectorAll('.u').forEach(e => { e.textContent = u; });
+      form.querySelectorAll('.units button').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-checked', x === b); });
+      units = u;
+    }));
+
+    // "Send result" posts to the live site's email endpoint. Browsers only allow that from
+    // mkpbikes.com.au itself, so anywhere else we say so and point to WhatsApp instead.
+    const msg = document.getElementById('sendMsg');
+    document.getElementById('sendResult').addEventListener('click', async e => {
+      const email = form.elements.email.value.trim();
+      const field = form.elements.email.closest('.field');
+      if (!email.includes('@')) { field.classList.add('bad'); form.elements.email.focus(); return; }
+      field.classList.remove('bad');
+      const btn = e.currentTarget;
+      btn.disabled = true; btn.textContent = 'Sending...';
+      const onLive = /(^|\.)mkpbikes\.com\.au$/.test(location.hostname);
+      const measurements = { height: num('height'), inseam: num('inseam'), armLength: num('armLength') || null, torsoLength: num('torsoLength') || null, units };
+      const style = { ridingType: form.elements.ridingType.value, position: form.elements.position.value, goals: [...form.querySelectorAll('[name=goals]:checked')].map(x => x.value) };
+      try {
+        const r = await fetch((onLive ? '' : S.LIVE) + '/api/send-size-result', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, measurements, style, frameSize: size, sizeDescription: DESC[size] }) });
+        if (!r.ok) throw new Error();
+        msg.innerHTML = '<b>Check your email.</b> We\'ve sent your result to your inbox.';
+      } catch (err) {
+        msg.innerHTML = 'We couldn\'t send the email from here. Your size is shown above, or <a class="link" href="' + document.getElementById('askSize').href + '" target="_blank" rel="noopener">message us on WhatsApp</a>.';
+      }
+      msg.hidden = false;
+      btn.disabled = false; btn.textContent = 'Send result';
+    });
+    show(1);
+  })();
+</script>
+</body>
+</html>

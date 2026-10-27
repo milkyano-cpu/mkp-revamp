@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Our Content | MKP Bikes</title>
+<meta name="description" content="Videos from MKP Bikes, your premium bike shop in Cheltenham, Melbourne.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="content">
+<div id="site-nav"></div>
+
+<main>
+  <section class="phero" style="padding-bottom:0">
+    <div class="wrap">
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Our content</span></nav>
+      <div class="sec-head" style="margin-bottom:0">
+        <div>
+          <h1>Our content.</h1>
+          <p class="sub">MKP Bikes, your premium bike shop. Rides, test rides and what goes on at the Cheltenham showroom.</p>
+        </div>
+        <div class="btns">
+          <a class="btn dark" href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">Follow @mkp.bikes</a>
+          <a class="btn ghost" href="https://strava.app.link/eqFU77Znl4b" target="_blank" rel="noopener">Strava club</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="reels" id="reels"></div>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap">
+      <a class="tav-card reveal" href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">
+        <span class="tav-logo"><img src="img/mkp-logo.jpg" alt=""></span>
+        <span class="tav-copy">
+          <span class="mono eyebrow light">Thanks for following</span>
+          <span class="tav-title">More on Instagram</span>
+          <span class="tav-sub">New arrivals, builds and rides from the shop, first.</span>
+        </span>
+        <span class="btn outline tav-btn">@mkp.bikes <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+  // Videos from mkpbikes.com.au/api/videos (Oct 2026), same order as the live gallery.
+  (() => {
+    const S = window.MKPsite;
+    const S3 = 'https://s3.milkyano.com/milkyano/mkp-bikes/';
+    const VIDEOS = [
+      { title: 'Thanks For Following', desc: 'MKP Bikes, your premium bike shop', video: 'thanks-for-following-resized-1771944675542.mp4', thumb: 'Thumbnail_-_Thanks_for_Following-1771944861955.jpg' },
+      { title: 'Sell Your Bikes', desc: 'MKP Bikes, your premium bike shop', video: 'sell-your-bikes-resized-1771945881561.mp4', thumb: 'Thumbnail_-_Sell_Your_Bike-1771946213916.jpg', link: ['sell.html', 'Sell your bike'] },
+      { title: 'Test Ride', desc: 'MKP Bikes, your premium bike shop', video: 'mkp-test-ride-resized.mp4', thumb: 'Thumbnail_-_Test_Ride-1771946599310.jpg', link: ['bikes.html', 'Pick a bike to test ride'] },
+    ];
+    VIDEOS.forEach(v => { v.video = S3 + v.video; v.thumb = S3 + v.thumb; });
+    const host = document.getElementById('reels');
+    // play muted while on screen, pause when scrolled away
+    const io = new IntersectionObserver(es => es.forEach(e => {
+      const v = e.target;
+      if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
+    }), { threshold: 0.4 });
+    const LINKS = { 'sell your bike': ['sell.html', 'Sell your bike'], 'sell your bikes': ['sell.html', 'Sell your bike'], 'test ride': ['bikes.html', 'Pick a bike to test ride'] };
+    function draw(list) {
+    host.innerHTML = list.map(v => `
+<figure class="reel reveal">
+  <div class="reel-media">
+    <video src="${S.esc(v.video)}" poster="${S.esc(v.thumb)}" muted loop playsinline preload="none"></video>
+    <button class="reel-sound" type="button" aria-pressed="false" aria-label="Turn sound on"><span class="mono">Sound</span></button>
+    <span class="tag orange on-dark reel-tag">Our content</span>
+  </div>
+  <figcaption>
+    <h3>${S.esc(v.title)}</h3>
+    <p class="mono">@MKP Bikes</p>
+    <p class="reel-desc">${S.esc(v.desc)}</p>
+    ${v.link ? `<a class="link" href="${v.link[0]}">${v.link[1]}</a>` : ''}
+  </figcaption>
+</figure>`).join('');
+    S.reveal(host);
+    host.querySelectorAll('video').forEach(v => io.observe(v));
+    }
+
+    draw(VIDEOS);
+    // videos managed in the admin (/api/videos) replace the snapshot when the backend is reachable
+    fetch('/api/videos').then(r => r.ok ? r.json() : Promise.reject()).then(list => {
+      if (!Array.isArray(list) || !list.length) return;
+      draw(list.map(x => ({ title: x.title, desc: String(x.description || '').replace(/\s+[-–—]\s+/g, ', '), video: x.videoUrl, thumb: x.thumbnailUrl, link: LINKS[String(x.title).toLowerCase()] })));
+    }).catch(() => {});
+
+    // one video with sound at a time
+    host.addEventListener('click', e => {
+      const b = e.target.closest('.reel-sound');
+      if (!b) return;
+      const v = b.parentElement.querySelector('video');
+      const on = v.muted;
+      host.querySelectorAll('video').forEach(x => { x.muted = true; });
+      host.querySelectorAll('.reel-sound').forEach(x => { x.setAttribute('aria-pressed', 'false'); x.setAttribute('aria-label', 'Turn sound on'); });
+      if (on) { v.muted = false; v.play().catch(() => {}); b.setAttribute('aria-pressed', 'true'); b.setAttribute('aria-label', 'Turn sound off'); }
+    });
+  })();
+</script>
+</body>
+</html>

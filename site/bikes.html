@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Shop bikes | MKP Bikes</title>
+<meta name="description" content="Pre-owned and new road, gravel and TT bikes in Cheltenham, Melbourne. Every bike inspected and graded. Australia-wide delivery.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="shop">
+<div id="site-nav"></div>
+
+<main>
+  <section class="phero">
+    <div class="wrap">
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span id="crumbNow">Shop</span></nav>
+      <h1 id="shopTitle">Shop bikes</h1>
+      <p class="sub" id="shopSub">Hand-selected, inspected and graded. Test ride in Cheltenham or get it delivered Australia-wide.</p>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap">
+      <div class="toolbar">
+        <div class="seg" role="tablist" aria-label="Condition">
+          <button data-type="all" class="on" role="tab">All</button>
+          <button data-type="pre" role="tab">Pre-owned</button>
+          <button data-type="new" role="tab">New</button>
+        </div>
+        <div class="chips" id="cats" aria-label="Category"></div>
+        <div class="tools-right">
+          <input class="search" id="q" type="search" placeholder="Search Trek, Di2, 54cm..." aria-label="Search bikes">
+          <select class="select" id="sort" aria-label="Sort">
+            <option value="new">Newest</option>
+            <option value="low">Price: low to high</option>
+            <option value="high">Price: high to low</option>
+          </select>
+        </div>
+      </div>
+      <p class="count mono" id="count"></p>
+      <div class="models" id="grid" style="margin-top:16px"></div>
+      <p class="empty" id="empty" hidden>No bikes match that. <a class="link" href="#" id="clear">Clear filters</a></p>
+    </div>
+  </section>
+
+  <section class="sec tight">
+    <div class="wrap">
+      <a class="tav-card reveal" href="sell.html">
+        <span class="tav-logo"><img src="img/mkp-logo.jpg" alt=""></span>
+        <span class="tav-copy">
+          <span class="mono eyebrow light">Upgrading?</span>
+          <span class="tav-title">Sell or trade in your current bike</span>
+          <span class="tav-sub">Fair, market-based offers. No listing fees, no strangers at your door.</span>
+        </span>
+        <span class="btn outline tav-btn">Get an offer <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </section>
+</main>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+(() => {
+  const S = window.MKPsite;
+  const params = new URLSearchParams(location.search);
+  // also accepts the live site's URL style (?type=pre-owned|new-bikes, ?search=) so old links and Google's sitelinks search keep working
+  const typeIn = params.get('type'), typeMap = { 'pre-owned': 'pre', 'new-bikes': 'new' };
+  const state = { type: typeMap[typeIn] || typeIn || 'all', cat: params.get('cat') || params.get('category') || 'All', q: params.get('q') || params.get('search') || '', sort: params.get('sort') || 'new' };
+  const grid = document.getElementById('grid');
+  const segBtns = [...document.querySelectorAll('.seg button')];
+  const drawCats = () => { const cats = ['All', ...new Set(S.bikes.map(b => b.category).filter(Boolean))]; document.getElementById('cats').innerHTML = cats.map(c => `<button class="chip" data-cat="${S.esc(c)}">${S.esc(c)}</button>`).join(''); };
+  drawCats();
+  const q = document.getElementById('q'), sort = document.getElementById('sort');
+  q.value = state.q; sort.value = state.sort;
+
+  const titles = { all: ['Shop bikes', 'Shop'], pre: ['Pre-owned bikes', 'Pre-owned'], new: ['New bikes', 'New'] };
+  const subs = {
+    all: 'Hand-selected, inspected and graded. Test ride in Cheltenham or get it delivered Australia-wide.',
+    pre: 'Every pre-owned bike is inspected and graded on frame, wheels, groupset and cockpit. No hidden issues.',
+    new: 'Brand new Tavelo carbon and more, built and tuned in our Cheltenham workshop. Lifetime Tavelo warranty.',
+  };
+
+  function render() {
+    const words = state.q.toLowerCase().split(/\s+/).filter(Boolean);
+    let list = S.bikes.filter(b =>
+      (state.type === 'all' || b.kind === state.type) &&
+      (state.cat === 'All' || b.category === state.cat) &&
+      words.every(w => (b.name + ' ' + b.size + ' ' + Object.values(b.specs).join(' ')).toLowerCase().includes(w)));
+    if (state.sort === 'low') list.sort((a, b) => a.price - b.price);
+    else if (state.sort === 'high') list.sort((a, b) => b.price - a.price);
+    else list.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
+    grid.innerHTML = list.map(S.card).join('');
+    S.wireWa(grid); S.reveal(grid);
+    document.getElementById('count').textContent = `${list.length} ${list.length === 1 ? 'bike' : 'bikes'}`;
+    document.getElementById('empty').hidden = list.length > 0;
+    segBtns.forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
+    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === state.cat));
+    document.getElementById('shopTitle').textContent = titles[state.type][0];
+    document.getElementById('crumbNow').textContent = titles[state.type][1];
+    document.getElementById('shopSub').textContent = subs[state.type];
+    document.title = `${titles[state.type][0]} | MKP Bikes`;
+    const p = new URLSearchParams();
+    if (state.type !== 'all') p.set('type', state.type);
+    if (state.cat !== 'All') p.set('cat', state.cat);
+    if (state.q) p.set('q', state.q);
+    if (state.sort !== 'new') p.set('sort', state.sort);
+    history.replaceState(history.state, '', location.pathname + (p.toString() ? '?' + p : '') + location.hash);
+  }
+  segBtns.forEach(b => b.addEventListener('click', () => { state.type = b.dataset.type; render(); }));
+  document.getElementById('cats').addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) { state.cat = c.dataset.cat; render(); } });
+  let t; q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = q.value.trim(); render(); }, 150); });
+  sort.addEventListener('change', () => { state.sort = sort.value; render(); });
+  document.getElementById('clear').addEventListener('click', e => { e.preventDefault(); Object.assign(state, { type: 'all', cat: 'All', q: '' }); q.value = ''; render(); });
+  render();
+  // live list from the backend arrived (new listings, price changes, sold bikes removed)
+  document.addEventListener('mkp:bikes', () => { drawCats(); render(); });
+})();
+</script>
+</body>
+</html>

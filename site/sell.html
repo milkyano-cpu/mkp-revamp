@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sell your road bike in Melbourne | MKP Bikes</title>
+<meta name="description" content="Sell your road, gravel or triathlon bike without the Marketplace circus. Fair, market-based offers or trade-in at MKP Bikes, Cheltenham.">
+<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/pages.css">
+</head>
+<body data-page="sell" data-no-popup="1">
+<div id="site-nav"></div>
+
+<main>
+  <section class="phero">
+    <div class="wrap two" style="align-items:start">
+      <div>
+        <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Sell your bike</span></nav>
+        <h1>Sell your bike. Skip the Marketplace circus.</h1>
+        <p class="sub">Bring your bike to MKP Bikes in Cheltenham and get a fair offer if it suits our pre-owned range. Or trade it in towards your next one.</p>
+        <ul class="checks">
+          <li>No listing fees</li>
+          <li>No strangers coming to your home</li>
+          <li>Fair, market-based offers</li>
+          <li>Fast bank transfer payment</li>
+          <li>Proof of ownership required</li>
+        </ul>
+      </div>
+
+      <form class="form-card reveal" id="sellForm" novalidate>
+        <h3>Get an offer</h3>
+        <p>Tell us about your bike. This opens WhatsApp with your details ready to send, then attach a few photos.</p>
+        <div class="fields">
+          <label class="field full"><span>Make and model</span><input name="model" placeholder="e.g. Trek Madone SL7" required></label>
+          <label class="field"><span>Year</span><input name="year" inputmode="numeric" placeholder="2022"></label>
+          <label class="field"><span>Frame size</span><input name="size" placeholder="54cm / Medium" required></label>
+          <label class="field"><span>Groupset</span>
+            <select name="groupset" required>
+              <option value="">Select</option>
+              <option>Shimano 105</option><option>Shimano 105 Di2</option><option>Shimano Ultegra</option><option>Shimano Ultegra Di2</option><option>Shimano Dura-Ace / Di2</option>
+              <option>SRAM Rival AXS</option><option>SRAM Force AXS</option><option>SRAM Red AXS</option><option>Other</option>
+            </select>
+          </label>
+          <label class="field"><span>Condition</span>
+            <select name="condition" required><option value="">Select</option><option>Like new</option><option>Great</option><option>Good, some wear</option><option>Needs work</option></select>
+          </label>
+          <label class="field"><span>Your name</span><input name="name" autocomplete="name" required></label>
+          <label class="field"><span>I'd like to</span>
+            <select name="intent"><option>Sell for cash</option><option>Trade in towards another bike</option><option>Not sure yet</option></select>
+          </label>
+          <label class="field full"><span>Anything else</span><textarea name="notes" placeholder="Upgrades, service history, damage..."></textarea></label>
+        </div>
+        <button class="btn dark" type="submit">Send via WhatsApp</button>
+        <p class="form-note">Or bring the bike in: 5/17 Kylie Place, Cheltenham VIC 3192</p>
+      </form>
+    </div>
+  </section>
+
+  <section class="sec">
+    <div class="wrap">
+      <div class="sec-head reveal"><div><span class="mono eyebrow">How it works</span><h2>Three steps. No hassle.</h2></div></div>
+      <div class="fgrid">
+        <div class="fcard reveal"><span class="mono">01</span><h3>Tell us about your bike</h3><p>Send the make, model, size, groupset and a few photos, or bring it into the showroom.</p></div>
+        <div class="fcard reveal"><span class="mono">02</span><h3>We inspect it</h3><p>Frame condition, drivetrain wear, wheels, bearings and service history before we make an offer.</p></div>
+        <div class="fcard reveal"><span class="mono">03</span><h3>Sell or trade in</h3><p>Get paid by bank transfer, or put the value towards your next bike.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec sec-dark" data-dark>
+    <div class="wrap two">
+      <div class="reveal">
+        <span class="mono eyebrow light">What we buy</span>
+        <h2 style="font-size:clamp(32px,4vw,52px)">Quality road, gravel and triathlon bikes.</h2>
+        <p class="sub">Recent-generation bikes with Shimano 105, Ultegra, Dura-Ace, SRAM Rival or higher are generally the strongest candidates.</p>
+      </div>
+      <div class="reveal">
+        <span class="mono eyebrow light">Upgrading?</span>
+        <h2 style="font-size:clamp(28px,3vw,40px)">Trade towards a premium pre-owned or brand new bike.</h2>
+        <div class="btns" style="margin-top:24px"><a class="btn light" href="bikes.html?type=pre">Browse pre-owned</a><a class="btn outline" href="bikes.html?type=new">Browse new bikes</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="site-foot"></div>
+<script src="js/bikes-data.js"></script>
+<script src="js/api.js"></script>
+<script src="js/site.js"></script>
+<script>
+  (() => {
+    const form = document.getElementById('sellForm');
+    form.addEventListener('input', e => e.target.closest('.field')?.classList.remove('bad'));
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      let ok = true;
+      form.querySelectorAll('[required]').forEach(f => { const bad = !f.value.trim(); f.closest('.field').classList.toggle('bad', bad); if (bad && ok) { f.focus(); ok = false; } });
+      if (!ok) return;
+      const d = Object.fromEntries(new FormData(form));
+      const msg = [
+        `Hi MKP Bikes, I'd like an offer on my bike (${d.intent.toLowerCase()}).`,
+        `Bike: ${d.model}${d.year ? ' (' + d.year + ')' : ''}`,
+        `Size: ${d.size}`, `Groupset: ${d.groupset}`, `Condition: ${d.condition}`,
+        d.notes ? `Notes: ${d.notes}` : '', `Name: ${d.name}`, `I'll attach some photos.`,
+      ].filter(Boolean).join('\n');
+      window.open(window.MKPsite.wa(msg), '_blank', 'noopener');
+    });
+  })();
+</script>
+</body>
+</html>
