@@ -9,6 +9,7 @@
   const end = document.querySelector('.story-end');
   const hint = document.querySelector('.story-hint');
   const bar = document.getElementById('storyBar');
+  const stage = document.querySelector('.story-stage'), bike = document.getElementById('storyBike');
   window.MKP = window.MKP || {};
   window.MKP.p = 0;
 
@@ -23,6 +24,7 @@
       range.selectNodeContents(w);
       widest = Math.max(widest, range.getBoundingClientRect().width);
     });
+    // fit the width, and on desktop keep the word inside the dark band above the bike
     const size = Math.min(max, (innerWidth * (innerWidth < 700 ? 0.9 : 0.82)) / widest * 100);
     words.forEach(w => { w.style.fontSize = size.toFixed(1) + 'px'; });
     window.MKP.wordH = size * 0.9;
@@ -44,6 +46,9 @@
       w.classList.toggle('past', p >= b);
     });
     end.classList.toggle('on', p >= 0.78 || reduce);
+    stage.classList.toggle('ending', p >= 0.78);
+    // the photo settles from a slight zoom to its full frame across the story
+    bike && bike.style.setProperty('--bs', (1.04 - 0.08 * Math.min(1, p / 0.72)).toFixed(4));
     hint.style.opacity = p > 0.03 ? 0 : 1;
     bar.style.transform = `scaleX(${p})`;
   }

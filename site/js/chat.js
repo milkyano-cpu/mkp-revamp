@@ -16,10 +16,10 @@
 <button class="tony-fab" type="button" aria-label="Open bike finder chat assistant" aria-expanded="false">
   <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/><path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2Zm-3 11.5V14l-3-3 4-3 2 3h2"/></svg>
 </button>
-<section class="tony-panel" role="dialog" aria-label="Bike Finder Assistant" hidden>
+<section class="tony-panel" role="dialog" aria-label="Tony, Bike Finder Assistant" hidden>
   <header class="tony-head">
-    <span class="tony-av">T</span>
-    <div><b>Bike Finder Assistant</b><span>Let me help you find the perfect bike</span></div>
+    <img class="tony-av" src="img/tony-duck.webp" width="40" height="40" alt="Tony">
+    <div><b>Tony | Bike Finder Assistant</b><span>Find the perfect bike for you</span></div>
     <button class="tony-reset" type="button">Reset</button>
     <button class="tony-x" type="button" aria-label="Close">✕</button>
   </header>
@@ -63,7 +63,8 @@
   const WELCOME = [{ label: 'Find my bike size' }, { label: 'Get a bike recommendation' }];
   const TYPES = [{ label: 'Road' }, { label: 'Gravel' }, { label: 'TT / Triathlon', value: 'TT' }];
   const HEIGHTS = [{ label: 'Under 165cm', value: '160cm' }, { label: '165 to 175cm', value: '170cm' }, { label: '175 to 185cm', value: '180cm' }, { label: 'Over 185cm', value: '190cm' }];
-  const BUDGETS = [{ label: 'Under $2,000', value: 'budget 1 2000' }, { label: '$2,000 to $3,500', value: 'budget 2000 3500' }, { label: '$3,500 to $5,000', value: 'budget 3500 5000' }, { label: '$5,000+', value: 'budget 5000 20000' }];
+  // same brackets as the Request a Bike form (fixed by the backend's /api/request-bike validation), so leads are logged one way
+  const BUDGETS = [{ label: 'Under $1,000', value: 'budget 1 1000' }, { label: '$1,000 to $2,000', value: 'budget 1000 2000' }, { label: '$2,000 to $3,500', value: 'budget 2000 3500' }, { label: '$3,500+', value: 'budget 3500 20000' }];
   const AFTER = [{ label: 'Start new search' }, { label: 'Browse all bikes' }];
 
   function start() {

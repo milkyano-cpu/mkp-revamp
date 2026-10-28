@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Book your bike fitting | MKP Bikes</title>
-<meta name="description" content="Book a 90-minute Functional Bike Fit with Ash Saxena at MKP Bikes, Cheltenham. Choose your time online.">
+<meta name="description" content="Book a 90-minute Road Bike Fit or TT Bike Fit with Ash Saxena at MKP Bikes, Cheltenham. Choose your time online.">
 <link rel="icon" href="img/mkp-logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,8 +27,12 @@
   <section class="sec tight">
     <div class="wrap book">
       <aside class="book-info reveal">
-        <span class="tag orange">Functional Bike Fit</span>
-        <div class="price"><b>$180</b><span class="mono" style="color:var(--muted)">AUD · 90 min</span></div>
+        <div class="fit-pick" role="radiogroup" aria-label="Fit type">
+          <button type="button" class="on" data-fit="road" role="radio" aria-checked="true"><span class="mono">Road Bike Fit</span><b>$180</b></button>
+          <button type="button" data-fit="triathlon" role="radio" aria-checked="false"><span class="mono">TT Bike Fit</span><b>$240</b></button>
+        </div>
+        <p class="mono" style="color:var(--muted);margin-top:10px">AUD · 90 min</p>
+        <p class="book-note fit-tri-note" hidden>Booking a TT fit? Pick a time and add "TT fit" in the notes so Ash sets up for your time trial or triathlon bike.</p>
         <ul class="checks">
           <li>Pre-fit consultation and goals</li>
           <li>Functional movement screening</li>
@@ -40,7 +44,7 @@
           <span class="mono">Where</span>
           <a href="#" data-maps>5/17 Kylie Place<br>Cheltenham VIC 3192</a>
         </div>
-        <p class="book-note">Bought your bike from MKP? Your fit is $150. <a class="link" href="#" data-wa="Hi, I'm buying a bike from MKP and would like to book the discounted bike fit at $150. Can I arrange a session?">Message us</a></p>
+        <p class="book-note">Bought your bike from MKP? Road fit $150 · TT fit $200. <a class="link" href="#" data-wa="Hi, I bought my bike from MKP and would like to book the discounted bike fit (road $150 / TT $200). Can I arrange a session?">Message us</a></p>
       </aside>
       <div class="cal reveal">
         <!-- Ash's live Calendly event, the same one mkpbikes.com.au/book-fitting embeds -->
@@ -56,5 +60,14 @@
 <script src="js/api.js"></script>
 <script src="js/site.js"></script>
 <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+  // Road $180 / Triathlon $240: both book through Ash's one Calendly event, so the choice is shown and noted here
+  (() => {
+    const btns = [...document.querySelectorAll('.fit-pick button')], note = document.querySelector('.fit-tri-note');
+    const set = f => { btns.forEach(b => { const on = b.dataset.fit === f; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); note.hidden = f !== 'triathlon'; };
+    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.fit)));
+    set(new URLSearchParams(location.search).get('fit') === 'triathlon' ? 'triathlon' : 'road');
+  })();
+</script>
 </body>
 </html>

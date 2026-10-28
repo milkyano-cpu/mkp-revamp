@@ -16,19 +16,30 @@
 <div id="site-nav"></div>
 
 <main>
-  <section class="phero">
-    <div class="wrap two">
-      <div>
+  <section class="phero fit-hero">
+    <div class="wrap fit-top">
+      <div class="fit-copy">
         <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Bike Fitting</span></nav>
-        <h1>Ride without the pain.</h1>
-        <p class="sub">Most cyclists ride in pain they think is normal. It's not. Our 90-minute session starts off the bike, assessing mobility and flexibility first, so every adjustment is built around your body, not a template.</p>
-        <div class="btns">
-          <a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book your fitting, $180</a>
-          <a class="btn ghost" href="#" data-wa="Hi, I'd like to ask about bike fitting.">Speak with the team</a>
+        <span class="mono eyebrow hot"><img class="flame" src="img/flame.webp" width="40" height="40" alt="" aria-hidden="true">Available at MKP Bikes</span>
+        <h1 class="fit-h1">Comprehensive Bike Fit in Melbourne <span>That Eliminates Knee, Back &amp; Neck Pain</span></h1>
+        <p class="sub">Most cyclists ride in pain they think is normal. It's not. Our 90-minute session starts off the bike, assessing your mobility and flexibility first, so every adjustment is built around your body, not a generic template.</p>
+        <!-- conversion first: pick a fit, the calendar is right there -->
+        <div class="fit-pick" role="radiogroup" aria-label="Fit type">
+          <button type="button" class="on" data-fit="road" role="radio" aria-checked="true"><span class="mono">Road Bike Fit</span><b>$180</b><small>$150 if your bike is from MKP</small></button>
+          <button type="button" data-fit="triathlon" role="radio" aria-checked="false"><span class="mono">TT Bike Fit</span><b>$240</b><small>$200 if your bike is from MKP</small></button>
         </div>
-        <p style="color:var(--muted);margin-top:18px;font-size:15px">Full refund if you feel no improvement after your fit.</p>
+        <p class="book-note fit-tri-note" hidden>Booking a TT fit? Add "TT fit" in the booking notes so Ash sets up for your time trial or triathlon bike.</p>
+        <div class="btns">
+          <a class="btn dark fit-jump" href="#fitCal" data-track="Clicked Book Fitting">Choose a time</a>
+          <a class="btn ghost" href="#" data-wa="Hi, I'd like to ask about bike fitting.">Speak with the Team</a>
+        </div>
+        <p class="fit-trust">90-minute session at our Cheltenham studio · Full refund if you feel no improvement after your fit</p>
       </div>
-      <div class="media reveal"><img src="img/bike-fitting-potrait.jpg" alt="Bike fitting session at MKP Bikes"></div>
+      <div class="cal fit-cal" id="fitCal">
+        <!-- Ash's live Calendly event (same one as book-fitting.html and mkpbikes.com.au/book-fitting) -->
+        <div class="calendly-inline-widget" data-url="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes?hide_gdpr_banner=1&background_color=fbfbfa&text_color=0d0d0f&primary_color=0d0d0f"></div>
+        <p class="cal-fallback">Calendar not loading? <a class="link" href="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes" target="_blank" rel="noopener">Open the booking page</a> or <a class="link" href="#" data-wa="Hi, I'd like to book a bike fit.">WhatsApp us</a>.</p>
+      </div>
     </div>
     <div class="wrap stats">
       <div class="stat reveal"><b>237+</b><span>Riders fitted</span></div>
@@ -81,27 +92,45 @@
     <div class="wrap">
       <div class="sec-head reveal"><div><span class="mono eyebrow">Pricing</span><h2>Bike Fit Options.</h2></div></div>
       <div class="pricing">
-        <div class="plan reveal" data-dark>
-          <span class="tag orange on-dark">Most popular</span>
-          <h3 style="font-size:28px;margin-top:16px">Functional Bike Fit</h3>
-          <p style="color:rgba(255,255,255,.6)">90-minute comprehensive fitting session</p>
-          <div class="price"><b>$180</b><span class="mono" style="color:rgba(255,255,255,.5)">AUD</span></div>
-          <ul>
-            <li>Pre-fit consultation and goal setting</li>
-            <li>Functional movement screening</li>
-            <li>On-bike assessment using visual-cue method</li>
-            <li>Saddle, handlebar and cleat adjustments</li>
-            <li>Rider feedback and recommendations</li>
-            <li>Detailed fit report to take home</li>
-          </ul>
-          <a class="btn light" href="book-fitting.html" data-track="Clicked Book Fitting">Book your fitting</a>
+        <div class="plans" aria-label="Fit options, swipe for the TT fit">
+          <div class="plan reveal" data-dark>
+            <span class="tag orange on-dark">Most popular</span>
+            <h3>Road Bike Fit</h3>
+            <p class="plan-sub">90 minutes · Road and gravel</p>
+            <div class="price"><b>$180</b><span class="mono">AUD</span></div>
+            <p class="plan-mkp">$150 if your bike is from MKP</p>
+            <ul>
+              <li>Consultation and goal setting</li>
+              <li>Movement screening</li>
+              <li>On-bike assessment</li>
+              <li>Saddle, bar and cleat setup</li>
+              <li>Fit report to take home</li>
+            </ul>
+            <a class="btn light" href="#fitCal" data-fit-go="road" data-track="Clicked Book Fitting">Book road fit</a>
+          </div>
+          <div class="plan plan-tri reveal" data-dark>
+            <span class="tag blue on-dark">TT &amp; triathlon</span>
+            <h3>TT Bike Fit</h3>
+            <p class="plan-sub">90 minutes · Time trial and triathlon</p>
+            <div class="price"><b>$240</b><span class="mono">AUD</span></div>
+            <p class="plan-mkp">$200 if your bike is from MKP</p>
+            <ul>
+              <li>Everything in the road fit</li>
+              <li>Saddle, pelvis and aero hold</li>
+              <li>Base bar, extensions and pads</li>
+              <li>Room to progress at follow-up</li>
+              <li>Fit report to take home</li>
+            </ul>
+            <a class="btn light" href="#fitCal" data-fit-go="triathlon" data-track="Clicked Book Fitting">Book TT fit</a>
+          </div>
         </div>
+        <p class="swipe-hint mono" aria-hidden="true">Swipe for the TT fit →</p>
         <div class="addons">
           <span class="mono eyebrow">Additional services</span>
           <div class="addon reveal"><div><h4>Cleat replacement · $45</h4><p>New cleats fitted and set up to your position.</p></div><a class="link" href="#" data-wa="Hi, I'd like to book a cleat replacement ($45).">Enquire</a></div>
-          <div class="addon reveal"><div><h4>Follow-up fit · $70</h4><p>Fine-tune your position after a few rides on your new setup.</p></div><a class="link" href="#" data-wa="Hi, I'd like to book a follow-up bike fit ($70).">Enquire</a></div>
-          <div class="addon reveal" style="background:var(--dark);color:#fff;border-color:transparent"><div><h4>Bought your bike from MKP?</h4><p style="color:rgba(255,255,255,.6)">Your fit is $150. Save $30.</p></div><a class="link" href="#" data-wa="Hi, I'm buying a bike from MKP and would like to book the discounted bike fit at $150. Can I arrange a session?">Book at $150</a></div>
-          <div class="addon reveal"><div><h4>Outside Melbourne?</h4><p>Message us to confirm travel or freight before booking.</p></div><a class="link" href="#" data-wa="Hi, I'm outside Melbourne and interested in a bike fitting. Could you confirm if there are any travel or freight costs?">Message us</a></div>
+          <div class="addon reveal"><div><h4>Follow-up fit · $70</h4><p>Refine a recent fit, sort a new niggle or fine-tune after adapting.</p></div><a class="link" href="#" data-wa="Hi, I'd like to book a follow-up bike fit ($70).">Enquire</a></div>
+          <div class="addon reveal" style="background:var(--dark);color:#fff;border-color:transparent"><div><h4>Bought your bike from MKP?</h4><p style="color:rgba(255,255,255,.6)">Road fit $150 (save $30) · TT fit $200 (save $40).</p></div><a class="link" href="#" data-wa="Hi, I bought my bike from MKP and would like to book the discounted bike fit (road $150 / TT $200). Can I arrange a session?">Book now</a></div>
+          <div class="addon reveal"><div><h4>Outside Melbourne?</h4><p>Message us about travel or freight before booking.</p></div><a class="link" href="#" data-wa="Hi, I'm outside Melbourne and interested in a bike fitting. Could you confirm if there are any travel or freight costs?">Message us</a></div>
         </div>
       </div>
     </div>
@@ -134,6 +163,17 @@
 <script src="js/api.js"></script>
 <script src="js/site.js"></script>
 <script src="js/reviews-data.js"></script>
+<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+<script>
+  // fit picker in the hero: both fits book through Ash's one Calendly event; the TT choice shows a note
+  (() => {
+    const btns = [...document.querySelectorAll('.fit-pick button')], note = document.querySelector('.fit-tri-note');
+    const set = f => { btns.forEach(b => { const on = b.dataset.fit === f; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); note.hidden = f !== 'triathlon'; };
+    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.fit)));
+    document.querySelectorAll('[data-fit-go]').forEach(a => a.addEventListener('click', () => set(a.dataset.fitGo)));
+    if (new URLSearchParams(location.search).get('fit') === 'triathlon') set('triathlon');
+  })();
+</script>
 <script>
 // Real Google reviews that are mainly about the bike fit (picked by name from reviews-data.js)
 (() => {
@@ -141,10 +181,24 @@
   const pick = ['Ari', 'Ashan S.', 'Rachel T.', 'Julian W.', 'Bryan C.', 'Kevin H.', 'Matthew S.', 'Andrew N.', 'Tony N.', 'Luke S.', 'Jordan T.', 'Harry S.', 'Guilherme P.'];
   const list = pick.map(n => R.items.find(r => r.name === n)).filter(Boolean);
   const box = document.getElementById('fitQuotes');
-  box.innerHTML = list.map(r => `<figure class="quote"><p>"${S.esc(r.text.replace(/^.*UPDATE:\s*/i, '').replace(/\s+[-–—]+\s+/g, ', '))}"</p><cite class="mono">${S.esc(r.name)} · Google review</cite></figure>`).join('');
-  // long reviews are clamped; tap a card to read the whole thing
-  box.querySelectorAll('.quote').forEach(q => { if (q.querySelector('p').scrollHeight > q.querySelector('p').clientHeight + 2) q.classList.add('more'); });
-  box.addEventListener('click', e => { const q = e.target.closest('.quote.more'); if (q) q.classList.toggle('open'); });
+  const clean = r => r.text.replace(/^.*UPDATE:\s*/i, '').replace(/\s+[-–—]+\s+/g, ', ');
+  // every card is the same height (text clamped); "Read more" opens the full review in a popup, cards never grow
+  box.innerHTML = list.map((r, i) => `<figure class="quote" data-i="${i}"><p>"${S.esc(clean(r))}"</p><div class="quote-foot"><cite class="mono">${S.esc(r.name)} · Google review</cite><button class="quote-more" type="button" hidden>Read more</button></div></figure>`).join('');
+  box.querySelectorAll('.quote').forEach(q => { const p = q.querySelector('p'); if (p.scrollHeight > p.clientHeight + 2) q.querySelector('.quote-more').hidden = false; });
+  const dlg = document.createElement('div');
+  dlg.className = 'rev-dialog'; dlg.hidden = true;
+  dlg.innerHTML = '<div class="rev-dialog-card" role="dialog" aria-modal="true" aria-label="Review"><button class="rev-dialog-x" type="button" aria-label="Close">✕</button><div class="rev-dialog-body"></div></div>';
+  document.body.appendChild(dlg);
+  const open = i => {
+    const r = list[i];
+    dlg.querySelector('.rev-dialog-body').innerHTML = `<div class="rev-top"><span class="mono">★★★★★ Google review</span></div><p>${S.esc(clean(r))}</p><b>${S.esc(r.name)}</b>`;
+    dlg.hidden = false; requestAnimationFrame(() => dlg.classList.add('open'));
+    document.documentElement.classList.add('pop-lock');
+  };
+  const close = () => { dlg.classList.remove('open'); document.documentElement.classList.remove('pop-lock'); setTimeout(() => { dlg.hidden = true; }, 300); };
+  box.addEventListener('click', e => { const q = e.target.closest('.quote'); if (q && !q.querySelector('.quote-more').hidden) open(+q.dataset.i); });
+  dlg.addEventListener('click', e => { if (e.target === dlg || e.target.closest('.rev-dialog-x')) close(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && !dlg.hidden) close(); });
   S.wireWa(document);
 })();
 </script>

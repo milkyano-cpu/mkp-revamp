@@ -74,7 +74,7 @@ Mapped from the admin data:
 |---|---|---|
 | Request a bike | `POST /api/request-bike` `{name, phone, bikeModel, size, budget, notes}`. Size/budget use the exact enum values the backend validates, including `"$1,000 – $2,000"` | `request.html` |
 | Email my size result | `POST /api/send-size-result` `{email, measurements, style, frameSize, sizeDescription}` | `size.html` |
-| Footer newsletter ("Stay updated") | `POST /api/newsletter/subscribe` `{email}` | `js/site.js` |
+| Footer newsletter | removed at the client's request (not used); handler for `POST /api/newsletter/subscribe` is still in `js/site.js` if it comes back | none |
 | Homepage triathlete guide popup | `POST /api/klaviyo/subscribe` `{email, type:"triathlon"}` | `js/site.js` |
 | Fitting page checklist popup (30s) | `POST /api/klaviyo/subscribe` `{email, type:"bikefit"}` | `js/site.js` |
 | "Clicked Book Fitting" event | `POST /api/klaviyo-track` `{event, page_url, email}` (email from localStorage `klaviyo_email`, same key as live) | `[data-track]` in `js/site.js` |

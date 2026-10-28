@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>MKP Bikes | Pre-owned & new road bikes, Melbourne</title>
-<meta name="description" content="Hand-selected, fully inspected road, gravel and TT bikes in Cheltenham, Melbourne. #1 Australian Tavelo dealer. Australia-wide delivery.">
+<meta name="description" content="Hand-selected, fully inspected road, gravel and TT bikes in Cheltenham, Melbourne. Australia-wide delivery.">
 <link rel="icon" href="img/mkp-logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/hero-bike-1400.webp" imagesrcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" imagesizes="(max-width: 700px) 90vw, 66vw">
+<link rel="preload" as="image" href="img/bianchi-oltre-rc-marble.webp" imagesrcset="img/bianchi-oltre-rc-marble-760.webp 760w, img/bianchi-oltre-rc-marble.webp 1552w" imagesizes="(max-width: 700px) 92vw, 56vw">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/pages.css">
 </head>
@@ -19,10 +19,7 @@
 
 <main id="top">
 
-<!-- 1. HERO: scroll story around a turning bike. The turn is a 60-frame image sequence (img/seq) rendered from
-     "Bianchi Oltre RC_ Classic" by Dav1d- on Sketchfab, drawn on a canvas as the page scrolls.
-     The live Sketchfab 3D viewer was removed in Oct 2026 for performance (about 4 MB of WebGL and scripts);
-     js/bike-viewer.js is kept for reference but no longer loaded. -->
+<!-- 1. HERO: scroll story over a studio photo of a Bianchi Oltre RC (Bianchi press image, background removed with Higgsfield: license or replace before launch) -->
 <section class="story" id="story">
   <div class="story-stage">
 
@@ -33,79 +30,7 @@
       <h2 class="w" data-i="3">ready to ride.</h2>
     </div>
 
-    <!-- Poster: the opening pose, shown at first paint. As soon as the visitor scrolls, the canvas takes over and
-         shows the frame for the current scroll position (frames load coarse to fine). -->
-    <img class="bike-poster" id="bikePoster" src="img/hero-bike-1400.webp" srcset="img/hero-bike-800.webp 800w, img/hero-bike-1400.webp 1400w" sizes="(max-width: 700px) 90vw, 66vw" alt="" fetchpriority="high" decoding="async">
-    <canvas class="bike-seq" id="bikeSeq" aria-hidden="true"></canvas>
-    <script>
-      (function () {
-        var st = document.currentScript.parentElement;
-        var poster = document.getElementById('bikePoster'), cv = document.getElementById('bikeSeq'), ctx = cv.getContext('2d');
-        var N = 60, small = innerWidth < 700, set = small ? 'm' : 'd', fw = small ? 600 : 1000;
-        var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-        cv.width = fw; cv.height = Math.round(fw * 1186 / 1428);
-        // framing maths from the original viewer: B = bike width at the opening camera
-        function place() {
-          var W = st.clientWidth, H = st.clientHeight + 640;
-          var B = 0.6453 * Math.min(W, 1.7 * H);
-          poster.style.width = (1.0082 * B) + 'px';
-          poster.style.left = (W / 2 - 0.461 * B) + 'px';
-          poster.style.top = (H / 2 - 0.325 * B - 320) + 'px';
-          cv.style.width = (1.3831 * B) + 'px';
-          cv.style.left = (W / 2 - 0.6915 * B) + 'px';
-          cv.style.top = (H / 2 - 0.5521 * B - 320) + 'px';
-        }
-        place(); addEventListener('resize', place);
-
-        // load frames coarse to fine so any scroll position has a close frame quickly
-        var frames = [], ok = [], all = Array.from({ length: N }, function (_, i) { return i; });
-        var queue = [0, N - 1, 30, 15, 45]
-          .concat(all.filter(function (i) { return i % 6 === 0; }), all.filter(function (i) { return i % 2 === 0; }), all)
-          .filter(function (v, i, a) { return a.indexOf(v) === i; });
-        var active = 0, started = false;
-        function next() {
-          started = true;
-          while (active < 4 && queue.length) {
-            (function (i) {
-              active++;
-              var im = new Image();
-              im.decoding = 'async';
-              im.src = 'img/seq/' + set + (i < 10 ? '0' : '') + i + '.webp';
-              im.decode().then(function () { frames[i] = im; ok[i] = true; kick(); }, function () {}).then(function () { active--; next(); });
-            })(queue.shift());
-          }
-        }
-        // start after the page has loaded, or straight away on the first scroll
-        if (document.readyState === 'complete') next(); else addEventListener('load', next);
-        addEventListener('scroll', function () { if (!started) next(); }, { passive: true, once: true });
-
-        // Draw only when something changes: the frame position eases toward the scroll position
-        // (like the old 3D camera did), and the loop stops as soon as it settles.
-        var pos = 0, cur = -1, using = false, running = false;
-        function nearest(i) {
-          for (var d = 0; d < N; d++) { if (ok[i - d]) return i - d; if (ok[i + d]) return i + d; }
-          return -1;
-        }
-        function tick() {
-          // same progress maths as home.js storyTick, read here so the frame never lags a scroll step behind
-          var story = st.parentElement, r = story.getBoundingClientRect();
-          var p = Math.min(1, Math.max(0, -r.top / Math.max(1, story.offsetHeight - innerHeight))), target = p * (N - 1);
-          pos = reduce ? target : pos + (target - pos) * 0.22;
-          if (Math.abs(target - pos) < 0.02) pos = target;
-          if (using || p >= 0.004) {
-            var j = nearest(Math.round(pos));
-            if (j >= 0) {
-              if (j !== cur) { ctx.clearRect(0, 0, cv.width, cv.height); ctx.drawImage(frames[j], 0, 0, cv.width, cv.height); cur = j; }
-              if (!using) { using = true; poster.style.transition = 'none'; poster.style.opacity = 0; cv.classList.add('on'); }
-            }
-          }
-          if (pos !== target) requestAnimationFrame(tick); else running = false;
-        }
-        function kick() { if (!running) { running = true; requestAnimationFrame(tick); } }
-        addEventListener('scroll', kick, { passive: true });
-        addEventListener('resize', kick);
-      })();
-    </script>
+    <img class="story-bike" id="storyBike" src="img/bianchi-oltre-rc-marble.webp" srcset="img/bianchi-oltre-rc-marble-760.webp 760w, img/bianchi-oltre-rc-marble.webp 1552w" sizes="(max-width: 700px) 92vw, 56vw" alt="Bianchi Oltre RC road bike in white marble and gold" fetchpriority="high" decoding="async">
 
     <div class="story-end">
       <h1>Marketplace bikes are a gamble. <br>Ours aren’t.</h1>
@@ -128,7 +53,7 @@
       <span class="tav-copy">
         <span class="mono eyebrow light">Now available</span>
         <span class="tav-title">Tavelo bikes, frames and components</span>
-        <span class="tav-sub">#1 Australian Tavelo dealer. Lifetime warranty included.</span>
+        <span class="tav-sub">Lifetime warranty included.</span>
       </span>
       <span class="btn outline tav-btn">Tavelo Bikes Australia <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
     </a>
@@ -141,7 +66,7 @@
     <div class="half-copy">
       <span class="mono label madone">Pre-owned</span>
       <h2>Premium Bikes</h2>
-      <span class="explore">Explore now</span>
+      <span class="explore">Shop now</span>
     </div>
     <img class="bg" src="img/studio/madone-black.jpg" alt="Trek Madone SL7, pre-owned">
   </a>
@@ -149,11 +74,10 @@
     <div class="half-copy">
       <span class="mono label">Brand new</span>
       <h2>Tavelo</h2>
-      <span class="explore">Explore now</span>
+      <span class="explore">Shop now</span>
     </div>
     <img class="bg" src="img/studio/arow-stone.jpg" alt="Tavelo Arow, brand new">
   </a>
-  <p class="split-foot mono">#1 Australian Tavelo dealer</p>
 </section>
 
 <!-- 3. LINEUP: model cards with price + two actions (Polestar) -->
@@ -247,13 +171,13 @@
   <div class="wrap fit-in">
     <div class="fit-img reveal"><img src="img/bike-fitting-landscape.jpg" alt="Bike fitting session at MKP Bikes"></div>
     <div class="fit-copy reveal">
-      <span class="mono eyebrow">Bike fitting with Ash Saxena</span>
+      <span class="mono eyebrow hot"><img class="flame" src="img/flame.webp" width="40" height="40" alt="" aria-hidden="true">Bike fitting with Ash Saxena</span>
       <h2>Ride without the knee, back and neck pain.</h2>
       <p class="sub">A 90-minute session that starts off the bike, so every adjustment is built around your body, not a template.</p>
       <ol class="steps mono">
         <li>Conversation</li><li>Body assessment</li><li>On-bike assessment</li><li>Adjustments</li><li>Fit report</li>
       </ol>
-      <div class="price-row"><div><b>From $180</b><span>Full refund if you feel no improvement.</span></div><a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book a fitting</a></div>
+      <div class="price-row"><div><b>From $180</b><span>Road $180 · TT $240. Full refund if you feel no improvement.</span></div><a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book a fitting</a></div>
     </div>
   </div>
 </section>
@@ -263,7 +187,7 @@
   <div class="wrap"><div class="banner-in reveal">
     <img src="img/tavelo-og.jpg" alt="Tavelo carbon bikes">
     <div class="banner-copy">
-      <span class="mono eyebrow light">#1 Australian Tavelo dealer</span>
+      <span class="mono eyebrow light">Tavelo</span>
       <h2>Race-proven carbon, with a lifetime warranty.</h2>
       <p>UCI-certified Tavelo frames, backed by local support in Melbourne.</p>
       <div class="btns"><a class="btn light" href="tavelo.html">Shop Tavelo</a><a class="btn outline" href="#" data-wa="Hi MKP Bikes, I'd like to chat about Tavelo bikes.">Talk to us</a></div>
@@ -302,7 +226,7 @@
     <dl class="visit-info">
       <div><dt class="mono">Address</dt><dd>5/17 Kylie Place<br>Cheltenham VIC 3192</dd></div>
       <div><dt class="mono">Hours</dt><dd>Weekdays 11am to 7pm<br>Weekends 10am to 5pm</dd></div>
-      <div><dt class="mono">Contact</dt><dd><a href="#" data-wa="">+61 426 195 709</a></dd></div>
+      <div><dt class="mono">Contact</dt><dd><a href="tel:+61426195709">+61 426 195 709</a> · <a class="link" href="#" data-wa="">WhatsApp</a></dd></div>
     </dl>
   </div>
 </section>

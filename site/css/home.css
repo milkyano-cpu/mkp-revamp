@@ -214,44 +214,38 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .pop-x:hover{background:rgba(255,255,255,.18)}
 
 /* ---------- 1. STORY HERO ---------- */
-.story{height:420vh;position:relative;background:
-  radial-gradient(rgba(13,13,15,.09) 1px,transparent 1.2px) 0 0/22px 22px,var(--bg)}
-.story-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
-.story-meta{position:absolute;top:88px;left:0;right:0;display:flex;justify-content:center;gap:28px;color:var(--muted);z-index:3}
+/* Light stage; the Bianchi is a transparent cut-out (Higgsfield background remover) layered ABOVE the big words,
+   so the words read behind the bike. (Multiply was dropped: the dark words showed through the bike.) */
+.story{height:420vh;position:relative;background:radial-gradient(rgba(13,13,15,.09) 1px,transparent 1.2px) 0 0/22px 22px,var(--bg)}
+.story-stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;isolation:isolate;
+  background:radial-gradient(rgba(13,13,15,.09) 1px,transparent 1.2px) 0 0/22px 22px,var(--bg)}
+.story-bike{position:absolute;left:50%;top:50%;width:min(56vw,780px,calc((100svh - 230px) * 1.665));height:auto;max-width:none;z-index:2;pointer-events:none;user-select:none;
+  filter:drop-shadow(0 24px 22px rgba(13,13,15,.12));transform:translate(-50%,-50%) translateY(var(--by,0px)) scale(var(--bs,1.04));transition:transform .2s linear}
 .story-words{position:absolute;left:0;right:0;top:var(--wy,50%);height:0;z-index:1;pointer-events:none}
 .story-words .w{position:absolute;left:0;right:0;top:0;font-size:clamp(56px,13vw,220px);font-weight:800;letter-spacing:-.06em;line-height:.9;color:var(--ink);text-align:center;white-space:nowrap;text-wrap:nowrap;opacity:0;transform:translateY(-50%) translateY(40px) scale(.98);transition:opacity .6s var(--ease),transform .8s var(--ease),filter .6s;filter:blur(8px)}
 .story-words .w.on{opacity:1;transform:translateY(-50%);filter:none}
 .story-words .w.past{opacity:0;transform:translateY(-50%) translateY(-40px) scale(1.02);filter:blur(8px)}
-#bike3d{position:absolute;inset:0;width:100%;height:100%;z-index:2;display:block}
-/* Sketchfab viewer (transparent): no pointer events so the page scroll drives it; fades in once the camera is set.
-   It overhangs the stage top and bottom so Sketchfab's rotate hint and logo sit outside the visible area */
-.story-stage{--wy:50%}
-@media (max-width:700px){.story-stage{--wy:calc(50% - 25vw - 48px)}}
-.bike-frame{position:absolute;left:0;right:0;top:-320px;bottom:-320px;z-index:2;pointer-events:none;opacity:0;transition:opacity 1.2s var(--ease)}
-.viewer-ready .bike-frame{opacity:1;transition-duration:.5s}
-/* instant still of the opening pose; hands over to the live viewer with a short crossfade */
-.bike-poster{position:absolute;z-index:2;max-width:none;height:auto;pointer-events:none;user-select:none;transition:opacity .5s var(--ease) .45s}
-.viewer-ready .bike-poster{opacity:0}
-/* turn sequence for scrolling before the live viewer is ready */
-.bike-seq{position:absolute;z-index:2;pointer-events:none;opacity:0}
-.bike-seq.on{opacity:1}
-.viewer-ready .bike-seq{opacity:0;transition:opacity .5s var(--ease) .45s}
-.bike-frame iframe{width:100%;height:100%;border:0;display:block;background:transparent}
-.model-credit{position:absolute;right:var(--gut);bottom:14px;z-index:3;font-size:10px;color:var(--muted);opacity:.7}
-.model-credit:hover{opacity:1;color:var(--ink)}
-.no-webgl .bike-frame{display:none}
-.bike-fallback{display:none;position:absolute;left:50%;top:50%;width:min(86vw,760px);border-radius:20px;transform:translate(-50%,-45%);z-index:2}
-.no-webgl #bike3d{display:none}
-.no-webgl .bike-fallback{display:none}
-.story-end{position:absolute;left:0;right:0;bottom:clamp(40px,8vh,90px);z-index:3;text-align:center;padding:0 var(--gut);opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .9s var(--ease);pointer-events:none}
+/* final headline: along the bottom, the bike stays fully visible above it */
+.story-end{position:absolute;left:0;right:0;bottom:clamp(36px,6vh,72px);z-index:3;text-align:center;padding:0 var(--gut);opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .9s var(--ease);pointer-events:none}
 .story-end.on{opacity:1;transform:none;pointer-events:auto}
-.story-end h1{font-size:clamp(30px,4.6vw,64px);margin-bottom:22px}
+.story-end h1{font-size:clamp(28px,3.6vw,52px);margin-bottom:18px}
 .story-end .btns{justify-content:center}
+.story-stage.ending{--by:-9vh}
 .story-hint{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:10px;align-items:center;color:var(--muted);z-index:3;transition:opacity .4s}
 .story-hint .dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:pulse 1.6s infinite}
 @keyframes pulse{50%{opacity:.25}}
 .story-bar{position:absolute;left:var(--gut);right:var(--gut);bottom:0;height:2px;background:var(--line);z-index:3}
 .story-bar i{display:block;height:100%;width:100%;background:var(--ink);transform-origin:0 50%;transform:scaleX(0)}
+.story-bike{transition:transform .7s var(--ease)}
+@media (max-width:700px){
+  .story-bike{width:92vw;top:50%}
+  /* phones: the bike is as wide as the word, so the word sits just above the saddle instead of fully hidden */
+  .story-stage{--wy:calc(50% - 28vw - 56px)}
+  /* end state on phones: bike + headline as one centred group (bike ~28vw tall half-height) */
+  .story-stage.ending{--by:-12vh}
+  .story-end{bottom:auto;top:calc(50% - 12vh + 30vw + 22px)}
+  .story-end h1{font-size:clamp(26px,7.4vw,34px)}
+}
 
 /* ---------- 1b. TAVELO BAND ---------- */
 .tav-band{padding:clamp(56px,7vw,96px) 0}
@@ -354,8 +348,8 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 /* ---------- 6. FITTING ---------- */
 .fitting{padding:var(--sec) 0}
 .fit-in{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(40px,6vw,96px);align-items:center}
-.fit-img{border-radius:24px;overflow:hidden;aspect-ratio:4/5}
-.fit-img img{width:100%;height:100%;object-fit:cover;object-position:60% 50%}
+.fit-img{border-radius:24px;overflow:hidden;aspect-ratio:4/3}
+.fit-img img{width:100%;height:100%;object-fit:cover;object-position:56% 42%}
 .fit-copy h2{font-size:clamp(34px,4.2vw,56px)}
 .steps{list-style:none;counter-reset:s;margin:30px 0;border-top:1px solid var(--line)}
 .steps li{counter-increment:s;display:flex;gap:18px;padding:13px 0;border-bottom:1px solid var(--line);color:var(--ink-2)}
@@ -521,8 +515,8 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .tony-fab{width:58px;height:58px;border-radius:50%;border:0;background:var(--ink);color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 30px rgba(0,0,0,.25);transition:transform .35s var(--ease),background .2s}
 .tony-fab:hover{transform:scale(1.07)}
 .tony.open .tony-fab{transform:scale(.9);background:var(--orange)}
+.tony-panel[hidden]{display:none!important}
 .tony-panel{position:absolute;right:0;bottom:72px;width:min(400px,calc(100vw - 32px));height:min(600px,calc(100vh - 140px));background:#fbfbfa;border:1px solid var(--line);border-radius:24px;box-shadow:0 30px 80px rgba(0,0,0,.22);display:flex;flex-direction:column;overflow:hidden;animation:tonyIn .4s var(--ease)}
-.tony-panel[hidden]{display:none}
 @keyframes tonyIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
 .tony-head{display:flex;align-items:center;gap:12px;padding:16px 16px 14px 18px;border-bottom:1px solid var(--line)}
 .tony-head div{flex:1;min-width:0;display:flex;flex-direction:column}
@@ -564,10 +558,42 @@ html.pop-lock .tony,html.menu-open .tony{display:none}
   .tony-panel{position:fixed;inset:auto 10px 10px 10px;width:auto;height:min(78vh,620px);bottom:76px}
 }
 
-/* Performance (Oct 2026): live blur behind sticky bars is expensive on phones while the page scrolls.
+/* ---------- footer: phones ----------
+   The page canvas is ink so iOS Safari's bottom overscroll / toolbar area continues the black footer
+   instead of showing a white strip (body keeps the light page colour). */
+html{background:var(--dark)}
+.foot{padding-bottom:calc(28px + env(safe-area-inset-bottom))}
+.foot-cols h5{white-space:nowrap}
+.foot-cols a{line-height:1.35}
+@media (max-width:700px){
+  .foot-in{gap:36px}
+  .foot-brand-col{width:100%}
+  .foot-news{max-width:none}
+  .foot-cols{display:grid;grid-template-columns:1fr 1fr;column-gap:24px;row-gap:36px;width:100%}
+  .foot-cols > div:last-child{grid-column:1 / -1}
+  .foot-cols a{font-size:15.5px}
+  .foot-fine{margin-top:44px;align-items:center;padding-right:72px}
+}
+/* phone menu: directions button (opens his Google Maps listing) */
+.menu-dir{gap:8px}
+.menu-foot .menu-addr{font-size:13px;color:rgba(255,255,255,.45)}
+/* card top row: badge + size always on one line, size truncates rather than wrapping under the badge */
+.m-top{gap:12px;min-width:0}
+.m-top .tag{flex:none}
+.m-top .size{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;text-align:right}
+
+/* "hot" label: Mike's animated flame from the live fitting page (img/flame.webp, from /flame-icon.gif) */
+.eyebrow.hot{display:inline-flex;align-items:center;gap:10px;color:var(--orange)}
+.eyebrow.hot .flame{width:34px;height:34px;flex:none;margin:-8px 0 -8px -4px}
+@media (prefers-reduced-motion:reduce){.eyebrow.hot .flame{content:url("../img/flame.webp")}}
+.tony-head b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tony-head div span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+img.tony-av{width:40px;height:40px;border-radius:50%;object-fit:cover;background:var(--orange);display:block;box-shadow:0 0 0 2px #fff,0 4px 12px rgba(255,90,31,.3)}
+@media (max-width:480px){.tony-head{gap:10px;padding:14px 10px 12px 14px}.tony-head b{font-size:14px;letter-spacing:-.02em}.tony-reset{padding:6px 4px}}
+
+/* Performance (from the team's Oct 27 commit): live blur behind sticky bars is expensive on phones while the page scrolls.
    Touch devices get a near-opaque fill instead; desktops keep the frosted look. Full-screen overlays
-   (.pop, .favs, .qv, .rev-dialog, .menu) use a plain dark fill everywhere: a full-viewport backdrop blur
-   re-renders the whole page behind it every frame and was the main cause of the lag. */
+   (.pop, .favs, .qv, .rev-dialog, .menu) use a plain dark fill everywhere. */
 @media (hover:none),(max-width:700px){
   .nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(251,251,250,.95)}
   .nav.on-dark{background:rgba(20,20,22,.94)}

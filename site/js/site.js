@@ -34,7 +34,11 @@
     const words = codes.map(c => SIZE_WORDS[c] || c);
     return words.length === 1 ? words[0] : words.join(' · ');
   }
-  const shortSize = b => sizeLabel(b);
+  // cards: one size as a word ("Medium"); several as short codes on one line ("S · XL · XXL") so the label never wraps
+  const shortSize = b => {
+    const codes = (b.sizing || []).map(x => String(x.size || '').toUpperCase().trim()).filter(Boolean);
+    return codes.length > 1 ? codes.join(' · ') : sizeLabel(b);
+  };
   const findBike = slug => (window.MKP_BIKES || []).find(x => x.slug === slug);
 
   // ---------- nav ----------
@@ -59,7 +63,7 @@
     </div>
   </nav>
   <button class="nav-ico" type="button" data-open-favs aria-label="Open favourites"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span class="fav-count" hidden>0</span></button>
-  <a class="nav-ico" href="${wa()}" target="_blank" rel="noopener" aria-label="Call or WhatsApp MKP Bikes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>
+  <a class="nav-ico" href="tel:${PHONE_LABEL.replace(/\s/g, '')}" aria-label="Call MKP Bikes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>
   <a class="nav-cta" href="bikes.html">Shop bikes</a>
   <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
 </header>
@@ -70,7 +74,8 @@
   </nav>
   <div class="menu-foot">
     <a class="btn light" href="${wa()}" target="_blank" rel="noopener">Contact us on WhatsApp</a>
-    <p class="mono">5/17 Kylie Place, Cheltenham VIC 3192</p>
+    <a class="btn outline menu-dir" href="${MAPS}" target="_blank" rel="noopener"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>Get directions</a>
+    <p class="menu-addr">5/17 Kylie Place, Cheltenham VIC 3192</p>
   </div>
 </div>`;
   }
@@ -107,18 +112,12 @@
   <div class="wrap foot-in">
     <div class="foot-brand-col">
       <div class="foot-brand"><img src="img/mkp-logo.jpg" alt=""><span>MKP Bikes</span></div>
-      <p class="foot-tag">Hand-selected pre-owned and new road bikes. #1 Australian Tavelo dealer.</p>
-      <form class="foot-news" novalidate>
-        <h5 class="mono">Stay updated</h5>
-        <p>New bikes, exclusive offers and cycling tips.</p>
-        <div class="fn-row"><input type="email" name="email" placeholder="Enter your email" autocomplete="email" required aria-label="Email address"><button class="btn light" type="submit">Subscribe</button></div>
-        <p class="fn-msg" role="status"></p>
-      </form>
+      <p class="foot-tag">Hand-selected pre-owned and new road bikes.</p>
     </div>
     <div class="foot-cols">
       <div><h5 class="mono">Shop</h5><a href="bikes.html?type=pre">Pre-Owned Bikes</a><a href="bikes.html?type=new">New Bikes</a><a href="tavelo.html">Tavelo</a><a href="sell.html">Sell Your Bike</a></div>
       <div><h5 class="mono">Quick links</h5><a href="about.html">About Us</a><a href="size.html">Find Your Size</a><a href="fitting.html">Bike Fitting</a><a href="request.html">Request a Bike</a><a href="content.html">Our Content</a><a href="articles.html">Articles</a></div>
-      <div><h5 class="mono">Visit us</h5><a href="${MAPS}" target="_blank" rel="noopener">5/17 Kylie Place<br>Cheltenham VIC 3192</a><a href="${wa()}" target="_blank" rel="noopener">${PHONE_LABEL}</a><a href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">@mkp.bikes</a></div>
+      <div><h5 class="mono">Visit us</h5><a href="${MAPS}" target="_blank" rel="noopener">5/17 Kylie Place<br>Cheltenham VIC 3192</a><a href="tel:${PHONE_LABEL.replace(/\s/g, '')}">${PHONE_LABEL}</a><a href="${wa()}" target="_blank" rel="noopener">WhatsApp us</a><a href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">@mkp.bikes</a></div>
     </div>
   </div>
   <div class="wrap foot-fine mono"><span>© ${new Date().getFullYear()} MKP Bikes</span><a href="${window.MKP_API && MKP_API.onLive ? '' : LIVE}/admin" rel="nofollow">Admin Panel</a></div>
@@ -423,7 +422,7 @@
     root.querySelectorAll('.model').forEach(m => {
       const a = m.querySelector('a[href*="bike="]'), sz = m.querySelector('.size');
       const bk = a && findBike(new URL(a.href, location.href).searchParams.get('bike'));
-      if (bk && sz) sz.textContent = sizeLabel(bk);
+      if (bk && sz) sz.textContent = shortSize(bk);
     });
     root.querySelectorAll('a.m-img[href*="bike="]').forEach(a => {
       if (a.parentElement.classList.contains('m-media')) return;
@@ -482,10 +481,11 @@
   function card(b) {
     const url = `product.html?bike=${encodeURIComponent(b.slug)}`;
     const groupset = (b.specs && (b.specs.Groupset || b.specs.groupset) || '').split(',')[0];
-    const mid = b.kind === 'pre' ? ['Condition', b.condition ? gradePct(b.condition) + '%' : 'Inspected'] : ['Type', b.productType === 'Full Bikes' ? b.category : b.productType];
+    // second spec: condition for pre-owned; for new, what it is (Full bike / Frameset / Wheelset), never a repeat of Category
+    const mid = b.kind === 'pre' ? ['Condition', b.condition ? gradePct(b.condition) + '%' : 'Inspected'] : ['Type', { 'Full Bikes': 'Full bike', Frames: 'Frameset', Wheels: 'Wheelset' }[b.productType] || b.productType];
     return `
 <article class="model reveal" data-t="${b.kind}" data-cat="${esc(b.category)}">
-  <div class="m-top">${tag(b)}<span class="mono size">${esc(sizeLabel(b))}</span></div>
+  <div class="m-top">${tag(b)}<span class="mono size">${esc(shortSize(b))}</span></div>
   <a class="m-img portrait" href="${url}"><img src="${esc(b.images[0])}" alt="${esc(b.name)}" loading="lazy"></a>
   <h3><a href="${url}">${esc(b.name)}</a></h3>
   <p class="m-line">${esc(groupset || b.category)}</p>
