@@ -9,6 +9,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://player.vimeo.com">
+<link rel="preconnect" href="https://i.vimeocdn.com">
+<link rel="preconnect" href="https://vod-adaptive-ak.vimeocdn.com" crossorigin>
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/pages.css">
 </head>
@@ -37,10 +40,10 @@
       <div class="fit-side">
         <!-- Same hero video as mkpbikes.com.au/bike-fitting (Vimeo 1197332906, "POV Bike Fitting at MKP Bikes").
              The clip is 9:16, the frame 4:5: the player is scaled to cover the frame so there are no black bars,
-             and the still photo underneath shows until the video starts. -->
+             and a still frame of the same video (img/fit-video-poster.jpg, from Vimeo) shows until it starts, so there is no visible swap. -->
         <div class="fit-video reveal">
-          <img src="img/bike-fitting-potrait.jpg" alt="" aria-hidden="true">
-          <iframe src="https://player.vimeo.com/video/1197332906?background=1&autoplay=1&loop=1&muted=1&dnt=1" title="POV bike fitting at MKP Bikes" allow="autoplay; fullscreen; picture-in-picture" loading="lazy" tabindex="-1"></iframe>
+          <img src="img/fit-video-poster.jpg" alt="" aria-hidden="true" fetchpriority="high">
+          <iframe src="https://player.vimeo.com/video/1197332906?background=1&autoplay=1&loop=1&muted=1&dnt=1" title="POV bike fitting at MKP Bikes" allow="autoplay; fullscreen; picture-in-picture" tabindex="-1"></iframe>
         </div>
       </div>
     </div>
