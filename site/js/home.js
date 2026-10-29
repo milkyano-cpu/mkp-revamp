@@ -35,29 +35,38 @@
   addEventListener('resize', fitWords);
   document.fonts && document.fonts.ready.then(fitWords);
 
+  // Story progress from scrollY and cached sizes: no layout reads while scrolling (iOS jank),
+  // and the DOM is only touched when the visible state actually changes.
+  let storyTop = 0, storyTotal = 1, lastState = '', lastBar = -1, lastHint = -1;
+  function measureStory() {
+    storyTop = story.getBoundingClientRect().top + scrollY;
+    storyTotal = Math.max(1, story.offsetHeight - innerHeight);
+  }
+  measureStory();
+  addEventListener('resize', measureStory);
+  addEventListener('load', measureStory);
   function storyTick() {
-    const r = story.getBoundingClientRect();
-    const total = story.offsetHeight - innerHeight;
-    const p = Math.min(1, Math.max(0, -r.top / total));
+    const p = Math.min(1, Math.max(0, (scrollY - storyTop) / storyTotal));
     window.MKP.p = p;
     // four words share the first 72%, then the headline lands
     const seg = 0.72 / words.length;
-    words.forEach((w, i) => {
-      const a = i ? i * seg : -1, b = (i + 1) * seg;
-      w.classList.toggle('on', p >= a && p < b);
-      w.classList.toggle('past', p >= b);
-    });
-    end.classList.toggle('on', p >= 0.78 || reduce);
-    stage.classList.toggle('ending', p >= 0.78);
-    // the photo settles from a slight zoom to its full frame across the story
-    // desktop only: the photo settles from a slight zoom as you scroll. On phones there is no per-scroll
-    // style write at all (it made iOS scrolling feel a swipe behind), only the end-state class above.
+    const idx = Math.min(words.length, Math.floor(p / seg)), ending = p >= 0.78 || reduce;
+    const state = idx + '|' + ending;
+    if (state !== lastState) {
+      lastState = state;
+      words.forEach((w, i) => { w.classList.toggle('on', i === idx && p < 0.72); w.classList.toggle('past', i < idx); });
+      end.classList.toggle('on', ending);
+      stage.classList.toggle('ending', p >= 0.78);
+    }
+    // desktop only: the photo settles from a slight zoom as you scroll (no per-scroll style write on phones)
     if (bike && fine) {
       const bs = (1.04 - 0.08 * Math.min(1, p / 0.72)).toFixed(3);
       if (bs !== lastBs) { bike.style.setProperty('--bs', bs); lastBs = bs; }
     }
-    hint.style.opacity = p > 0.03 ? 0 : 1;
-    bar.style.transform = `scaleX(${p})`;
+    const h = p > 0.03 ? 0 : 1;
+    if (h !== lastHint) { hint.style.opacity = h; lastHint = h; }
+    const pb = Math.round(p * 200) / 200;
+    if (pb !== lastBar) { bar.style.transform = `scaleX(${pb})`; lastBar = pb; }
   }
 
   let ticking = false;

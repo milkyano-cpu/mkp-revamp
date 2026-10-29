@@ -28,19 +28,19 @@
           <button type="button" data-fit="road" role="radio" aria-checked="false"><span class="mono">Road Bike Fit</span><b>$180</b><small>$150 if your bike is from MKP</small></button>
           <button type="button" data-fit="triathlon" role="radio" aria-checked="false"><span class="mono">TT Bike Fit</span><b>$240</b><small>$200 if your bike is from MKP</small></button>
         </div>
-        <p class="book-note fit-tri-note" hidden>Booking a TT fit? Add "TT fit" in the booking notes so Ash sets up for your time trial or triathlon bike.</p>
         <div class="btns">
-          <a class="btn dark fit-jump" href="#fitCal" data-track="Clicked Book Fitting">Choose a time</a>
+          <a class="btn dark fit-jump" href="book-fitting.html" data-track="Clicked Book Fitting">Choose a time</a>
           <a class="btn ghost" href="#" data-wa="Hi, I'd like to ask about bike fitting.">Speak with the Team</a>
         </div>
         <p class="fit-trust">90-minute session at our Cheltenham studio · Full refund if you feel no improvement after your fit</p>
       </div>
       <div class="fit-side">
-        <div class="media fit-photo reveal"><img src="img/bike-fitting-potrait.jpg" alt="Bike fitting session at MKP Bikes"></div>
-        <div class="cal fit-cal" id="fitCal" hidden>
-          <!-- Ash's live Calendly event (same one as book-fitting.html and mkpbikes.com.au/book-fitting); loaded only after a fit is picked -->
-          <div class="calendly-inline-widget" data-src="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes?hide_gdpr_banner=1&background_color=fbfbfa&text_color=0d0d0f&primary_color=0d0d0f"></div>
-          <p class="cal-fallback">Calendar not loading? <a class="link" href="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes" target="_blank" rel="noopener">Open the booking page</a> or <a class="link" href="#" data-wa="Hi, I'd like to book a bike fit.">WhatsApp us</a>.</p>
+        <!-- Same hero video as mkpbikes.com.au/bike-fitting (Vimeo 1197332906, "POV Bike Fitting at MKP Bikes").
+             The clip is 9:16, the frame 4:5: the player is scaled to cover the frame so there are no black bars,
+             and the still photo underneath shows until the video starts. -->
+        <div class="fit-video reveal">
+          <img src="img/bike-fitting-potrait.jpg" alt="" aria-hidden="true">
+          <iframe src="https://player.vimeo.com/video/1197332906?background=1&autoplay=1&loop=1&muted=1&dnt=1" title="POV bike fitting at MKP Bikes" allow="autoplay; fullscreen; picture-in-picture" loading="lazy" tabindex="-1"></iframe>
         </div>
       </div>
     </div>
@@ -109,7 +109,7 @@
               <li>Saddle, bar and cleat setup</li>
               <li>Fit report to take home</li>
             </ul>
-            <a class="btn light" href="#fitCal" data-fit-go="road" data-track="Clicked Book Fitting">Book road fit</a>
+            <a class="btn light" href="book-fitting.html?fit=road" data-fit-go="road" data-track="Clicked Book Fitting">Book road fit</a>
           </div>
           <div class="plan plan-tri reveal" data-dark>
             <span class="tag blue on-dark">TT &amp; triathlon</span>
@@ -124,7 +124,7 @@
               <li>Room to progress at follow-up</li>
               <li>Fit report to take home</li>
             </ul>
-            <a class="btn light" href="#fitCal" data-fit-go="triathlon" data-track="Clicked Book Fitting">Book TT fit</a>
+            <a class="btn light" href="book-fitting.html?fit=triathlon" data-fit-go="triathlon" data-track="Clicked Book Fitting">Book TT fit</a>
           </div>
         </div>
         <p class="swipe-hint mono" aria-hidden="true">Swipe for the TT fit →</p>
@@ -166,31 +166,12 @@
 <script src="js/site.js"></script>
 <script src="js/reviews-data.js"></script>
 <script>
-  // Fit picker: the photo shows until a fit is picked (a card, "Choose a time" or a Book button);
-  // then the photo swaps for Ash's Calendly, which only loads at that point. Both fits book through his one event.
+  // Fit picker: one tap opens the booking page (Ash's Calendly) with that fit already selected
   (() => {
-    const btns = [...document.querySelectorAll('.fit-pick button')], note = document.querySelector('.fit-tri-note');
-    const cal = document.getElementById('fitCal'), photo = document.querySelector('.fit-photo'), widget = cal.querySelector('.calendly-inline-widget');
-    let loaded = false;
-    function showCal(scroll) {
-      if (cal.hidden) { cal.hidden = false; photo.hidden = true; }
-      if (!loaded) {
-        loaded = true;
-        widget.dataset.url = widget.dataset.src;
-        const sc = document.createElement('script'); sc.src = 'https://assets.calendly.com/assets/external/widget.js'; sc.async = true; document.body.appendChild(sc);
-      }
-      if (scroll) cal.scrollIntoView({ behavior: 'smooth', block: matchMedia('(max-width: 900px)').matches ? 'start' : 'center' });
-    }
-    const set = (f, scroll) => {
-      btns.forEach(b => { const on = b.dataset.fit === f; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
-      note.hidden = f !== 'triathlon';
-      showCal(scroll);
-    };
-    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.fit, matchMedia('(max-width: 900px)').matches)));
-    document.querySelectorAll('[data-fit-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(a.dataset.fitGo, true); }));
-    document.querySelectorAll('.fit-jump').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(btns.find(b => b.classList.contains('on'))?.dataset.fit || 'road', true); }));
-    const q = new URLSearchParams(location.search).get('fit');
-    if (q) set(q === 'triathlon' ? 'triathlon' : 'road', true);
+    const go = f => { location.href = 'book-fitting.html?fit=' + (f === 'triathlon' ? 'triathlon' : 'road'); };
+    document.querySelectorAll('.fit-pick button').forEach(b => b.addEventListener('click', () => go(b.dataset.fit)));
+    document.querySelectorAll('[data-fit-go]').forEach(a => { a.href = 'book-fitting.html?fit=' + a.dataset.fitGo; });
+    document.querySelectorAll('.fit-jump').forEach(a => { a.href = 'book-fitting.html'; });
   })();
 </script>
 <script>

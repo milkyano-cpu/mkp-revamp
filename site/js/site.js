@@ -503,7 +503,7 @@
   //   homepage: triathlete race-bike guide (type "triathlon")
   //   bike fitting page: 5-point bike fit checklist after 30s (type "bikefit")
   const POPS = {
-    home: { key: 'mkp-guide-popup', type: 'triathlon', delay: 15000, scroll: true, img: 'img/studio/popup-tt.jpg', imgTag: 'Free PDF guide', tag: 'Beginner triathletes',
+    home: { key: 'mkp-guide-popup', type: 'triathlon', delay: 15000, scroll: true, img: 'img/about.jpg', imgTag: 'Free PDF guide', tag: 'Beginner triathletes',
       title: 'Choosing your first race bike?', text: 'Get our free guide to picking the right triathlon bike: sizing, aero vs road, and what to pay for a good second-hand TT bike.',
       btn: 'Send me the guide', ok: "<b>You're on the list.</b> The guide is on its way to your inbox." },
     fitting: { key: 'mkp-fit-popup', type: 'bikefit', delay: 30000, scroll: false, img: 'img/bike-fitting-landscape.jpg', imgTag: 'Free checklist', tag: 'Bike fitting',
@@ -516,7 +516,7 @@
   try { seen = !!localStorage.getItem(POP_KEY); } catch (e) {}
   if (P && !seen && !document.body.dataset.noPopup) {
     const pop = document.createElement('div');
-    pop.className = 'pop';
+    pop.className = 'pop pop-' + page; // pop-home = blue, pop-fitting = orange
     pop.hidden = true;
     pop.innerHTML = `
 <div class="pop-card" role="dialog" aria-modal="true" aria-labelledby="popTitle">
@@ -528,7 +528,7 @@
     <p>${P.text}</p>
     <label class="pop-field"><span class="sr">Email address</span><input type="email" name="email" placeholder="you@email.com" autocomplete="email" required></label>
     <button class="btn pop-btn" type="submit">${P.btn}</button>
-    <p class="pop-note mono">No spam. Unsubscribe anytime.</p>
+    <p class="pop-note"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>No spam. Unsubscribe anytime.</p>
     <p class="pop-ok" hidden>${P.ok}</p>
   </form>
 </div>`;

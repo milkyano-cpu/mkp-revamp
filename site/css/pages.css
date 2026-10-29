@@ -432,3 +432,18 @@ a.fcard:hover{transform:translateY(-3px);border-color:var(--ink)}
 .fit-photo[hidden],.fit-cal[hidden]{display:none}
 .fit-cal{position:static}
 @media (max-width:900px){.fit-side{position:static}.fit-photo{aspect-ratio:4/3;max-height:none}}
+/* fitting hero video: 4:5 frame, 9:16 Vimeo clip scaled to COVER it (no letterbox bars); still photo below while it loads */
+.fit-video{position:relative;aspect-ratio:4/5;border-radius:24px;overflow:hidden;background:#d9d6d0;max-height:calc(100svh - 150px)}
+.fit-video img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 40%}
+.fit-video iframe{position:absolute;left:50%;top:50%;width:100%;height:177.78%;min-height:100%;min-width:56.25%;transform:translate(-50%,-50%);border:0;pointer-events:none}
+@supports (aspect-ratio:1){.fit-video iframe{width:max(100%, calc(100% * 9 / 16 * 16 / 9));height:auto;aspect-ratio:9/16}}
+.fit-pick button{cursor:pointer}
+@media (max-width:900px){.fit-side{position:static}.fit-video{max-height:none}}
+/* fit cards: hover flips to black and white (same look as selected), smooth */
+.fit-pick button{transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
+.fit-pick button small,.fit-pick button .mono{transition:color .25s var(--ease)}
+@media (hover:hover){
+  .fit-pick button:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}
+  .fit-pick button:hover .mono,.fit-pick button:hover small{color:rgba(255,255,255,.65)}
+}
+.fit-pick button:active{background:var(--ink);color:#fff;border-color:var(--ink)}
