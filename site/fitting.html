@@ -25,7 +25,7 @@
         <p class="sub">Most cyclists ride in pain they think is normal. It's not. Our 90-minute session starts off the bike, assessing your mobility and flexibility first, so every adjustment is built around your body, not a generic template.</p>
         <!-- conversion first: pick a fit, the calendar is right there -->
         <div class="fit-pick" role="radiogroup" aria-label="Fit type">
-          <button type="button" class="on" data-fit="road" role="radio" aria-checked="true"><span class="mono">Road Bike Fit</span><b>$180</b><small>$150 if your bike is from MKP</small></button>
+          <button type="button" data-fit="road" role="radio" aria-checked="false"><span class="mono">Road Bike Fit</span><b>$180</b><small>$150 if your bike is from MKP</small></button>
           <button type="button" data-fit="triathlon" role="radio" aria-checked="false"><span class="mono">TT Bike Fit</span><b>$240</b><small>$200 if your bike is from MKP</small></button>
         </div>
         <p class="book-note fit-tri-note" hidden>Booking a TT fit? Add "TT fit" in the booking notes so Ash sets up for your time trial or triathlon bike.</p>
@@ -35,10 +35,13 @@
         </div>
         <p class="fit-trust">90-minute session at our Cheltenham studio · Full refund if you feel no improvement after your fit</p>
       </div>
-      <div class="cal fit-cal" id="fitCal">
-        <!-- Ash's live Calendly event (same one as book-fitting.html and mkpbikes.com.au/book-fitting) -->
-        <div class="calendly-inline-widget" data-url="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes?hide_gdpr_banner=1&background_color=fbfbfa&text_color=0d0d0f&primary_color=0d0d0f"></div>
-        <p class="cal-fallback">Calendar not loading? <a class="link" href="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes" target="_blank" rel="noopener">Open the booking page</a> or <a class="link" href="#" data-wa="Hi, I'd like to book a bike fit.">WhatsApp us</a>.</p>
+      <div class="fit-side">
+        <div class="media fit-photo reveal"><img src="img/bike-fitting-potrait.jpg" alt="Bike fitting session at MKP Bikes"></div>
+        <div class="cal fit-cal" id="fitCal" hidden>
+          <!-- Ash's live Calendly event (same one as book-fitting.html and mkpbikes.com.au/book-fitting); loaded only after a fit is picked -->
+          <div class="calendly-inline-widget" data-src="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes?hide_gdpr_banner=1&background_color=fbfbfa&text_color=0d0d0f&primary_color=0d0d0f"></div>
+          <p class="cal-fallback">Calendar not loading? <a class="link" href="https://calendly.com/ash-mkp-bikes/comprehensive-bike-fit-mkp-bikes" target="_blank" rel="noopener">Open the booking page</a> or <a class="link" href="#" data-wa="Hi, I'd like to book a bike fit.">WhatsApp us</a>.</p>
+        </div>
       </div>
     </div>
     <div class="wrap stats">
@@ -130,7 +133,6 @@
           <div class="addon reveal"><div><h4>Cleat replacement · $45</h4><p>New cleats fitted and set up to your position.</p></div><a class="link" href="#" data-wa="Hi, I'd like to book a cleat replacement ($45).">Enquire</a></div>
           <div class="addon reveal"><div><h4>Follow-up fit · $70</h4><p>Refine a recent fit, sort a new niggle or fine-tune after adapting.</p></div><a class="link" href="#" data-wa="Hi, I'd like to book a follow-up bike fit ($70).">Enquire</a></div>
           <div class="addon reveal" style="background:var(--dark);color:#fff;border-color:transparent"><div><h4>Bought your bike from MKP?</h4><p style="color:rgba(255,255,255,.6)">Road fit $150 (save $30) · TT fit $200 (save $40).</p></div><a class="link" href="#" data-wa="Hi, I bought my bike from MKP and would like to book the discounted bike fit (road $150 / TT $200). Can I arrange a session?">Book now</a></div>
-          <div class="addon reveal"><div><h4>Outside Melbourne?</h4><p>Message us about travel or freight before booking.</p></div><a class="link" href="#" data-wa="Hi, I'm outside Melbourne and interested in a bike fitting. Could you confirm if there are any travel or freight costs?">Message us</a></div>
         </div>
       </div>
     </div>
@@ -163,15 +165,32 @@
 <script src="js/api.js"></script>
 <script src="js/site.js"></script>
 <script src="js/reviews-data.js"></script>
-<script src="https://assets.calendly.com/assets/external/widget.js" async></script>
 <script>
-  // fit picker in the hero: both fits book through Ash's one Calendly event; the TT choice shows a note
+  // Fit picker: the photo shows until a fit is picked (a card, "Choose a time" or a Book button);
+  // then the photo swaps for Ash's Calendly, which only loads at that point. Both fits book through his one event.
   (() => {
     const btns = [...document.querySelectorAll('.fit-pick button')], note = document.querySelector('.fit-tri-note');
-    const set = f => { btns.forEach(b => { const on = b.dataset.fit === f; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); }); note.hidden = f !== 'triathlon'; };
-    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.fit)));
-    document.querySelectorAll('[data-fit-go]').forEach(a => a.addEventListener('click', () => set(a.dataset.fitGo)));
-    if (new URLSearchParams(location.search).get('fit') === 'triathlon') set('triathlon');
+    const cal = document.getElementById('fitCal'), photo = document.querySelector('.fit-photo'), widget = cal.querySelector('.calendly-inline-widget');
+    let loaded = false;
+    function showCal(scroll) {
+      if (cal.hidden) { cal.hidden = false; photo.hidden = true; }
+      if (!loaded) {
+        loaded = true;
+        widget.dataset.url = widget.dataset.src;
+        const sc = document.createElement('script'); sc.src = 'https://assets.calendly.com/assets/external/widget.js'; sc.async = true; document.body.appendChild(sc);
+      }
+      if (scroll) cal.scrollIntoView({ behavior: 'smooth', block: matchMedia('(max-width: 900px)').matches ? 'start' : 'center' });
+    }
+    const set = (f, scroll) => {
+      btns.forEach(b => { const on = b.dataset.fit === f; b.classList.toggle('on', on); b.setAttribute('aria-checked', on); });
+      note.hidden = f !== 'triathlon';
+      showCal(scroll);
+    };
+    btns.forEach(b => b.addEventListener('click', () => set(b.dataset.fit, matchMedia('(max-width: 900px)').matches)));
+    document.querySelectorAll('[data-fit-go]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(a.dataset.fitGo, true); }));
+    document.querySelectorAll('.fit-jump').forEach(a => a.addEventListener('click', e => { e.preventDefault(); set(btns.find(b => b.classList.contains('on'))?.dataset.fit || 'road', true); }));
+    const q = new URLSearchParams(location.search).get('fit');
+    if (q) set(q === 'triathlon' ? 'triathlon' : 'road', true);
   })();
 </script>
 <script>
