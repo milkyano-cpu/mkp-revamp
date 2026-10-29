@@ -33,9 +33,9 @@
           <button data-type="new" role="tab">New</button>
         </div>
         <div class="chips" id="cats" aria-label="Category"></div>
+        <div class="chips chips-size" id="sizes" aria-label="Size (pick one or more)"></div>
         <div class="tools-right">
           <input class="search" id="q" type="search" placeholder="Search Trek, Di2, 54cm..." aria-label="Search bikes">
-          <select class="select" id="size" aria-label="Size"><option value="">Any size</option></select>
           <select class="select" id="sort" aria-label="Sort">
             <option value="new">Newest</option>
             <option value="low">Price: low to high</option>
@@ -74,19 +74,21 @@
   const params = new URLSearchParams(location.search);
   // also accepts the live site's URL style (?type=pre-owned|new-bikes, ?search=) so old links and Google's sitelinks search keep working
   const typeIn = params.get('type'), typeMap = { 'pre-owned': 'pre', 'new-bikes': 'new' };
-  const state = { type: typeMap[typeIn] || typeIn || 'all', cat: params.get('cat') || params.get('category') || 'All', q: params.get('q') || params.get('search') || '', sort: params.get('sort') || 'new', size: (params.get('size') || '').toUpperCase() };
+  const state = { type: typeMap[typeIn] || typeIn || 'all', cat: params.get('cat') || params.get('category') || 'All', q: params.get('q') || params.get('search') || '', sort: params.get('sort') || 'new', sizes: (params.get('size') || '').toUpperCase().split(',').filter(Boolean) };
   const grid = document.getElementById('grid');
   const segBtns = [...document.querySelectorAll('.seg button')];
   const drawCats = () => { const cats = ['All', ...new Set(S.bikes.map(b => b.category).filter(Boolean))]; document.getElementById('cats').innerHTML = cats.map(c => `<button class="chip" data-cat="${S.esc(c)}">${S.esc(c)}</button>`).join(''); };
   drawCats();
-  const q = document.getElementById('q'), sort = document.getElementById('sort'), sizeSel = document.getElementById('size');
+  const q = document.getElementById('q'), sort = document.getElementById('sort'), sizeBox = document.getElementById('sizes');
   // size filter: built from the sizes in stock (each bike's sizing codes), shown as words
   const ORDER = ['XXS', 'XS', 'S', 'SM', 'M', 'ML', 'M/L', 'L', 'XL', 'XXL'];
   const codes = b => (b.sizing || []).map(x => String(x.size || '').toUpperCase().trim()).filter(Boolean);
+  // size chips (multi-select): "All sizes" clears; tap sizes to add/remove. Short labels so the row stays compact.
+  const SHORT = { XXS: 'XXS', XS: 'XS', S: 'Small', SM: 'S/M', M: 'Medium', ML: 'M/L', 'M/L': 'M/L', L: 'Large', XL: 'XL', XXL: 'XXL' };
   const drawSizes = () => {
     const have = [...new Set(S.bikes.flatMap(codes))].sort((a, b) => (ORDER.indexOf(a) + 99 * (ORDER.indexOf(a) < 0)) - (ORDER.indexOf(b) + 99 * (ORDER.indexOf(b) < 0)));
-    sizeSel.innerHTML = '<option value="">Any size</option>' + have.map(c => `<option value="${S.esc(c)}">${S.esc(S.sizeLabel({ sizing: [{ size: c }] }))}</option>`).join('');
-    sizeSel.value = have.includes(state.size) ? state.size : '';
+    state.sizes = state.sizes.filter(c => have.includes(c));
+    sizeBox.innerHTML = '<button class="chip" data-size="">All sizes</button>' + have.map(c => `<button class="chip" data-size="${S.esc(c)}" title="${S.esc(S.sizeLabel({ sizing: [{ size: c }] }))}">${S.esc(SHORT[c] || c)}</button>`).join('');
   };
   drawSizes();
   q.value = state.q; sort.value = state.sort;
@@ -103,7 +105,7 @@
     let list = S.bikes.filter(b =>
       (state.type === 'all' || b.kind === state.type) &&
       (state.cat === 'All' || b.category === state.cat) &&
-      (!state.size || codes(b).includes(state.size)) &&
+      (!state.sizes.length || codes(b).some(c => state.sizes.includes(c))) &&
       words.every(w => (b.name + ' ' + b.size + ' ' + Object.values(b.specs).join(' ')).toLowerCase().includes(w)));
     if (state.sort === 'low') list.sort((a, b) => a.price - b.price);
     else if (state.sort === 'high') list.sort((a, b) => b.price - a.price);
@@ -113,7 +115,8 @@
     document.getElementById('count').textContent = `${list.length} ${list.length === 1 ? 'bike' : 'bikes'}`;
     document.getElementById('empty').hidden = list.length > 0;
     segBtns.forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
-    document.querySelectorAll('.chip').forEach(c => c.classList.toggle('on', c.dataset.cat === state.cat));
+    document.querySelectorAll('#cats .chip').forEach(c => c.classList.toggle('on', c.dataset.cat === state.cat));
+    sizeBox.querySelectorAll('.chip').forEach(c => { const on = c.dataset.size ? state.sizes.includes(c.dataset.size) : !state.sizes.length; c.classList.toggle('on', on); c.setAttribute('aria-pressed', on); });
     document.getElementById('shopTitle').textContent = titles[state.type][0];
     document.getElementById('crumbNow').textContent = titles[state.type][1];
     document.getElementById('shopSub').textContent = subs[state.type];
@@ -123,15 +126,21 @@
     if (state.cat !== 'All') p.set('cat', state.cat);
     if (state.q) p.set('q', state.q);
     if (state.sort !== 'new') p.set('sort', state.sort);
-    if (state.size) p.set('size', state.size);
+    if (state.sizes.length) p.set('size', state.sizes.join(','));
     history.replaceState(history.state, '', location.pathname + (p.toString() ? '?' + p : '') + location.hash);
   }
   segBtns.forEach(b => b.addEventListener('click', () => { state.type = b.dataset.type; render(); }));
   document.getElementById('cats').addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) { state.cat = c.dataset.cat; render(); } });
   let t; q.addEventListener('input', () => { clearTimeout(t); t = setTimeout(() => { state.q = q.value.trim(); render(); }, 150); });
   sort.addEventListener('change', () => { state.sort = sort.value; render(); });
-  sizeSel.addEventListener('change', () => { state.size = sizeSel.value; render(); });
-  document.getElementById('clear').addEventListener('click', e => { e.preventDefault(); Object.assign(state, { type: 'all', cat: 'All', q: '', size: '' }); q.value = ''; sizeSel.value = ''; render(); });
+  sizeBox.addEventListener('click', e => {
+    const c = e.target.closest('.chip'); if (!c) return;
+    const v = c.dataset.size;
+    if (!v) state.sizes = [];
+    else state.sizes = state.sizes.includes(v) ? state.sizes.filter(x => x !== v) : [...state.sizes, v];
+    render();
+  });
+  document.getElementById('clear').addEventListener('click', e => { e.preventDefault(); Object.assign(state, { type: 'all', cat: 'All', q: '', sizes: [] }); q.value = ''; render(); });
   render();
   // live list from the backend arrived (new listings, price changes, sold bikes removed)
   document.addEventListener('mkp:bikes', () => { drawCats(); drawSizes(); render(); });

@@ -45,7 +45,9 @@
   measureStory();
   addEventListener('resize', measureStory);
   addEventListener('load', measureStory);
+  const isStatic = story.classList.contains('story-static');
   function storyTick() {
+    if (isStatic) return; // static hero: nothing changes on scroll
     const p = Math.min(1, Math.max(0, (scrollY - storyTop) / storyTotal));
     window.MKP.p = p;
     // four words share the first 72%, then the headline lands
@@ -75,7 +77,7 @@
     ticking = true;
     requestAnimationFrame(() => { storyTick(); ticking = false; });
   }
-  addEventListener('scroll', onScroll, { passive: true });
+  if (!isStatic) addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', onScroll);
   storyTick();
 

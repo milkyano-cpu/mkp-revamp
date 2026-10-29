@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="preload" as="image" href="img/bianchi-oltre-rc-marble.webp" imagesrcset="img/bianchi-oltre-rc-marble-760.webp 760w, img/bianchi-oltre-rc-marble.webp 1552w" imagesizes="(max-width: 700px) 92vw, 56vw">
 <link rel="stylesheet" href="css/home.css">
 <link rel="stylesheet" href="css/pages.css">
 </head>
@@ -20,28 +19,19 @@
 <main id="top">
 
 <!-- 1. HERO: scroll story over a studio photo of a Bianchi Oltre RC (Bianchi press image, background removed with Higgsfield: license or replace before launch) -->
-<section class="story" id="story">
+<section class="story story-static" id="story">
   <div class="story-stage">
 
-    <div class="story-words" aria-hidden="true">
-      <h2 class="w" data-i="0">every bike.</h2>
-      <h2 class="w" data-i="1">inspected.</h2>
-      <h2 class="w" data-i="2">graded.</h2>
-      <h2 class="w" data-i="3">ready to ride.</h2>
-    </div>
 
-    <img class="story-bike" id="storyBike" src="img/bianchi-oltre-rc-marble.webp" srcset="img/bianchi-oltre-rc-marble-760.webp 760w, img/bianchi-oltre-rc-marble.webp 1552w" sizes="(max-width: 700px) 92vw, 56vw" alt="Bianchi Oltre RC road bike in white marble and gold" fetchpriority="high" decoding="async">
 
-    <div class="story-end">
+    <div class="story-end on">
       <h1>Marketplace bikes are a gamble. <br>Ours aren’t.</h1>
       <div class="btns">
         <a class="btn dark" href="bikes.html">Shop road bikes</a>
-        <a class="btn ghost" href="#" data-wa="Hi MKP Bikes, I'd like to book a test ride.">Book a test ride</a>
+        <a class="btn ghost" href="book-fitting.html" data-track="Clicked Book Fitting">Book bike fit</a>
       </div>
     </div>
 
-    <div class="story-hint mono"><span class="dot"></span>Scroll</div>
-    <div class="story-bar"><i id="storyBar"></i></div>
   </div>
 </section>
 
@@ -177,7 +167,14 @@
       <ol class="steps mono">
         <li>Conversation</li><li>Body assessment</li><li>On-bike assessment</li><li>Adjustments</li><li>Fit report</li>
       </ol>
-      <div class="price-row"><div><b>From $180</b><span>Road $180 · TT $240. Full refund if you feel no improvement.</span></div><a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book a fitting</a></div>
+      <div class="fit-prices">
+        <a class="fp" href="book-fitting.html?fit=road" data-track="Clicked Book Fitting"><span class="mono">Road Bike Fit</span><b>$180</b></a>
+        <a class="fp" href="book-fitting.html?fit=triathlon" data-track="Clicked Book Fitting"><span class="mono">TT Bike Fit</span><b>$240</b></a>
+      </div>
+      <div class="fit-cta">
+        <a class="btn dark" href="book-fitting.html" data-track="Clicked Book Fitting">Book a fitting</a>
+        <p class="fit-guarantee"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Full refund if you feel no improvement</p>
+      </div>
     </div>
   </div>
 </section>

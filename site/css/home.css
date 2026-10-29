@@ -641,3 +641,42 @@ img.tony-av{width:40px;height:40px;border-radius:50%;object-fit:cover;background
 @media (hover:none),(max-width:700px){
   input,select,textarea,.tony-form input,.pop-field input,.search,.select,.field input,.field select,.field textarea{font-size:16px !important}
 }
+
+/* homepage fitting: two price tiles + one tidy CTA line */
+.fit-prices{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.fp{display:flex;flex-direction:column;gap:6px;padding:16px 18px;border-radius:18px;border:1px solid var(--line);background:var(--paper);transition:background .25s var(--ease),color .25s var(--ease),border-color .25s var(--ease),transform .25s var(--ease)}
+.fp .mono{color:var(--muted);font-size:10.5px;letter-spacing:.12em;transition:color .25s var(--ease)}
+.fp b{font-size:30px;letter-spacing:-.04em;line-height:1}
+@media (hover:hover){.fp:hover{background:var(--ink);color:#fff;border-color:var(--ink);transform:translateY(-2px)}.fp:hover .mono{color:rgba(255,255,255,.6)}}
+.fit-cta{display:flex;align-items:center;gap:18px;flex-wrap:wrap;margin-top:18px}
+.fit-guarantee{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--ink-2);margin:0}
+.fit-guarantee svg{color:var(--orange);flex:none}
+
+/* ---------- static hero (no scroll story): bike, one big word behind it, headline + buttons, all at once ---------- */
+.story.story-static{height:auto}
+.story-static .story-stage{position:relative;height:100vh;height:100svh;min-height:600px}
+.story-static .story-bike{--by:-9vh;--bs:1;transition:none}
+.story-static .story-words{--wy:calc(50% - 9vh)}
+.story-static .story-words .w{opacity:1;transform:translateY(-50%);filter:none;transition:none}
+.story-static .story-end{opacity:1;transform:none;transition:none;pointer-events:auto}
+@media (max-width:700px){
+  .story-static .story-bike{--by:-12vh}
+  .story-static .story-words{--wy:calc(50% - 12vh - 28vw - 44px)}
+  .story-static .story-words .w{transform:translateY(-100%)}
+}
+@media (max-width:700px){
+  /* centre the whole group (title + bike + headline + buttons) vertically on phones */
+  .story-static .story-bike{--by:-4vh}
+  .story-static .story-words{--wy:calc(50% - 4vh - 28vw - 44px)}
+  .story-static .story-end{bottom:auto;top:calc(50% - 4vh + 30vw + 22px)}
+}
+
+/* hero without bike or big word: headline + buttons centred in a shorter first section */
+.story-static .story-stage{height:auto;min-height:0;padding:clamp(150px,22vh,220px) var(--gut) clamp(90px,14vh,140px);display:flex;align-items:center;justify-content:center}
+.story-static .story-end,.story-static .story-end.on{position:static;transform:none;top:auto;bottom:auto;padding:0;max-width:980px}
+.story-static .story-end h1{font-size:clamp(40px,6.4vw,88px);line-height:1;letter-spacing:-.045em;margin-bottom:28px}
+@media (max-width:700px){
+  .story-static .story-stage{padding:130px var(--gut) 72px}
+  .story-static .story-end h1{font-size:clamp(34px,10.5vw,46px)}
+  .story-static .story-end,.story-static .story-end.on{top:auto}
+}
