@@ -469,7 +469,9 @@
     });
     nav.classList.toggle('on-dark', dark);
   }
-  addEventListener('scroll', () => requestAnimationFrame(navTick), { passive: true });
+  // one nav check per frame at most (several scroll events can fire per frame on iOS)
+  let navQueued = false;
+  addEventListener('scroll', () => { if (navQueued) return; navQueued = true; requestAnimationFrame(() => { navQueued = false; navTick(); }); }, { passive: true });
   navTick();
 
   // ---------- shared bike helpers ----------
@@ -547,10 +549,13 @@
       setTimeout(() => pop.querySelector('input').focus({ preventScroll: true }), 450);
     };
     setTimeout(show, P.delay);
-    if (P.scroll) addEventListener('scroll', () => {
-      const p = scrollY / Math.max(1, document.documentElement.scrollHeight - innerHeight);
-      if (p > 0.5) show();
-    }, { passive: true });
+    // halfway trigger: page height measured once (not on every scroll event), listener removed once shown
+    if (P.scroll) {
+      let half = (document.documentElement.scrollHeight - innerHeight) / 2;
+      addEventListener('resize', () => { half = (document.documentElement.scrollHeight - innerHeight) / 2; }, { passive: true });
+      const onS = () => { if (scrollY > half) { removeEventListener('scroll', onS); show(); } };
+      addEventListener('scroll', onS, { passive: true });
+    }
     pop.addEventListener('click', e => { if (e.target === pop || e.target.closest('.pop-x')) close(); });
     addEventListener('keydown', e => { if (e.key === 'Escape' && pop.classList.contains('open')) close(); });
     pop.querySelector('form').addEventListener('submit', e => {

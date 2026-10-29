@@ -10,6 +10,8 @@
   const hint = document.querySelector('.story-hint');
   const bar = document.getElementById('storyBar');
   const stage = document.querySelector('.story-stage'), bike = document.getElementById('storyBike');
+  const fine = matchMedia('(hover: hover) and (pointer: fine) and (min-width: 701px)').matches;
+  let lastBs = '';
   window.MKP = window.MKP || {};
   window.MKP.p = 0;
 
@@ -48,7 +50,12 @@
     end.classList.toggle('on', p >= 0.78 || reduce);
     stage.classList.toggle('ending', p >= 0.78);
     // the photo settles from a slight zoom to its full frame across the story
-    bike && bike.style.setProperty('--bs', (1.04 - 0.08 * Math.min(1, p / 0.72)).toFixed(4));
+    // desktop only: the photo settles from a slight zoom as you scroll. On phones there is no per-scroll
+    // style write at all (it made iOS scrolling feel a swipe behind), only the end-state class above.
+    if (bike && fine) {
+      const bs = (1.04 - 0.08 * Math.min(1, p / 0.72)).toFixed(3);
+      if (bs !== lastBs) { bike.style.setProperty('--bs', bs); lastBs = bs; }
+    }
     hint.style.opacity = p > 0.03 ? 0 : 1;
     bar.style.transform = `scaleX(${p})`;
   }
