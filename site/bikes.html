@@ -82,11 +82,14 @@
   const q = document.getElementById('q'), sort = document.getElementById('sort'), sizeBox = document.getElementById('sizes');
   // size filter: built from the sizes in stock (each bike's sizing codes), shown as words
   const ORDER = ['XXS', 'XS', 'S', 'SM', 'M', 'ML', 'M/L', 'L', 'XL', 'XXL'];
-  const codes = b => (b.sizing || []).map(x => String(x.size || '').toUpperCase().trim()).filter(Boolean);
+  const codes = b => (b.sizing || []).map(x => String(x.size || '').toUpperCase().trim().replace('M/L', 'ML')).filter(Boolean);
   // size chips (multi-select): "All sizes" clears; tap sizes to add/remove. Short labels so the row stays compact.
   const SHORT = { XXS: 'XXS', XS: 'XS', S: 'Small', SM: 'S/M', M: 'Medium', ML: 'M/L', 'M/L': 'M/L', L: 'Large', XL: 'XL', XXL: 'XXL' };
   const drawSizes = () => {
-    const have = [...new Set(S.bikes.flatMap(codes))].sort((a, b) => (ORDER.indexOf(a) + 99 * (ORDER.indexOf(a) < 0)) - (ORDER.indexOf(b) + 99 * (ORDER.indexOf(b) < 0)));
+    // letter sizes only (a bike listed with a frame size in cm, e.g. "51", still shows under All sizes),
+    // and XXS is always offered even before any XXS bike is in stock
+    const inStock = new Set(S.bikes.flatMap(codes));
+    const have = ORDER.filter(c => c !== 'M/L' && (c === 'XXS' || inStock.has(c)));
     state.sizes = state.sizes.filter(c => have.includes(c));
     sizeBox.innerHTML = '<button class="chip" data-size="">All sizes</button>' + have.map(c => `<button class="chip" data-size="${S.esc(c)}" title="${S.esc(S.sizeLabel({ sizing: [{ size: c }] }))}">${S.esc(SHORT[c] || c)}</button>`).join('');
   };
