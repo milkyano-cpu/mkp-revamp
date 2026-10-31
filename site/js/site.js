@@ -477,8 +477,8 @@
   const bikes = window.MKP_BIKES || [];
   const bySlug = slug => bikes.find(b => b.slug === slug);
   const tag = b => b.kind === 'pre'
-    ? '<span class="tag orange">Pre-owned</span>'
-    : `<span class="tag blue">${b.productType === 'Frames' ? 'Frameset' : b.productType === 'Wheels' ? 'Wheelset' : 'Brand new'}</span>`;
+    ? '<span class="tag orange pre">Pre-owned</span>'
+    : `<span class="tag blue new">${b.productType === 'Frames' ? 'Frameset' : b.productType === 'Wheels' ? 'Wheelset' : 'Brand new'}</span>`;
   function card(b) {
     const url = `product.html?bike=${encodeURIComponent(b.slug)}`;
     const groupset = (b.specs && (b.specs.Groupset || b.specs.groupset) || '').split(',')[0];
@@ -515,7 +515,7 @@
   try { seen = !!localStorage.getItem(POP_KEY); } catch (e) {}
   if (P && !seen && !document.body.dataset.noPopup) {
     const pop = document.createElement('div');
-    pop.className = 'pop pop-' + page; // pop-home = blue, pop-fitting = orange
+    pop.className = 'pop pop-' + page; // pop-home = ink, pop-fitting = orange
     pop.hidden = true;
     pop.innerHTML = `
 <div class="pop-card" role="dialog" aria-modal="true" aria-labelledby="popTitle">

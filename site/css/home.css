@@ -49,19 +49,21 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .btns{display:flex;gap:10px;flex-wrap:wrap}
 .link{font-weight:600;border-bottom:1px solid currentColor;padding-bottom:2px}
 
-/* badges: small mono capsules with a glowing status dot */
-.tags{display:inline-flex;gap:6px;flex-wrap:wrap}
-.tag{position:relative;display:inline-flex;align-items:center;gap:7px;height:26px;padding:0 11px 0 9px;border-radius:999px;
-  font:600 10.5px/1 "Inter",system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;
-  border:1px solid transparent;overflow:hidden;isolation:isolate}
-.tag::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;flex:none}
-/* pre-owned: warm paper capsule, orange dot */
-.tag.orange{color:#c8430f;background:linear-gradient(180deg,#fff 0,#fff3ec 100%);border-color:rgba(255,90,31,.24);box-shadow:0 1px 0 rgba(255,255,255,.9) inset,0 2px 8px -4px rgba(255,90,31,.45)}
-.tag.orange::before{background:var(--orange);box-shadow:0 0 0 3px rgba(255,90,31,.16),0 0 8px rgba(255,90,31,.7)}
-.tag.orange.on-dark{color:#ffb08f;background:rgba(255,90,31,.1);border-color:rgba(255,90,31,.32);box-shadow:none}
-/* brand new: ink capsule, electric blue dot */
-.tag.blue{color:#fff;background:linear-gradient(180deg,#26272d 0,#0d0d0f 100%);border-color:rgba(255,255,255,.08);box-shadow:0 1px 0 rgba(255,255,255,.12) inset,0 4px 12px -6px rgba(13,13,15,.6)}
-.tag.blue::before{background:#7ea8ff;box-shadow:0 0 0 3px rgba(126,168,255,.18),0 0 10px rgba(126,168,255,.9)}
+/* badges: soft bevelled pills, sentence case, status dot on the top-right corner */
+.tags{display:inline-flex;gap:8px;flex-wrap:wrap}
+.tag{--dot:var(--orange);--ring:#fff;position:relative;display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 13px;border-radius:999px;
+  font:500 13px/1 "Inter",system-ui,sans-serif;letter-spacing:-.005em;text-transform:none;white-space:nowrap;
+  color:#1d1b18;background:linear-gradient(180deg,#f7f5f0 0,#ebe8e0 100%);border:1px solid #dcd8ce;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(20,18,14,.04),0 1px 2px rgba(20,18,14,.06)}
+.tag::after{content:"";position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:var(--dot);box-shadow:0 0 0 2px var(--ring)}
+/* dark pill: brand new, and any tag sitting on a dark surface */
+.tag.blue,.tag.on-dark,.tag.pop-tag{--ring:#161513;color:#f4f2ed;background:linear-gradient(180deg,#3b3936 0,#252320 100%);border-color:#161513;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.13),0 1px 2px rgba(0,0,0,.28)}
+.tag.blue{--dot:#4d8dff}
+/* small icon: loop for pre-owned, sparkle for brand new */
+.tag.pre::before,.tag.new::before{content:"";width:14px;height:14px;flex:none;margin-left:-2px;background:currentColor;-webkit-mask:var(--ico) center/contain no-repeat;mask:var(--ico) center/contain no-repeat}
+.tag.pre{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 11a8 8 0 0 0-14.6-4.5L4 8'/%3E%3Cpath d='M4 3v5h5'/%3E%3Cpath d='M4 13a8 8 0 0 0 14.6 4.5L20 16'/%3E%3Cpath d='M20 21v-5h-5'/%3E%3C/svg%3E")}
+.tag.new{--ico:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.9' stroke-linejoin='round' stroke-linecap='round'%3E%3Cpath d='M10 4c.6 4.2 1.8 5.4 6 6-4.2.6-5.4 1.8-6 6-.6-4.2-1.8-5.4-6-6 4.2-.6 5.4-1.8 6-6z'/%3E%3Cpath d='M18 3v4M16 5h4'/%3E%3Ccircle cx='17.5' cy='17.5' r='.6' fill='black'/%3E%3C/svg%3E")}
 
 /* ---------- NAV ---------- */
 .nav{position:fixed;z-index:50;top:14px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:6px;height:52px;padding:0 6px 0 8px;border-radius:999px;background:rgba(251,251,250,.72);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border:1px solid var(--line);box-shadow:0 8px 30px rgba(0,0,0,.06);transition:background .4s,color .4s,border-color .4s;width:max-content;max-width:calc(100% - 24px)}
@@ -132,7 +134,7 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .favs-empty p{color:rgba(255,255,255,.55);margin-bottom:12px}
 .favs-empty .btn.dark{background:#fff;color:var(--ink)}
 .favs-foot{padding:18px 22px 22px;border-top:1px solid rgba(255,255,255,.08)}
-.favs-cta{width:100%;height:54px;color:#fff;background:linear-gradient(110deg,#1f6bff,#2fb4ff);box-shadow:0 12px 30px -12px rgba(47,140,255,.9);font-size:16px}
+.favs-cta{width:100%;height:54px;color:var(--ink);background:#f4f4f2;box-shadow:inset 0 1px 0 #fff,0 10px 26px -14px rgba(255,255,255,.5);font-size:16px}
 .favs-trust{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin-top:14px;font-size:10px;color:rgba(255,255,255,.45)}
 /* bike quick view: the product page design in a floating panel, page visible around it */
 .qv{position:fixed;inset:0;z-index:86;padding:clamp(14px,4vh,44px) clamp(14px,4vw,56px);background:rgba(8,8,10,.66);opacity:0;transition:opacity .35s var(--ease)}
@@ -192,20 +194,19 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .pop-card{position:relative;display:grid;grid-template-columns:.9fr 1.1fr;width:min(760px,100%);border-radius:28px;overflow:hidden;background:#0b0b0c;color:#fff;box-shadow:0 50px 100px -30px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.08);transform:translateY(24px) scale(.97);transition:transform .6s var(--ease)}
 .pop.open .pop-card{transform:none}
 .pop-img{position:relative;min-height:380px;background:#111}
-.pop-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%}
-.pop-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(5,15,40,.55)),linear-gradient(90deg,transparent 70%,rgba(11,11,12,.35))}
+.pop-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:51% 50%}
+.pop-img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 55%,rgba(0,0,0,.5)),linear-gradient(90deg,transparent 70%,rgba(11,11,12,.35))}
 .pop-img .mono{position:absolute;left:18px;bottom:16px;z-index:1;color:rgba(255,255,255,.85);font-size:10.5px}
-.pop-body{padding:38px 34px 30px;display:flex;flex-direction:column;background:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.2px) 0 0/20px 20px,radial-gradient(90% 70% at 100% 0,rgba(47,140,255,.24),transparent 60%)}
+.pop-body{padding:38px 34px 30px;display:flex;flex-direction:column;background:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.2px) 0 0/20px 20px,radial-gradient(90% 70% at 100% 0,rgba(255,255,255,.07),transparent 60%)}
 .pop-body h3{font-size:clamp(26px,3vw,34px);letter-spacing:-.035em;line-height:1.05;margin:16px 0 12px}
 .pop-body>p{color:rgba(255,255,255,.62);font-size:15px;line-height:1.5}
-.tag.pop-tag{color:#a9ccff;background:rgba(47,140,255,.12);border-color:rgba(47,140,255,.35);align-self:flex-start}
-.tag.pop-tag::before{background:#4da3ff;box-shadow:0 0 0 3px rgba(77,163,255,.2),0 0 8px rgba(77,163,255,.9)}
+.tag.pop-tag{--dot:var(--orange);align-self:flex-start}
 .pop-field{display:block;margin:22px 0 10px}
 .pop-field input{width:100%;height:52px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.06);color:#fff;font:inherit;font-size:15px;padding:0 20px;outline:none;transition:border-color .2s,background .2s}
 .pop-field input::placeholder{color:rgba(255,255,255,.38)}
-.pop-field input:focus{border-color:#4da3ff;background:rgba(255,255,255,.09)}
+.pop-field input:focus{border-color:rgba(255,255,255,.5);background:rgba(255,255,255,.09)}
 .pop-field.bad input{border-color:#ff5a5a}
-.pop-btn{width:100%;height:52px;color:#fff;background:linear-gradient(110deg,#1f6bff,#2fb4ff);box-shadow:0 12px 30px -12px rgba(47,140,255,.9)}
+.pop-btn{width:100%;height:52px;color:var(--ink);background:#f4f4f2;box-shadow:inset 0 1px 0 #fff,0 10px 26px -14px rgba(255,255,255,.5)}
 .pop-btn:hover{filter:brightness(1.06)}
 .pop-note{display:flex;align-items:center;justify-content:center;gap:6px;color:rgba(255,255,255,.45);font-size:12.5px;letter-spacing:0;text-transform:none;margin-top:12px;white-space:nowrap}
 .pop-note svg{opacity:.7;flex:none}
@@ -283,7 +284,13 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .half .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 1.6s var(--ease);will-change:transform}
 .half:hover .bg{transform:scale(1.03)}
 /* the Madone sits higher in its shot; drop it so both bikes share one baseline (black fills the gap) */
-@media (min-width:861px){.half.dark .bg{top:9%;height:100%}}
+@media (min-width:861px){
+  /* desktop: shorter than the 3:4 photo, top of the wall cropped so the saddle always sits ~360px from the
+     top (about 110px under "Shop now") at any width. Both saddles are at ~49% of the photo height. */
+  .half{aspect-ratio:auto;height:min(calc(34.15vw + 360px),66.95vw);padding-top:104px}
+  .half .bg{object-position:50% 100%}
+  .half.dark .bg{top:6vw;height:100%}
+}
 .half{justify-content:flex-start}
 .half-copy{align-self:flex-start}
 .half.light .half-copy{align-self:flex-end;text-align:right}
@@ -311,11 +318,12 @@ h2{font-size:clamp(36px,5.4vw,72px)}
 .m-img img{width:100%;height:100%;object-fit:cover;object-position:50% 50%;transition:transform .8s var(--ease)}
 .model:hover .m-img img{transform:scale(1.04)}
 .model h3{font-size:20px;letter-spacing:-.02em;line-height:1.2;min-height:2.4em}
-.m-line{color:var(--muted);font-size:14px;margin-top:6px;min-height:42px}
-.specs{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--line);margin-top:16px;padding-top:14px;gap:8px}
-.specs dt{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:"Inter",system-ui,sans-serif;font-weight:600;letter-spacing:.12em}
-.specs dd{font-size:14px;font-weight:600;margin-top:2px}
-.m-btns{display:flex;gap:8px;margin-top:18px}
+.m-line{color:var(--muted);font-size:14px;line-height:1.5;margin-top:6px;height:3em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.specs{display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:12px;border-top:1px solid var(--line);margin-top:16px;padding-top:14px;row-gap:8px}
+.specs dt{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-family:"Inter",system-ui,sans-serif;font-weight:600;letter-spacing:.1em}
+.specs>div{min-width:0}
+.specs dd{font-size:14px;font-weight:600;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.m-btns{display:flex;gap:8px;margin-top:auto;padding-top:18px}
 .m-btns .btn{flex:1}
 .more{margin-top:44px}
 
@@ -450,7 +458,8 @@ h2{font-size:clamp(36px,5.4vw,72px)}
   .nav-burger{display:flex}
   .nav-ico{width:36px;height:36px}
   .pop-card{grid-template-columns:1fr}
-  .pop-img{min-height:170px}
+  .pop-img{min-height:0;height:min(52vw,260px)}
+  .pop-home .pop-img img{object-position:50% 22%}
   .pop-body{padding:24px 22px 22px}
   .split{grid-template-columns:1fr}
   /* phones / tablets: compact 4:5 tiles, one-line heading, bike underneath */
@@ -631,9 +640,8 @@ img.tony-av{width:40px;height:40px;border-radius:50%;object-fit:cover;background
 /* bike fitting popup: orange button + warm ambience (homepage popup stays blue) */
 .pop-fitting .pop-body{background:radial-gradient(rgba(255,255,255,.06) 1px,transparent 1.2px) 0 0/20px 20px,radial-gradient(90% 70% at 100% 0,rgba(255,90,31,.26),transparent 60%)}
 .pop-fitting .pop-img::after{background:linear-gradient(180deg,transparent 55%,rgba(40,14,5,.6)),linear-gradient(90deg,transparent 70%,rgba(11,11,12,.35))}
-.pop-fitting .tag.pop-tag{color:#ffb08f;background:rgba(255,90,31,.12);border-color:rgba(255,90,31,.35)}
-.pop-fitting .tag.pop-tag::before{background:var(--orange);box-shadow:0 0 0 3px rgba(255,90,31,.2),0 0 8px rgba(255,90,31,.9)}
-.pop-fitting .pop-btn{background:linear-gradient(110deg,#ff5a1f,#ff8a3d);box-shadow:0 12px 30px -12px rgba(255,90,31,.9)}
+.pop-fitting .tag.pop-tag{--dot:var(--orange)}
+.pop-fitting .pop-btn{color:#fff;background:linear-gradient(110deg,#ff5a1f,#ff8a3d);box-shadow:0 12px 30px -12px rgba(255,90,31,.9)}
 .pop-fitting .pop-field input:focus{border-color:rgba(255,138,61,.7)}
 
 /* iPhone: Safari zooms into any text box under 16px. All inputs are 16px on touch devices
