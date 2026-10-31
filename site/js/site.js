@@ -633,8 +633,6 @@
     add('https://data.auscycles.com/js/vhhjjtmy0f1745552696185.js', { onload: () => { if (window.gass) window.gass.run({ subdomain: 'data.auscycles.com', pkey: '89EEBA6C309607BA1ADD5E55371BAC99', interval: 2, connector: ['2CE5B915F633F2E930AD78558E0EBF2E'], cta_hidden: 1 }, () => {}); } });
   }
 
-  // Tony, the bike finder chat (/js/chat.js), on every page like the live site
-  if (!document.body.dataset.noChat) setTimeout(() => { const c = document.createElement('script'); c.src = '/js/chat.js'; document.body.appendChild(c); }, 0);
 
   // ---------- riders fitted: same formula as the live site (107 on 18 Jun 2026, +1 every day) ----------
   const ridersFitted = () => 107 + Math.max(0, Math.floor((Date.now() - Date.UTC(2026, 5, 18)) / 864e5));
