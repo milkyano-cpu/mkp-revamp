@@ -3,14 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Shop bikes | MKP Bikes</title>
-<meta name="description" content="Pre-owned and new road, gravel and TT bikes in Cheltenham, Melbourne. Every bike inspected and graded. Australia-wide delivery.">
-<link rel="icon" href="img/mkp-logo.jpg">
+<title>All Bikes | MKP Bikes</title>
+<link rel="icon" href="/img/mkp-logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/pages.css">
+<!-- seo:start (copied from the live site by tools/seo-heads.py) -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","LocalBusiness","Store"],"@id":"https://www.mkpbikes.com.au/#organization","name":"MKP Bikes","legalName":"MKP Bikes Pty Ltd","url":"https://www.mkpbikes.com.au/","logo":{"@type":"ImageObject","url":"https://www.mkpbikes.com.au/logo.png","width":"512","height":"512"},"image":"https://www.mkpbikes.com.au/background.png","description":"Melbourne's premier destination for pre-owned road bikes and refurbished gravel bikes. Quality guaranteed, expert service in Cheltenham VIC.","telephone":"+61-478-165-043","email":"contact@mkpbikes.com","address":{"@type":"PostalAddress","streetAddress":"9/17 Kylie Place","addressLocality":"Cheltenham","addressRegion":"VIC","postalCode":"3192","addressCountry":"AU"},"geo":{"@type":"GeoCoordinates","latitude":-37.9628,"longitude":145.0544},"areaServed":[{"@type":"City","name":"Melbourne"},{"@type":"State","name":"Victoria","alternateName":"VIC"}],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"11:00","closes":"19:00"}],"priceRange":"$$$","paymentAccepted":["Cash","Credit Card","Bank Transfer"],"currenciesAccepted":"AUD","sameAs":[]},{"@type":"WebSite","@id":"https://www.mkpbikes.com.au/#website","name":"MKP Bikes","url":"https://www.mkpbikes.com.au/","description":"Melbourne's premier destination for pre-owned road bikes and refurbished gravel bikes","publisher":{"@id":"https://www.mkpbikes.com.au/#organization"},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.mkpbikes.com.au//bikes?search={search_term_string}"},"query-input":"required name=search_term_string"},"sameAs":[]}]}</script>
+<meta name="description" content="Browse our complete collection of new and pre-owned road and gravel bikes."/>
+<meta name="og:image:secure_url" content="https://www.mkpbikes.com.au/background.png"/>
+<meta name="google-site-verification" content="kkY_OoeNBHuIBMYF6RRw9TXKVgivlLUiu6pOZ2YGkD4"/>
+<!-- seo:end -->
 </head>
 <body data-page="shop">
 <div id="site-nav"></div>
@@ -18,7 +23,7 @@
 <main>
   <section class="phero">
     <div class="wrap">
-      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span id="crumbNow">Shop</span></nav>
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span id="crumbNow">Shop</span></nav>
       <h1 id="shopTitle">Shop bikes</h1>
       <p class="sub" id="shopSub">Hand-selected, inspected and graded. Test ride in Cheltenham or get it delivered Australia-wide.</p>
     </div>
@@ -51,8 +56,8 @@
 
   <section class="sec tight">
     <div class="wrap">
-      <a class="tav-card reveal" href="sell.html">
-        <span class="tav-logo"><img src="img/mkp-logo.jpg" alt=""></span>
+      <a class="tav-card reveal" href="/sell.html">
+        <span class="tav-logo"><img src="/img/mkp-logo.jpg" alt=""></span>
         <span class="tav-copy">
           <span class="mono eyebrow light">Upgrading?</span>
           <span class="tav-title">Sell or trade in your current bike</span>
@@ -65,15 +70,17 @@
 </main>
 
 <div id="site-foot"></div>
-<script src="js/bikes-data.js"></script>
-<script src="js/api.js"></script>
-<script src="js/site.js"></script>
+<script src="/js/bikes-data.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
 <script>
 (() => {
   const S = window.MKPsite;
   const params = new URLSearchParams(location.search);
   // also accepts the live site's URL style (?type=pre-owned|new-bikes, ?search=) so old links and Google's sitelinks search keep working
-  const typeIn = params.get('type'), typeMap = { 'pre-owned': 'pre', 'new-bikes': 'new' };
+  // clean URLs on mkpbikes.com.au: /bikes, /bikes/pre-owned, /bikes/new-bikes (rewritten to this page)
+  const cleanPath = /^\/bikes(\/|$)/.test(location.pathname);
+  const typeIn = params.get('type') || (location.pathname.match(/^\/bikes\/(pre-owned|new-bikes)/) || [])[1], typeMap = { 'pre-owned': 'pre', 'new-bikes': 'new' };
   const state = { type: typeMap[typeIn] || typeIn || 'all', cat: params.get('cat') || params.get('category') || 'All', q: params.get('q') || params.get('search') || '', sort: params.get('sort') || 'new', sizes: (params.get('size') || '').toUpperCase().split(',').filter(Boolean) };
   const grid = document.getElementById('grid');
   const segBtns = [...document.querySelectorAll('.seg button')];
@@ -125,12 +132,13 @@
     document.getElementById('shopSub').textContent = subs[state.type];
     document.title = `${titles[state.type][0]} | MKP Bikes`;
     const p = new URLSearchParams();
-    if (state.type !== 'all') p.set('type', state.type);
+    if (state.type !== 'all' && !cleanPath) p.set('type', state.type);
     if (state.cat !== 'All') p.set('cat', state.cat);
     if (state.q) p.set('q', state.q);
     if (state.sort !== 'new') p.set('sort', state.sort);
     if (state.sizes.length) p.set('size', state.sizes.join(','));
-    history.replaceState(history.state, '', location.pathname + (p.toString() ? '?' + p : '') + location.hash);
+    const path = cleanPath ? ({ pre: '/bikes/pre-owned', new: '/bikes/new-bikes' }[state.type] || '/bikes') : location.pathname;
+    history.replaceState(history.state, '', path + (p.toString() ? '?' + p : '') + location.hash);
   }
   segBtns.forEach(b => b.addEventListener('click', () => { state.type = b.dataset.type; render(); }));
   document.getElementById('cats').addEventListener('click', e => { const c = e.target.closest('.chip'); if (c) { state.cat = c.dataset.cat; render(); } });

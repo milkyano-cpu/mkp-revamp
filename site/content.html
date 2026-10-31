@@ -5,12 +5,18 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Our Content | MKP Bikes</title>
 <meta name="description" content="Videos from MKP Bikes, your premium bike shop in Cheltenham, Melbourne.">
-<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="icon" href="/img/mkp-logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/pages.css">
+<!-- seo:start (copied from the live site by tools/seo-heads.py) -->
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Organization","LocalBusiness","Store"],"@id":"https://www.mkpbikes.com.au/#organization","name":"MKP Bikes","legalName":"MKP Bikes Pty Ltd","url":"https://www.mkpbikes.com.au/","logo":{"@type":"ImageObject","url":"https://www.mkpbikes.com.au/logo.png","width":"512","height":"512"},"image":"https://www.mkpbikes.com.au/background.png","description":"Melbourne's premier destination for pre-owned road bikes and refurbished gravel bikes. Quality guaranteed, expert service in Cheltenham VIC.","telephone":"+61-478-165-043","email":"contact@mkpbikes.com","address":{"@type":"PostalAddress","streetAddress":"9/17 Kylie Place","addressLocality":"Cheltenham","addressRegion":"VIC","postalCode":"3192","addressCountry":"AU"},"geo":{"@type":"GeoCoordinates","latitude":-37.9628,"longitude":145.0544},"areaServed":[{"@type":"City","name":"Melbourne"},{"@type":"State","name":"Victoria","alternateName":"VIC"}],"openingHoursSpecification":[{"@type":"OpeningHoursSpecification","dayOfWeek":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"opens":"11:00","closes":"19:00"}],"priceRange":"$$$","paymentAccepted":["Cash","Credit Card","Bank Transfer"],"currenciesAccepted":"AUD","sameAs":[]},{"@type":"WebSite","@id":"https://www.mkpbikes.com.au/#website","name":"MKP Bikes","url":"https://www.mkpbikes.com.au/","description":"Melbourne's premier destination for pre-owned road bikes and refurbished gravel bikes","publisher":{"@id":"https://www.mkpbikes.com.au/#organization"},"potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://www.mkpbikes.com.au//bikes?search={search_term_string}"},"query-input":"required name=search_term_string"},"sameAs":[]}]}</script>
+<meta name="og:image:secure_url" content="https://www.mkpbikes.com.au/background.png"/>
+<meta name="google-site-verification" content="kkY_OoeNBHuIBMYF6RRw9TXKVgivlLUiu6pOZ2YGkD4"/>
+<link rel="canonical" href="https://www.mkpbikes.com.au/gallery">
+<!-- seo:end -->
 </head>
 <body data-page="content">
 <div id="site-nav"></div>
@@ -18,7 +24,7 @@
 <main>
   <section class="phero" style="padding-bottom:0">
     <div class="wrap">
-      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span><span>Our content</span></nav>
+      <nav class="crumbs mono" aria-label="Breadcrumb"><a href="/">Home</a><span aria-hidden="true">/</span><span>Our content</span></nav>
       <div class="sec-head" style="margin-bottom:0">
         <div>
           <h1>Our content.</h1>
@@ -41,7 +47,7 @@
   <section class="sec tight">
     <div class="wrap">
       <a class="tav-card reveal" href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">
-        <span class="tav-logo"><img src="img/mkp-logo.jpg" alt=""></span>
+        <span class="tav-logo"><img src="/img/mkp-logo.jpg" alt=""></span>
         <span class="tav-copy">
           <span class="mono eyebrow light">Thanks for following</span>
           <span class="tav-title">More on Instagram</span>
@@ -54,9 +60,9 @@
 </main>
 
 <div id="site-foot"></div>
-<script src="js/bikes-data.js"></script>
-<script src="js/api.js"></script>
-<script src="js/site.js"></script>
+<script src="/js/bikes-data.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
 <script>
   // Videos from mkpbikes.com.au/api/videos (Oct 2026), same order as the live gallery.
   (() => {
@@ -64,8 +70,8 @@
     const S3 = 'https://s3.milkyano.com/milkyano/mkp-bikes/';
     const VIDEOS = [
       { title: 'Thanks For Following', desc: 'MKP Bikes, your premium bike shop', video: 'thanks-for-following-resized-1771944675542.mp4', thumb: 'Thumbnail_-_Thanks_for_Following-1771944861955.jpg' },
-      { title: 'Sell Your Bikes', desc: 'MKP Bikes, your premium bike shop', video: 'sell-your-bikes-resized-1771945881561.mp4', thumb: 'Thumbnail_-_Sell_Your_Bike-1771946213916.jpg', link: ['sell.html', 'Sell your bike'] },
-      { title: 'Test Ride', desc: 'MKP Bikes, your premium bike shop', video: 'mkp-test-ride-resized.mp4', thumb: 'Thumbnail_-_Test_Ride-1771946599310.jpg', link: ['bikes.html', 'Pick a bike to test ride'] },
+      { title: 'Sell Your Bikes', desc: 'MKP Bikes, your premium bike shop', video: 'sell-your-bikes-resized-1771945881561.mp4', thumb: 'Thumbnail_-_Sell_Your_Bike-1771946213916.jpg', link: ['/sell.html', 'Sell your bike'] },
+      { title: 'Test Ride', desc: 'MKP Bikes, your premium bike shop', video: 'mkp-test-ride-resized.mp4', thumb: 'Thumbnail_-_Test_Ride-1771946599310.jpg', link: ['/bikes.html', 'Pick a bike to test ride'] },
     ];
     VIDEOS.forEach(v => { v.video = S3 + v.video; v.thumb = S3 + v.thumb; });
     const host = document.getElementById('reels');
@@ -74,7 +80,7 @@
       const v = e.target;
       if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(() => {}); } else v.pause();
     }), { threshold: 0.4 });
-    const LINKS = { 'sell your bike': ['sell.html', 'Sell your bike'], 'sell your bikes': ['sell.html', 'Sell your bike'], 'test ride': ['bikes.html', 'Pick a bike to test ride'] };
+    const LINKS = { 'sell your bike': ['/sell.html', 'Sell your bike'], 'sell your bikes': ['/sell.html', 'Sell your bike'], 'test ride': ['/bikes.html', 'Pick a bike to test ride'] };
     function draw(list) {
     host.innerHTML = list.map(v => `
 <figure class="reel reveal">

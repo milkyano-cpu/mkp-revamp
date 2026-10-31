@@ -97,7 +97,7 @@
     if (!S || !grid) return;
     const live = !!window.MKP_LIVE;
     grid.querySelectorAll('.model').forEach(m => {
-      const a = m.querySelector('a[href*="product.html?bike="]');
+      const a = m.querySelector('a[href*="/product.html?bike="]');
       const slug = a && new URL(a.href).searchParams.get('bike');
       const b = slug && S.bySlug(slug);
       if (!b) { if (live) m.remove(); return; }
@@ -107,7 +107,7 @@
         if (k === 'Condition' && b.condition) dd.textContent = S.gradePct(b.condition) + '%';
       });
     });
-    const want = 4, shown = new Set([...grid.querySelectorAll('a[href*="product.html?bike="]')].map(a => new URL(a.href).searchParams.get('bike')));
+    const want = 4, shown = new Set([...grid.querySelectorAll('a[href*="/product.html?bike="]')].map(a => new URL(a.href).searchParams.get('bike')));
     if (live && shown.size < want) {
       const extra = S.bikes.filter(b => !shown.has(b.slug) && b.productType === 'Full Bikes')
         .sort((a, b) => (b.created || '').localeCompare(a.created || '')).slice(0, want - shown.size);

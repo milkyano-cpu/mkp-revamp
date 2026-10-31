@@ -18,7 +18,7 @@
 </button>
 <section class="tony-panel" role="dialog" aria-label="Tony, Bike Finder Assistant" hidden>
   <header class="tony-head">
-    <img class="tony-av" src="img/tony-duck.webp" width="40" height="40" alt="Tony">
+    <img class="tony-av" src="/img/tony-duck.webp" width="40" height="40" alt="Tony">
     <div><b>Tony | Bike Finder Assistant</b><span>Find the perfect bike for you</span></div>
     <button class="tony-reset" type="button">Reset</button>
     <button class="tony-x" type="button" aria-label="Close">✕</button>
@@ -54,7 +54,7 @@
     if (!recs.length) return '';
     const items = recs.map(r => S.bySlug(r.slug) || { slug: r.slug, name: r.slug.split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' '), price: parseFloat(String(r.price).replace(/[^0-9.]/g, '')), images: [], category: r.category, sizing: r.sizing || [] });
     return `<div class="tony-bikes">${items.slice(0, 4).map(b => `
-<a class="tony-bike" href="product.html?bike=${encodeURIComponent(b.slug)}">
+<a class="tony-bike" href="/product.html?bike=${encodeURIComponent(b.slug)}">
   <span class="tb-img">${b.images && b.images[0] ? `<img src="${esc(b.images[0])}" alt="" loading="lazy">` : ''}</span>
   <span class="tb-copy"><b>${esc(b.name)}</b><span>${S.money(b.price)}${S.sizeLabel(b) ? ' · ' + esc(S.sizeLabel(b)) : ''}</span></span>
 </a>`).join('')}</div>`;
@@ -113,7 +113,7 @@
     typing(false);
     if (window.MKP_LIVE) recs = recs.filter(r => S.bySlug(r.slug));
     if (recs.length) { bot('Here are my top recommendations for you:', bikeCards(recs)); }
-    else bot("I couldn't find bikes matching that right now. Try a different budget, or tell us what you're after and we'll find it.", `<div class="tony-bikes"><a class="tony-bike tb-link" href="request.html"><span class="tb-copy"><b>Request a bike</b><span>We'll source it for you</span></span></a></div>`);
+    else bot("I couldn't find bikes matching that right now. Try a different budget, or tell us what you're after and we'll find it.", `<div class="tony-bikes"><a class="tony-bike tb-link" href="/request.html"><span class="tb-copy"><b>Request a bike</b><span>We'll source it for you</span></span></a></div>`);
     setChips(AFTER);
   }
 
@@ -122,10 +122,10 @@
     const low = text.toLowerCase();
     if (low === 'find my bike size' || (!fromChip && /\b(what size|bike size|my size|sizing)\b/.test(low))) {
       user(text);
-      bot('Our size finder works out your frame size from your height and inseam in about a minute.', `<div class="tony-bikes"><a class="tony-bike tb-link" href="size.html"><span class="tb-copy"><b>Find your size</b><span>Height, inseam and riding style</span></span></a></div>`);
+      bot('Our size finder works out your frame size from your height and inseam in about a minute.', `<div class="tony-bikes"><a class="tony-bike tb-link" href="/size.html"><span class="tb-copy"><b>Find your size</b><span>Height, inseam and riding style</span></span></a></div>`);
       setChips([{ label: 'Get a bike recommendation' }]); return;
     }
-    if (low === 'browse all bikes') { location.href = 'bikes.html'; return; }
+    if (low === 'browse all bikes') { location.href = '/bikes.html'; return; }
     if (low === 'start new search') { start(); return; }
     if (low === 'get a bike recommendation') { user(text); memory = {}; next(); return; }
 

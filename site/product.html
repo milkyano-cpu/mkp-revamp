@@ -5,12 +5,12 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Bike | MKP Bikes</title>
 <meta name="description" content="Inspected and graded road bikes from MKP Bikes, Cheltenham, Melbourne.">
-<link rel="icon" href="img/mkp-logo.jpg">
+<link rel="icon" href="/img/mkp-logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="css/pages.css">
+<link rel="stylesheet" href="/css/home.css">
+<link rel="stylesheet" href="/css/pages.css">
 </head>
 <body data-page="shop">
 <div id="site-nav"></div>
@@ -19,7 +19,7 @@
 
 <section class="sec" id="relatedSec" hidden>
   <div class="wrap">
-    <div class="sec-head"><div><span class="mono eyebrow">You may also like</span><h2>More bikes like this.</h2></div><a class="link" id="relatedAll" href="bikes.html">See all</a></div>
+    <div class="sec-head"><div><span class="mono eyebrow">You may also like</span><h2>More bikes like this.</h2></div><a class="link" id="relatedAll" href="/bikes.html">See all</a></div>
     <div class="models" id="related"></div>
   </div>
 </section>
@@ -34,21 +34,26 @@
 <div style="height:clamp(72px,9vw,120px)"></div>
 
 <div id="site-foot"></div>
-<script src="js/bikes-data.js"></script>
-<script src="js/api.js"></script>
-<script src="js/site.js"></script>
+<script src="/js/bikes-data.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/site.js"></script>
 <script>
 (() => {
   const S = window.MKPsite;
-  const slug = new URLSearchParams(location.search).get('bike') || 'specialized-aethos-expert';
+  // ?bike=<slug>, or the live site's clean URL /bikes/<type>/<slug> (served by a rewrite on mkpbikes.com.au)
+  const slug = new URLSearchParams(location.search).get('bike') || (location.pathname.match(/^\/bikes\/[^/]+\/([^/?#]+)/) || [])[1] || 'specialized-aethos-expert';
   const main = document.getElementById('pdp');
   const esc = S.esc;
-  const notFound = () => { main.innerHTML = `<section class="notfound"><div class="wrap"><span class="mono eyebrow">Not found</span><h1 style="font-size:clamp(40px,6vw,72px)">This Bike Has Found a New Home.</h1><p class="sub" style="margin:18px auto 30px">It may have sold. Plenty more inspected bikes are ready to ride.</p><a class="btn dark" href="bikes.html">Shop all bikes</a></div></section>`; };
+  const notFound = () => { main.innerHTML = `<section class="notfound"><div class="wrap"><span class="mono eyebrow">Not found</span><h1 style="font-size:clamp(40px,6vw,72px)">This Bike Has Found a New Home.</h1><p class="sub" style="margin:18px auto 30px">It may have sold. Plenty more inspected bikes are ready to ride.</p><a class="btn dark" href="/bikes.html">Shop all bikes</a></div></section>`; };
   let gal = null, cur = null;
 
   function show(b) {
     cur = b;
     document.title = `${b.name} | MKP Bikes`;
+    // point search engines at the bike's clean URL (/bikes/<type>/<slug>), whichever URL opened this page
+    let canon = document.querySelector('link[rel=canonical]');
+    if (!canon) { canon = document.createElement('link'); canon.rel = 'canonical'; document.head.appendChild(canon); }
+    canon.href = `https://www.mkpbikes.com.au/bikes/${b.kind === 'pre' ? 'pre-owned' : 'new-bikes'}/${b.slug}`;
     // same renderer as the quick-view popup (site.js), so both always look identical
     gal = S.renderProduct(main, b, false);
     related();
@@ -64,7 +69,7 @@
     document.getElementById('relatedSec').hidden = !rel.length;
     if (!rel.length) return;
     document.getElementById('related').innerHTML = rel.map(S.card).join('');
-    document.getElementById('relatedAll').href = `bikes.html?type=${b.kind}`;
+    document.getElementById('relatedAll').href = `/bikes.html?type=${b.kind}`;
     S.wireWa(document.getElementById('related')); S.reveal(document.getElementById('related'));
   }
   addEventListener('keydown', e => { if (!gal || document.querySelector('.qv.open')) return; if (e.key === 'ArrowLeft') gal.prev(); if (e.key === 'ArrowRight') gal.next(); });

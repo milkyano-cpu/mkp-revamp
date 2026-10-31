@@ -9,12 +9,12 @@
   const KLAVIYO = { company: 'RMdpdR', listId: '' }; // listId: the guide list from his Klaviyo account
   // secondary pages (all local now); Strava and Instagram stay external
   const more = [
-    ['sell.html', 'Sell Your Bike', 'Get a fair offer or trade in', 'sell'],
-    ['size.html', 'Find Your Size', 'Sizing help for any bike', 'size'],
-    ['request.html', 'Request a Bike', 'We will find it for you', 'request'],
-    ['content.html', 'Our Content', 'Rides, builds and videos', 'content'],
-    ['articles.html', 'Articles', 'Guides and buying advice', 'articles'],
-    ['about.html', 'About Us', 'The team in Cheltenham', 'about'],
+    ['/sell.html', 'Sell Your Bike', 'Get a fair offer or trade in', 'sell'],
+    ['/size.html', 'Find Your Size', 'Sizing help for any bike', 'size'],
+    ['/request.html', 'Request a Bike', 'We will find it for you', 'request'],
+    ['/content.html', 'Our Content', 'Rides, builds and videos', 'content'],
+    ['/articles.html', 'Articles', 'Guides and buying advice', 'articles'],
+    ['/about.html', 'About Us', 'The team in Cheltenham', 'about'],
     ['https://strava.app.link/eqFU77Znl4b', 'Strava Club', 'Join the ride'],
     ['https://instagram.com/mkp.bikes', 'Instagram', '@mkp.bikes'],
   ];
@@ -43,16 +43,16 @@
 
   // ---------- nav ----------
   const links = [
-    ['index.html', 'Home', 'home'],
-    ['bikes.html', 'Shop', 'shop'],
-    ['tavelo.html', 'Tavelo', 'tavelo'],
-    ['fitting.html', 'Bike Fitting', 'fitting'],
+    ['/', 'Home', 'home'],
+    ['/bikes.html', 'Shop', 'shop'],
+    ['/tavelo.html', 'Tavelo', 'tavelo'],
+    ['/fitting.html', 'Bike Fitting', 'fitting'],
   ];
   const navHost = document.getElementById('site-nav');
   if (navHost) {
     navHost.outerHTML = `
 <header class="nav" id="nav">
-  <a class="brand" href="index.html" aria-label="MKP Bikes home"><img src="img/mkp-logo.jpg" alt=""><span>MKP</span></a>
+  <a class="brand" href="/" aria-label="MKP Bikes home"><img src="/img/mkp-logo.jpg" alt=""><span>MKP</span></a>
   <nav class="nav-links" aria-label="Main">
     ${links.map(([h, t, k]) => `<a href="${h}"${k === page ? ' class="cur" aria-current="page"' : ''}>${t}</a>`).join('')}
     <div class="nav-more">
@@ -64,7 +64,7 @@
   </nav>
   <button class="nav-ico" type="button" data-open-favs aria-label="Open favourites"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg><span class="fav-count" hidden>0</span></button>
   <a class="nav-ico" href="tel:${PHONE_LABEL.replace(/\s/g, '')}" aria-label="Call MKP Bikes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92Z"/></svg></a>
-  <a class="nav-cta" href="bikes.html">Shop bikes</a>
+  <a class="nav-cta" href="/bikes.html">Shop bikes</a>
   <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="menu"><i></i><i></i></button>
 </header>
 <div class="menu" id="menu" hidden>
@@ -110,12 +110,12 @@
 <footer class="foot">
   <div class="wrap foot-in">
     <div class="foot-brand-col">
-      <div class="foot-brand"><img src="img/mkp-logo.jpg" alt=""><span>MKP Bikes</span></div>
+      <div class="foot-brand"><img src="/img/mkp-logo.jpg" alt=""><span>MKP Bikes</span></div>
       <p class="foot-tag">Hand-selected pre-owned and new road bikes.</p>
     </div>
     <div class="foot-cols">
-      <div><h5 class="mono">Shop</h5><a href="bikes.html?type=pre">Pre-Owned Bikes</a><a href="bikes.html?type=new">New Bikes</a><a href="tavelo.html">Tavelo</a><a href="sell.html">Sell Your Bike</a></div>
-      <div><h5 class="mono">Quick links</h5><a href="about.html">About Us</a><a href="size.html">Find Your Size</a><a href="fitting.html">Bike Fitting</a><a href="request.html">Request a Bike</a><a href="content.html">Our Content</a><a href="articles.html">Articles</a></div>
+      <div><h5 class="mono">Shop</h5><a href="/bikes.html?type=pre">Pre-Owned Bikes</a><a href="/bikes.html?type=new">New Bikes</a><a href="/tavelo.html">Tavelo</a><a href="/sell.html">Sell Your Bike</a></div>
+      <div><h5 class="mono">Quick links</h5><a href="/about.html">About Us</a><a href="/size.html">Find Your Size</a><a href="/fitting.html">Bike Fitting</a><a href="/request.html">Request a Bike</a><a href="/content.html">Our Content</a><a href="/articles.html">Articles</a></div>
       <div><h5 class="mono">Visit us</h5><a href="${MAPS}" target="_blank" rel="noopener">5/17 Kylie Place<br>Cheltenham VIC 3192</a><a href="tel:${PHONE_LABEL.replace(/\s/g, '')}">${PHONE_LABEL}</a><a href="${wa()}" target="_blank" rel="noopener">WhatsApp us</a><a href="https://instagram.com/mkp.bikes" target="_blank" rel="noopener">@mkp.bikes</a></div>
     </div>
   </div>
@@ -184,15 +184,15 @@
     const list = drawer.querySelector('.favs-list'), foot = drawer.querySelector('.favs-foot');
     foot.hidden = !items.length;
     if (!items.length) {
-      list.innerHTML = `<div class="favs-empty"><span class="favs-empty-ico">${HEART}</span><h3>No favourites yet</h3><p>Tap the heart on any bike to save it here.</p><a class="btn dark" href="bikes.html">Shop bikes</a></div>`;
+      list.innerHTML = `<div class="favs-empty"><span class="favs-empty-ico">${HEART}</span><h3>No favourites yet</h3><p>Tap the heart on any bike to save it here.</p><a class="btn dark" href="/bikes.html">Shop bikes</a></div>`;
       return;
     }
     list.innerHTML = items.map(b => `
 <article class="fav-item">
-  <a class="fav-thumb" href="product.html?bike=${encodeURIComponent(b.slug)}"><img src="${esc(b.images[0])}" alt="" loading="lazy"></a>
+  <a class="fav-thumb" href="/product.html?bike=${encodeURIComponent(b.slug)}"><img src="${esc(b.images[0])}" alt="" loading="lazy"></a>
   <div class="fav-info">
     <span class="mono">${b.kind === 'pre' ? 'Pre-owned' : 'Brand new'} · ${esc(sizeLabel(b))}</span>
-    <a class="fav-name" href="product.html?bike=${encodeURIComponent(b.slug)}">${esc(b.name)}</a>
+    <a class="fav-name" href="/product.html?bike=${encodeURIComponent(b.slug)}">${esc(b.name)}</a>
     <a class="fav-ride" href="${wa(`Hey MKP, I'd like to book a test ride for this bike: ${liveUrl(b)}`)}" target="_blank" rel="noopener">Book a test ride</a>
   </div>
   <div class="fav-side"><b>${money(b.price)}</b><button class="fav-del" type="button" data-fav="${esc(b.slug)}" aria-label="Remove ${esc(b.name)}">${trash}</button></div>
@@ -219,7 +219,7 @@
   // keep the open drawer in sync when a heart is toggled
   document.addEventListener('click', e => { if (e.target.closest('[data-fav]') && drawer.classList.contains('open')) setTimeout(renderFavs, 0); });
 
-  // ---------- product view: one renderer for product.html and the quick-view popup ----------
+  // ---------- product view: one renderer for /product.html and the quick-view popup ----------
   const gradeNames = { frameSet: 'Frame set', wheelSet: 'Wheel set', groupSet: 'Group set', cockpit: 'Cockpit' };
   // grades are 0 to 100 (Low to High). The live backend currently stores words, so map those until it sends numbers.
   const gradeWords = { amazing: 96, excellent: 90, great: 84, good: 74, fair: 58, poor: 35 };
@@ -248,13 +248,13 @@
     const kindLabel = b.kind === 'pre' ? 'Pre-owned' : 'New';
     const sizes = sizeLabel(b) || b.size;
     const specs = Object.entries(b.specs || {});
-    const url = `product.html?bike=${encodeURIComponent(b.slug)}`;
+    const url = `/product.html?bike=${encodeURIComponent(b.slug)}`;
     return `
 <section class="pdp${modal ? ' in-modal' : ''}">
   <div class="wrap">
     <nav class="crumbs mono" aria-label="Breadcrumb">${modal
       ? `<span>${kindLabel}</span><span aria-hidden="true">/</span><span>${esc(b.name)}</span><a class="crumb-full" href="${url}" data-full>Open full page ↗</a>`
-      : `<a href="index.html">Home</a><span aria-hidden="true">/</span><a href="bikes.html?type=${b.kind}">${kindLabel}</a><span aria-hidden="true">/</span><span>${esc(b.name)}</span>`}</nav>
+      : `<a href="/">Home</a><span aria-hidden="true">/</span><a href="/bikes.html?type=${b.kind}">${kindLabel}</a><span aria-hidden="true">/</span><span>${esc(b.name)}</span>`}</nav>
     <div class="pdp-in">
       <div class="gallery">
         <div class="gallery-main">
@@ -351,7 +351,7 @@
   }
   // any link to a product page opens the quick view (new-tab clicks and "Open full page" still navigate)
   document.addEventListener('click', e => {
-    const a = e.target.closest('a[href*="product.html?bike="]');
+    const a = e.target.closest('a[href*="/product.html?bike="]');
     if (!a || a.hasAttribute('data-full') || e.metaKey || e.ctrlKey || e.shiftKey || e.button) return;
     const b = bySlug(new URL(a.href, location.href).searchParams.get('bike'));
     if (!b) return;
@@ -372,7 +372,7 @@
     const m = location.hash.match(/^#bike=(.+)$/);
     if (m && bySlug(m[1])) openQv(bySlug(m[1]), false); else closeQv(true);
   });
-  // a shared link like bikes.html#bike=<slug> opens straight into the quick view (after the page has set up)
+  // a shared link like /bikes.html#bike=<slug> opens straight into the quick view (after the page has set up)
   setTimeout(() => { const m = location.hash.match(/^#bike=(.+)$/); if (m && bySlug(m[1])) openQv(bySlug(m[1]), false); }, 50);
 
   // ---------- heart effect: ring pulse + particle burst + a small heart flying to the menu heart ----------
@@ -480,7 +480,7 @@
     ? '<span class="tag orange pre">Pre-owned</span>'
     : `<span class="tag blue new">${b.productType === 'Frames' ? 'Frameset' : b.productType === 'Wheels' ? 'Wheelset' : 'Brand new'}</span>`;
   function card(b) {
-    const url = `product.html?bike=${encodeURIComponent(b.slug)}`;
+    const url = `/product.html?bike=${encodeURIComponent(b.slug)}`;
     const groupset = (b.specs && (b.specs.Groupset || b.specs.groupset) || '').split(',')[0];
     // second spec: condition for pre-owned; for new, what it is (Full bike / Frameset / Wheelset), never a repeat of Category
     const mid = b.kind === 'pre' ? ['Condition', b.condition ? gradePct(b.condition) + '%' : 'Inspected'] : ['Type', { 'Full Bikes': 'Full bike', Frames: 'Frameset', Wheels: 'Wheelset' }[b.productType] || b.productType];
@@ -502,10 +502,10 @@
   //   homepage: triathlete race-bike guide (type "triathlon")
   //   bike fitting page: 5-point bike fit checklist after 30s (type "bikefit")
   const POPS = {
-    home: { key: 'mkp-guide-popup', type: 'triathlon', delay: 15000, scroll: true, img: 'img/about.jpg', imgTag: 'Free PDF guide', tag: 'Beginner triathletes',
+    home: { key: 'mkp-guide-popup', type: 'triathlon', delay: 15000, scroll: true, img: '/img/about.jpg', imgTag: 'Free PDF guide', tag: 'Beginner triathletes',
       title: 'Choosing your first race bike?', text: 'Get our free guide to picking the right triathlon bike: sizing, aero vs road, and what to pay for a good second-hand TT bike.',
       btn: 'Send me the guide', ok: "<b>You're on the list.</b> The guide is on its way to your inbox." },
-    fitting: { key: 'mkp-fit-popup', type: 'bikefit', delay: 30000, scroll: false, img: 'img/bike-fitting-landscape.jpg', imgTag: 'Free checklist', tag: 'Bike fitting',
+    fitting: { key: 'mkp-fit-popup', type: 'bikefit', delay: 30000, scroll: false, img: '/img/bike-fitting-landscape.jpg', imgTag: 'Free checklist', tag: 'Bike fitting',
       title: 'Is a Bike Fit Worth It for You?', text: 'Not everyone needs one. Get our free 5-point checklist and find out in 30 seconds.',
       btn: 'Send me the checklist', ok: "<b>Check your inbox.</b> We've sent your Bike Fit Checklist. Can't find it? Check your spam or promotions folder." },
   };
@@ -633,8 +633,8 @@
     add('https://data.auscycles.com/js/vhhjjtmy0f1745552696185.js', { onload: () => { if (window.gass) window.gass.run({ subdomain: 'data.auscycles.com', pkey: '89EEBA6C309607BA1ADD5E55371BAC99', interval: 2, connector: ['2CE5B915F633F2E930AD78558E0EBF2E'], cta_hidden: 1 }, () => {}); } });
   }
 
-  // Tony, the bike finder chat (js/chat.js), on every page like the live site
-  if (!document.body.dataset.noChat) setTimeout(() => { const c = document.createElement('script'); c.src = 'js/chat.js'; document.body.appendChild(c); }, 0);
+  // Tony, the bike finder chat (/js/chat.js), on every page like the live site
+  if (!document.body.dataset.noChat) setTimeout(() => { const c = document.createElement('script'); c.src = '/js/chat.js'; document.body.appendChild(c); }, 0);
 
   window.MKPsite = { gradePct, subscribe, track, sizeLabel, wa, money, esc, cap, bikes, bySlug, card, tag, reveal, wireWa, liveUrl, LIVE, MAPS, PHONE_LABEL, favList, favSync, HEART, renderProduct };
 })();

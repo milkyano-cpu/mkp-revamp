@@ -2,7 +2,7 @@
 // Nothing here changes the backend: it reads the same public endpoints the current site uses.
 //
 // How it works
-// - js/bikes-data.js is a snapshot so pages paint instantly (and work offline in the preview).
+// - /js/bikes-data.js is a snapshot so pages paint instantly (and work offline in the preview).
 // - On load we fetch /api/bikes/paginated (same origin, so it works once this frontend is deployed on
 //   mkpbikes.com.au; locally tools/dev-server.py forwards /api to the live site).
 // - The live list replaces the snapshot IN PLACE (same array), then 'mkp:bikes' fires and pages re-render.

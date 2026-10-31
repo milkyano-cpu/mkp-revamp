@@ -1,5 +1,5 @@
 // Articles from the existing backend (written in the admin panel, served by /api/articles).
-// js/articles-data.js is a snapshot for instant paint; this refreshes the list from the backend
+// /js/articles-data.js is a snapshot for instant paint; this refreshes the list from the backend
 // and renders any article that isn't in the snapshot (same markdown rules as tools/build-articles.py).
 (() => {
   const A = window.MKP_ARTICLES = window.MKP_ARTICLES || [];
@@ -10,15 +10,15 @@
   const undash = s => String(s || '').replace(/(\d)\s*[–—]\s*(\$?\d)/g, '$1 to $2').replace(/\s+[–—]\s+/g, ', ').replace(/[–—]/g, ', ');
   const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const LOCAL = {
-    '/bike-fitting': 'fitting.html', '/bikes/pre-owned': 'bikes.html?type=pre', '/bikes/new-bikes': 'bikes.html?type=new',
-    '/bikes': 'bikes.html', '/tavelo': 'tavelo.html', '/about': 'about.html', '/find-your-size': 'size.html',
-    '/sell-your-bike': 'sell.html', '/request-a-bike': 'request.html',
+    '/bike-fitting': '/fitting.html', '/bikes/pre-owned': '/bikes.html?type=pre', '/bikes/new-bikes': '/bikes.html?type=new',
+    '/bikes': '/bikes.html', '/tavelo': '/tavelo.html', '/about': '/about.html', '/find-your-size': '/size.html',
+    '/sell-your-bike': '/sell.html', '/request-a-bike': '/request.html',
   };
   function fixHref(h) {
     h = h.replace(/[?&]utm_source=[^&]*/, '');
     const path = h.replace(/^https?:\/\/(www\.)?mkpbikes\.com\.au/, '') || '/';
     if (LOCAL[path]) return LOCAL[path];
-    if (path.startsWith('/article/')) return 'article.html?slug=' + path.split('/article/')[1];
+    if (path.startsWith('/article/')) return '/article.html?slug=' + path.split('/article/')[1];
     if (path.startsWith('/')) return LIVE + path;
     return h;
   }
