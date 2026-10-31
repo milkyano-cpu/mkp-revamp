@@ -84,37 +84,30 @@
   // ----- lineup filter (also driven by the split halves) -----
   const segBtns = [...document.querySelectorAll('.seg button')];
   let curFilter = 'all';
-  function setFilter(f) {
-    curFilter = f;
-    segBtns.forEach(b => { const on = b.dataset.f === f; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
-    document.querySelectorAll('.models .model').forEach(m => m.classList.toggle('hide', f !== 'all' && m.dataset.t !== f));
-  }
 
-  // ----- featured bikes stay hand-picked (nicer photos), but price/condition come from the backend,
-  // sold bikes drop out, and the row is topped up with the newest listings -----
+  // ----- featured bikes: always the newest listings uploaded in the admin, nothing hand-picked.
+  // All = the 4 newest bikes, at least 2 of them brand new; Pre-owned / New = the 4 newest of that kind.
+  // Paints from the snapshot, then re-renders when the live list arrives (mkp:bikes). -----
+  const WANT = 4, MIN_NEW = 2;
+  const newest = list => list.slice().sort((a, b) => String(b.created || '').localeCompare(String(a.created || '')));
+  function featured(f) {
+    const S = window.MKPsite;
+    const pool = newest(S.bikes.filter(b => b.productType === 'Full Bikes' && b.images && b.images.length));
+    if (f !== 'all') return pool.filter(b => b.kind === f).slice(0, WANT);
+    const pick = pool.filter(b => b.kind === 'new').slice(0, MIN_NEW);
+    for (const b of pool) { if (pick.length >= WANT) break; if (!pick.includes(b)) pick.push(b); }
+    return newest(pick);
+  }
   function syncFeatured() {
     const S = window.MKPsite, grid = document.querySelector('.models');
     if (!S || !grid) return;
-    const live = !!window.MKP_LIVE;
-    grid.querySelectorAll('.model').forEach(m => {
-      const a = m.querySelector('a[href*="/product.html?bike="]');
-      const slug = a && new URL(a.href).searchParams.get('bike');
-      const b = slug && S.bySlug(slug);
-      if (!b) { if (live) m.remove(); return; }
-      m.querySelectorAll('.specs > div').forEach(d => {
-        const k = d.querySelector('dt').textContent.trim(), dd = d.querySelector('dd');
-        if (k === 'Price') dd.innerHTML = S.money(b.price) + (b.priceBefore ? ` <s>${S.money(b.priceBefore)}</s>` : '');
-        if (k === 'Condition' && b.condition) dd.textContent = S.gradePct(b.condition) + '%';
-      });
-    });
-    const want = 4, shown = new Set([...grid.querySelectorAll('a[href*="/product.html?bike="]')].map(a => new URL(a.href).searchParams.get('bike')));
-    if (live && shown.size < want) {
-      const extra = S.bikes.filter(b => !shown.has(b.slug) && b.productType === 'Full Bikes')
-        .sort((a, b) => (b.created || '').localeCompare(a.created || '')).slice(0, want - shown.size);
-      grid.insertAdjacentHTML('beforeend', extra.map(S.card).join(''));
-      S.wireWa(grid); S.reveal(grid);
-    }
-    setFilter(curFilter);
+    grid.innerHTML = featured(curFilter).map(S.card).join('');
+    S.wireWa(grid); S.reveal(grid);
+  }
+  function setFilter(f) {
+    curFilter = f;
+    segBtns.forEach(b => { const on = b.dataset.f === f; b.classList.toggle('on', on); b.setAttribute('aria-selected', on); });
+    syncFeatured();
   }
   syncFeatured();
   document.addEventListener('mkp:bikes', syncFeatured);
