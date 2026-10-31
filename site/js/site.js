@@ -636,5 +636,9 @@
   // Tony, the bike finder chat (/js/chat.js), on every page like the live site
   if (!document.body.dataset.noChat) setTimeout(() => { const c = document.createElement('script'); c.src = '/js/chat.js'; document.body.appendChild(c); }, 0);
 
+  // ---------- riders fitted: same formula as the live site (107 on 18 Jun 2026, +1 every day) ----------
+  const ridersFitted = () => 107 + Math.max(0, Math.floor((Date.now() - Date.UTC(2026, 5, 18)) / 864e5));
+  document.querySelectorAll('[data-riders]').forEach(el => { el.textContent = ridersFitted(); });
+
   window.MKPsite = { gradePct, subscribe, track, sizeLabel, wa, money, esc, cap, bikes, bySlug, card, tag, reveal, wireWa, liveUrl, LIVE, MAPS, PHONE_LABEL, favList, favSync, HEART, renderProduct };
 })();
