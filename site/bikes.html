@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+<!-- live stock: start the request right away (api.js picks it up) -->
+<link rel="preload" href="/api/bikes/paginated?limit=500" as="fetch" crossorigin="anonymous">
 <link rel="stylesheet" href="/css/home.css">
 <link rel="stylesheet" href="/css/pages.css">
 <!-- seo:start (copied from the live site by tools/seo-heads.py) -->
@@ -120,10 +122,11 @@
     if (state.sort === 'low') list.sort((a, b) => a.price - b.price);
     else if (state.sort === 'high') list.sort((a, b) => b.price - a.price);
     else list.sort((a, b) => (b.created || '').localeCompare(a.created || ''));
-    grid.innerHTML = list.map(S.card).join('');
+    const loading = window.MKP_LOADING, failed = window.MKP_FAILED && !S.bikes.length;
+    grid.innerHTML = loading ? S.skeleton(8) : failed ? S.loadFailed : list.map(S.card).join('');
     S.wireWa(grid); S.reveal(grid);
-    document.getElementById('count').textContent = `${list.length} ${list.length === 1 ? 'bike' : 'bikes'}`;
-    document.getElementById('empty').hidden = list.length > 0;
+    document.getElementById('count').textContent = loading ? 'Loading bikes…' : failed ? '' : `${list.length} ${list.length === 1 ? 'bike' : 'bikes'}`;
+    document.getElementById('empty').hidden = loading || failed || list.length > 0;
     segBtns.forEach(b => b.classList.toggle('on', b.dataset.type === state.type));
     document.querySelectorAll('#cats .chip').forEach(c => c.classList.toggle('on', c.dataset.cat === state.cat));
     sizeBox.querySelectorAll('.chip').forEach(c => { const on = c.dataset.size ? state.sizes.includes(c.dataset.size) : !state.sizes.length; c.classList.toggle('on', on); c.setAttribute('aria-pressed', on); });

@@ -101,7 +101,7 @@
   function syncFeatured() {
     const S = window.MKPsite, grid = document.querySelector('.models');
     if (!S || !grid) return;
-    grid.innerHTML = featured(curFilter).map(S.card).join('');
+    grid.innerHTML = window.MKP_LOADING ? S.skeleton(4) : window.MKP_FAILED && !S.bikes.length ? S.loadFailed : featured(curFilter).map(S.card).join('');
     S.wireWa(grid); S.reveal(grid);
   }
   function setFilter(f) {

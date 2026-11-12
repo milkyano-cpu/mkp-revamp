@@ -701,3 +701,17 @@ img.tony-av{width:40px;height:40px;border-radius:50%;object-fit:cover;background
   .story-static .story-stage{gap:clamp(10px,2vh,24px);padding-bottom:clamp(60px,9vh,100px)}
   .hero-bike{width:min(720px,58vw,calc((100svh - 360px) * 1.76))}
 }
+
+/* loading placeholders while the live stock arrives (real site only) */
+.model.skel{pointer-events:none}
+.sk{display:block;border-radius:8px;background:linear-gradient(90deg,#e9e8e3 25%,#f3f2ee 50%,#e9e8e3 75%);background-size:200% 100%;animation:skel 1.2s linear infinite}
+.sk-line{height:12px}
+.sk-h3{height:20px;width:72%}
+.sk-pill{width:104px;height:28px;border-radius:999px}
+.m-img.sk{border-radius:12px}
+.sk-specs{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;border-top:1px solid var(--line);margin-top:16px;padding-top:14px}
+.sk-btn{flex:1;height:40px;border-radius:999px}
+.m-btns .sk-btn{margin-top:0}
+@keyframes skel{to{background-position:-200% 0}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+.load-failed{grid-column:1/-1;text-align:center;color:var(--muted);padding:40px 0}

@@ -11,6 +11,21 @@
 (() => {
   const SNAP = window.MKP_BIKES = window.MKP_BIKES || [];
   const snapBySlug = Object.fromEntries(SNAP.map(b => [b.slug, b]));
+  const onLive = /(^|\.)mkpbikes\.com\.au$/.test(location.hostname);
+
+  // On the real site the bundled snapshot is never shown: it goes stale (sold bikes stayed visible
+  // for a few seconds and people put deposits on them). Pages show loading cards until the live list
+  // arrives. The last live list is kept for this tab for 5 minutes so moving between pages is instant;
+  // it is replaced by a fresh copy on every page load.
+  const CACHE_KEY = 'mkp-live-bikes', CACHE_AGE = 5 * 60 * 1000;
+  if (onLive) {
+    SNAP.length = 0;
+    try {
+      const c = JSON.parse(sessionStorage.getItem(CACHE_KEY) || 'null');
+      if (c && Date.now() - c.t < CACHE_AGE && Array.isArray(c.list) && c.list.length) { SNAP.push(...c.list); window.MKP_LIVE = true; }
+    } catch (e) {}
+    window.MKP_LOADING = !SNAP.length;
+  }
   const num = v => { if (v == null || v === '') return null; if (typeof v === 'number') return v; const n = parseFloat(String(v).replace(/[^0-9.]/g, '')); return isNaN(n) ? null : n; };
 
   // A deal set in the admin (isOnDeal + dealPrice, optional start/end dates) shows as the price with the old price struck out
@@ -55,20 +70,29 @@
     };
   }
 
-  const getJSON = url => fetch(url, { headers: { Accept: 'application/json' } }).then(r => r.ok ? r.json() : Promise.reject(r.status));
+  // plain fetch (no extra headers) so it reuses the <link rel=preload> request started in the page head
+  const getJSON = url => fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status));
   const visible = x => x.inStock !== false && !(x.type && x.type.slug === 'archived');
 
-  const ready = getJSON('/api/bikes/paginated?limit=500')
+  const LIST = '/api/bikes/paginated?limit=500';
+  const ready = getJSON(LIST)
+    .catch(() => onLive ? new Promise(r => setTimeout(r, 1500)).then(() => getJSON(LIST)) : Promise.reject()) // one retry on the real site
     .then(d => {
       const list = (d.bikes || d).filter(visible).map(fromLive);
-      if (!list.length) return false;
+      if (!list.length && !onLive) return false;
       SNAP.splice(0, SNAP.length, ...list);
       SNAP.forEach(b => { snapBySlug[b.slug] = b; });
       window.MKP_LIVE = true;
+      window.MKP_LOADING = false;
+      if (onLive) try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), list })); } catch (e) {}
       document.dispatchEvent(new CustomEvent('mkp:bikes', { detail: { live: true } }));
       return true;
     })
-    .catch(() => false); // no backend (plain static preview): keep the snapshot
+    .catch(() => {
+      // no backend (local/staging preview): keep the snapshot. On the real site: say so, never show stale bikes
+      if (onLive && window.MKP_LOADING) { window.MKP_LOADING = false; window.MKP_FAILED = true; document.dispatchEvent(new CustomEvent('mkp:bikes', { detail: { failed: true } })); }
+      return false;
+    });
 
   // full record for one bike (adds grades); merged into the shared list
   const cache = {};
@@ -83,7 +107,6 @@
   }
 
   // same-origin POST used by every form (works once deployed on mkpbikes.com.au)
-  const onLive = /(^|\.)mkpbikes\.com\.au$/.test(location.hostname);
   const post = (path, data) => fetch(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) })
     .then(async r => { let j = null; try { j = await r.json(); } catch (e) {} if (!r.ok) throw Object.assign(new Error((j && j.error) || r.status), { status: r.status }); return j; });
 

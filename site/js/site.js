@@ -183,6 +183,7 @@
     const items = favList().map(bySlug).filter(Boolean);
     const list = drawer.querySelector('.favs-list'), foot = drawer.querySelector('.favs-foot');
     foot.hidden = !items.length;
+    if (!items.length && window.MKP_LOADING && favList().length) { list.innerHTML = '<div class="favs-empty"><p>Loading your saved bikes…</p></div>'; return; }
     if (!items.length) {
       list.innerHTML = `<div class="favs-empty"><span class="favs-empty-ico">${HEART}</span><h3>No favourites yet</h3><p>Tap the heart on any bike to save it here.</p><a class="btn dark" href="/bikes.html">Shop bikes</a></div>`;
       return;
@@ -218,6 +219,7 @@
   addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) closeFavs(); });
   // keep the open drawer in sync when a heart is toggled
   document.addEventListener('click', e => { if (e.target.closest('[data-fav]') && drawer.classList.contains('open')) setTimeout(renderFavs, 0); });
+  document.addEventListener('mkp:bikes', () => { if (drawer.classList.contains('open')) renderFavs(); });
 
   // ---------- product view: one renderer for /product.html and the quick-view popup ----------
   const gradeNames = { frameSet: 'Frame set', wheelSet: 'Wheel set', groupSet: 'Group set', cockpit: 'Cockpit' };
@@ -374,6 +376,7 @@
   });
   // a shared link like /bikes.html#bike=<slug> opens straight into the quick view (after the page has set up)
   setTimeout(() => { const m = location.hash.match(/^#bike=(.+)$/); if (m && bySlug(m[1])) openQv(bySlug(m[1]), false); }, 50);
+  document.addEventListener('mkp:bikes', () => { const m = location.hash.match(/^#bike=(.+)$/); if (m && bySlug(m[1]) && !qv.classList.contains('open')) openQv(bySlug(m[1]), false); }, { once: true });
 
   // ---------- heart effect: ring pulse + particle burst + a small heart flying to the menu heart ----------
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -494,6 +497,18 @@
   <div class="m-btns"><a class="btn dark sm" href="${url}">View bike</a><a class="btn ghost sm" data-wa="Hey MKP, I'd like to book a test ride for this bike: ${liveUrl(b)}" href="#">Test ride</a></div>
 </article>`;
   }
+
+  // ---------- while the live stock loads (real site only): grey placeholder cards, never old bikes ----------
+  const skelCard = () => `
+<article class="model skel" aria-hidden="true">
+  <div class="m-top"><span class="sk sk-pill"></span><span class="sk sk-line" style="width:54px"></span></div>
+  <div class="m-img sk"></div>
+  <span class="sk sk-line sk-h3"></span><span class="sk sk-line" style="width:58%;margin-top:10px"></span>
+  <div class="sk-specs"><span class="sk sk-line"></span><span class="sk sk-line"></span><span class="sk sk-line"></span></div>
+  <div class="m-btns"><span class="sk sk-btn"></span><span class="sk sk-btn"></span></div>
+</article>`;
+  const skeleton = n => Array.from({ length: n }, skelCard).join('');
+  const loadFailed = `<p class="load-failed">We couldn't load the bikes just now. <a class="link" href="javascript:location.reload()">Try again</a> or <a class="link" href="${wa('Hey MKP, what bikes do you have in stock?')}" target="_blank" rel="noopener">message us on WhatsApp</a>.</p>`;
 
   // ---------- triathlete guide popup (from the live site, restyled) ----------
   // Shows once per visitor: after 15s or when they're halfway down the page.
@@ -638,5 +653,5 @@
   const ridersFitted = () => 107 + Math.max(0, Math.floor((Date.now() - Date.UTC(2026, 5, 18)) / 864e5));
   document.querySelectorAll('[data-riders]').forEach(el => { el.textContent = ridersFitted(); });
 
-  window.MKPsite = { gradePct, subscribe, track, sizeLabel, wa, money, esc, cap, bikes, bySlug, card, tag, reveal, wireWa, liveUrl, LIVE, MAPS, PHONE_LABEL, favList, favSync, HEART, renderProduct };
+  window.MKPsite = { skeleton, loadFailed, gradePct, subscribe, track, sizeLabel, wa, money, esc, cap, bikes, bySlug, card, tag, reveal, wireWa, liveUrl, LIVE, MAPS, PHONE_LABEL, favList, favSync, HEART, renderProduct };
 })();
